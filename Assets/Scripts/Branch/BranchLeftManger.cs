@@ -23,8 +23,13 @@ public class BranchLeftManger : MonoBehaviour
             BrachRight = ObjectPooler._instance.SpawnFromPool("BranchLeft", new Vector3(-100, -100, 0), Quaternion.identity);
             BrachRight.GetComponent<Branch>().id = CountBrach;
         }
+
+        Vector3 PosOutScreen = new Vector3(-1.8f, 6.27f, 0);
+        BrachRight.GetComponent<Branch>().posOutScreen = PosOutScreen;
+
         BrachRight.transform.parent = transform;
         BrachRight.transform.localPosition = PoslastChild;
         return BrachRight.GetComponent<Branch>();
     }
+   
 }

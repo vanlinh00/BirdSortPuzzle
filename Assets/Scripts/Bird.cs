@@ -7,6 +7,7 @@ public class Bird : MonoBehaviour
 {
     public int id;
     [SerializeField] SkeletonAnimation _skeletonAnimation;
+    public Vector3 RealPosBird;
     public void Start()
     {
         StateIdle();
@@ -62,4 +63,5 @@ public class Bird : MonoBehaviour
         }
 
     }
+    
 }

@@ -30,8 +30,6 @@ public class BranchManager : MonoBehaviour
         //{
         //    Debug.Log(dataBirdOnBranch.id);
         //}
-
-
         //   "AmountBranch": 3   
         if (level == 1)
         {
@@ -126,28 +124,36 @@ public class BranchManager : MonoBehaviour
             dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch12);
         }
 
-
     }
- 
     public List<Branch>  BonrAllBirdOnBranch()
     {  
         for (int i = 0; i < dataBirdOnBranchs.dataBirdOnBranch.Count; i++)
         {
             DataBirdOnBranch data = dataBirdOnBranchs.dataBirdOnBranch[i];
-
-            Vector3 PosBird = ListAllBranchs[data.idBranch - 1].GetPosSlot(data.slotBird - 1);
+            Vector3 RealPosBird = ListAllBranchs[data.idBranch - 1].GetPosSlot(data.slotBird - 1);
             GameObject Bird;
             if (data.idBranch % 2 != 0)
             {
-                Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, PosBird, new Quaternion(0f, 180f, 0f, 0f));
+                Vector3 StartPosBird = new Vector3(RealPosBird.x - 2.5f, RealPosBird.y + 1.25f, 0);
+                Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, StartPosBird, new Quaternion(0f, 180f, 0f, 0f));
+
             }
             else
             {
-                Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, PosBird, Quaternion.identity);
+                Vector3 StartPosBird = new Vector3(RealPosBird.x + 2.5f, RealPosBird.y + 1.25f, 0);
+                Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, StartPosBird, Quaternion.identity);
             }
+            Bird.GetComponent<Bird>().RealPosBird = RealPosBird;
             ListAllBranchs[data.idBranch - 1].AddToListBrids(Bird.GetComponent<Bird>());
         }
         return ListAllBranchs;
+    }
+  public void MoveAllBirdSToAllBrachs()
+    {
+        for (int i = 0; i < ListAllBranchs.Count; i++)
+        {
+            ListAllBranchs[i].MoveALlBirdToALlSlot();
+        }
     }
     public void LoadAllBranchLeve(int AmountBranch)
     {
@@ -170,7 +176,7 @@ public class BranchManager : MonoBehaviour
     }
     public bool IsSameIdBird(int IdBranch1,int IdBranch2)
     {
-        if (ListAllBranchs[IdBranch2].birds.Count == 4)
+        if (ListAllBranchs[IdBranch2].birds.Count == 4|| ListAllBranchs[IdBranch1].birds.Count == 0)
         {
             return false;
         }
@@ -190,4 +196,26 @@ public class BranchManager : MonoBehaviour
 
         }
     }
+    //[SerializeField] BranchRightManager _branchRightManager;
+    //[SerializeField] BranchLeftManger _branchLeftManger;
+    public void MoveToScreen()
+    {
+        StartCoroutine(Move(_branchRightManager.transform, new Vector3(0f, 0f, 0f), 0.4f));
+        StartCoroutine(Move(_branchLeftManger.transform, new Vector3(0f, 0f, 0f), 0.4f));
+    }
+    IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)
+    {
+        var passed = 0f;
+        var init = CurrentTransform.transform.position;
+        while (passed < TotalTime)
+        {
+            passed += Time.deltaTime;
+            var normalized = passed / TotalTime;
+            var current = Vector3.Lerp(init, Target, normalized);
+            CurrentTransform.position = current;
+            yield return null;
+        }
+
+    }
+
 }

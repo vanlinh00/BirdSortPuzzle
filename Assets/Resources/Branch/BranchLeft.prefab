@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 4304638697851586229}
   - component: {fileID: 4304638697851586235}
   - component: {fileID: 4304638697851586234}
+  - component: {fileID: 2149240218881277700}
   m_Layer: 0
   m_Name: BranchLeft
   m_TagString: Untagged
@@ -138,6 +139,7 @@ MonoBehaviour:
   - {fileID: 4304638698262311590}
   birds: []
   listBirdMove: []
+  _animator: {fileID: 2149240218881277700}
 --- !u!61 &4304638697851586234
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -164,6 +166,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6.6299996, y: 2.1439722}
   m_EdgeRadius: 0
+--- !u!95 &2149240218881277700
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4304638697851586232}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 47fb3a30cca54c8449b7f73b4dfa0866, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4304638698262311590
 GameObject:
   m_ObjectHideFlags: 0
