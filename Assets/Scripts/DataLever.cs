@@ -14,13 +14,11 @@ public class DataLevel
     //    ]
     //}
 
-
 public int AmountBranch;
 }
 public class DataBirdOnBranchs
 {
     public List<DataBirdOnBranch> dataBirdOnBranch = new List<DataBirdOnBranch>();
-
 }
 public class DataBirdOnBranch
 {

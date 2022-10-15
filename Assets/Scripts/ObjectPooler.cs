@@ -61,14 +61,10 @@ public class ObjectPooler : Singleton<ObjectPooler>
             Debug.LogWarning("Pool with tag" + tag + "doesn't excist");
             return null;
         }
-
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();
-
         objectToSpawn.SetActive(true);
-
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = rotation;
-
         return objectToSpawn;
     }
     public void AddElement(string tag, GameObject objectToSpawn)

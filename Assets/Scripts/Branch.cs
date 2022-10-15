@@ -8,6 +8,7 @@ public class Branch : MonoBehaviour
     public List<GameObject> allSlots = new List<GameObject>();
     public List<Bird> birds = new List<Bird>();
     public List<Bird> listBirdMove = new List<Bird>();
+    public List<GameObject> listBirdsFlyingToBrach = new List<GameObject>();
     public Animator _animator;
     public Vector3 posOutScreen;
     public void AddToListBrids(Bird bird)
@@ -93,17 +94,7 @@ public class Branch : MonoBehaviour
         _animator.SetBool("Shaky", false);
 
     }
-    public void AllBirdsTouchBranch()
-    {
-        StartCoroutine(WaitTimeTouchBranch());
-    }
-    IEnumerator WaitTimeTouchBranch()
-    {
-        yield return new WaitForSeconds(1f);
-        StateShaky();
-        yield return new WaitForSeconds(0.4f);
-        StateIdle();
-    }
+
     public void Renew()
     {
         id = 0;
@@ -113,12 +104,36 @@ public class Branch : MonoBehaviour
     }
     public void MoveALlBirdToALlSlot()
     {
-        for (int j = 0; j <birds.Count; j++)
+        StartCoroutine(FadeMoveAllBirdToAllSlot());
+
+    }
+    IEnumerator FadeMoveAllBirdToAllSlot()
+    {
+        float TimeWaitBridMove = 0f;
+        for (int j = 0; j < birds.Count; j++)
         {
+            birds[j].transform.parent = transform;
             Vector3 RealPosBird = birds[j].RealPosBird;
-            birds[j].MoveToTarget(RealPosBird);
-            AllBirdsTouchBranch();
+            birds[j].MoveToOnScreen(RealPosBird);
+            TimeWaitBridMove = Random.RandomRange(0.07f, 0.15f);
+            yield return new WaitForSeconds(TimeWaitBridMove);
+
+            if (j== birds.Count-1)
+            {
+                AllBirdsTouchBranch(TimeWaitBridMove);
+            }
         }
+    }
+    public void AllBirdsTouchBranch(float TimeWaitBridMove)
+    {
+        StartCoroutine(WaitTimeTouchBranch(TimeWaitBridMove));
+    }
+    IEnumerator WaitTimeTouchBranch(float TimeWaitBridMove)
+    {
+        yield return new WaitForSeconds(TimeWaitBridMove+1.4f);
+        StateShaky();
+        yield return new WaitForSeconds(0.4f);
+        StateIdle();
     }
     public bool IsFullSameBirdsOnBranch()
     {
@@ -146,10 +161,21 @@ public class Branch : MonoBehaviour
     }
     public void MoveAllBirdToOutScreen()
     {
+        StartCoroutine(FadeMoveBirdToOutScreen());
+    }
+    IEnumerator FadeMoveBirdToOutScreen()
+    {
         for (int j = 0; j < birds.Count; j++)
         {
             Vector3 RealPosBird = birds[j].RealPosBird;
-            birds[j].MoveToTarget(posOutScreen);
+
+            float TimeWait = Random.RandomRange(0.05f,0.1f);
+       
+           yield return new WaitForSeconds(TimeWait);
+
+            Vector3 NewPosOutScreen = new Vector3(Random.RandomRange(posOutScreen.x, posOutScreen.x + 1f), posOutScreen.y, 0f);
+
+            birds[j].MoveToTarget(NewPosOutScreen,true);
         }
         birds.Clear();
     }

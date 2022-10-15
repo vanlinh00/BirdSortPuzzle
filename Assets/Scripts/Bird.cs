@@ -8,6 +8,7 @@ public class Bird : MonoBehaviour
     public int id;
     [SerializeField] SkeletonAnimation _skeletonAnimation;
     public Vector3 RealPosBird;
+   
     public void Start()
     {
         StateIdle();
@@ -28,25 +29,46 @@ public class Bird : MonoBehaviour
     {
         _skeletonAnimation.AnimationName = "touching";
     }
-    public void MoveToTarget(Vector3 Target)
-    {
+    public void MoveToTarget(Vector3 Target, bool IsFlipX)
+    {   
         StateFly();
-        StartCoroutine(Move(transform, Target, 1f));
-        StartCoroutine(WaitTimeChangeState());
+        StartCoroutine(Move(transform, Target, 0.54f));
+        StartCoroutine(WaitTimeChangeState(IsFlipX));
     }
-    IEnumerator WaitTimeChangeState()
+    IEnumerator WaitTimeChangeState(bool IsFlipX)
     {
-        yield return new WaitForSeconds(1f);
-        if (transform.position.x < 0f)
+        yield return new WaitForSeconds(0.54f);
+
+        if(IsFlipX)
         {
-            transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
-        }
-        else
-        {
-            transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
+            FlipX();
         }
         StateGrounding();
         yield return new WaitForSeconds(0.2f);
+        StateIdle();
+    }
+    public void FlipX()
+    {
+        if (_skeletonAnimation.skeleton.FlipX)
+        {
+            _skeletonAnimation.skeleton.FlipX = false;
+        }
+        else
+        {
+            _skeletonAnimation.skeleton.FlipX = true;
+        }
+    }
+    public void MoveToOnScreen(Vector3 RealPosBird)
+    {
+        StateFly();
+        StartCoroutine(Move(transform, RealPosBird, 1f));
+        StartCoroutine(WaitTimeChangeStateWhenStartGame());
+    }
+    IEnumerator WaitTimeChangeStateWhenStartGame()
+    {
+        yield return new WaitForSeconds(1f);
+        StateGrounding();
+        yield return new WaitForSeconds(0.4f);
         StateIdle();
     }
     IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)

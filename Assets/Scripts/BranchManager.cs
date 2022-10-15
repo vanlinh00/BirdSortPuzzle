@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class BranchManager : MonoBehaviour
 {
-    public TextAsset jsonFile;
-    DataBirdOnBranchs dataBirdOnBranchs = new DataBirdOnBranchs();
+    [SerializeField] DataBirdOnBranchs _dataBirdOnBranchs = new DataBirdOnBranchs();
     [SerializeField]  List<Branch> ListAllBranchs = new List<Branch>();
-
     [SerializeField] BranchRightManager _branchRightManager;
     [SerializeField] BranchLeftManger _branchLeftManger;
 
@@ -20,123 +18,23 @@ public class BranchManager : MonoBehaviour
     //        { "id": 4,"idBird":9,"idBranch":2,"posBird":2}
     //    ]
     //}
-
-
-    public void LoadDataLevel(int level)
+    public void LoadDataBirdOnBranchs(DataBirdOnBranchs DataBirdOnBranchs)
     {
-        //DataBirdOnBranchs DataBirdOnBranchsJson = JsonUtility.FromJson<DataBirdOnBranchs>(jsonFile.text);
-
-        //foreach (DataBirdOnBranch dataBirdOnBranch in DataBirdOnBranchsJson.dataBirdOnBranch)
-        //{
-        //    Debug.Log(dataBirdOnBranch.id);
-        //}
-        //   "AmountBranch": 3   
-        if (level == 1)
-        {
-            DataBirdOnBranch dataBirdOnBranch = new DataBirdOnBranch(1, 1, 1, 1);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch);
-
-
-            DataBirdOnBranch dataBirdOnBranch2 = new DataBirdOnBranch(2, 1, 1, 2);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch2);
-
-
-            DataBirdOnBranch dataBirdOnBranch3 = new DataBirdOnBranch(3, 1, 2, 1);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch3);
-
-            DataBirdOnBranch dataBirdOnBranch4 = new DataBirdOnBranch(4, 1, 2, 2);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch4);
-        }
-        if (level==2)
-        {
-
-            DataBirdOnBranch dataBirdOnBranch = new DataBirdOnBranch(1, 1, 1, 1);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch);
-
-
-            DataBirdOnBranch dataBirdOnBranch2 = new DataBirdOnBranch(2, 1, 1, 2);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch2);
-
-
-            DataBirdOnBranch dataBirdOnBranch3 = new DataBirdOnBranch(3, 2, 1, 3);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch3);
-
-            DataBirdOnBranch dataBirdOnBranch4 = new DataBirdOnBranch(4, 2, 2, 1);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch4);
-
-
-            DataBirdOnBranch dataBirdOnBranch5 = new DataBirdOnBranch(5, 2, 2, 2);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch5);
-
-            DataBirdOnBranch dataBirdOnBranch6 = new DataBirdOnBranch(6, 2, 2, 3);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch6);
-
-
-            DataBirdOnBranch dataBirdOnBranch7 = new DataBirdOnBranch(7, 1, 3, 1);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch7);
-
-            DataBirdOnBranch dataBirdOnBranch8 = new DataBirdOnBranch(8, 1, 3, 2);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch8);
-        }
-        if(level==3)
-        {
-
-            // "branch": 5,
-            DataBirdOnBranch dataBirdOnBranch = new DataBirdOnBranch(1, 3, 1, 1);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch);
-
-
-            DataBirdOnBranch dataBirdOnBranch2 = new DataBirdOnBranch(2, 1, 1, 2);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch2);
-
-
-            DataBirdOnBranch dataBirdOnBranch3 = new DataBirdOnBranch(3, 2, 1, 3);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch3);
-
-
-            DataBirdOnBranch dataBirdOnBranch4 = new DataBirdOnBranch(4, 2, 1, 4);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch4);
-
-
-            DataBirdOnBranch dataBirdOnBranch5 = new DataBirdOnBranch(5, 1, 2, 1);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch5);
-
-            DataBirdOnBranch dataBirdOnBranch6 = new DataBirdOnBranch(6, 2, 2, 2);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch6);
-
-
-            DataBirdOnBranch dataBirdOnBranch7 = new DataBirdOnBranch(7, 1, 2, 3);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch7);
-
-            DataBirdOnBranch dataBirdOnBranch8 = new DataBirdOnBranch(8, 1, 2, 4);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch8);
-
-            DataBirdOnBranch dataBirdOnBranch9 = new DataBirdOnBranch(9, 2, 3, 1);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch9);
-
-            DataBirdOnBranch dataBirdOnBranch10 = new DataBirdOnBranch(10, 3, 3, 2);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch10);
-
-            DataBirdOnBranch dataBirdOnBranch11 = new DataBirdOnBranch(11, 3, 3, 3);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch11);
-
-            DataBirdOnBranch dataBirdOnBranch12 = new DataBirdOnBranch(12, 3, 3, 4);
-            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch12);
-        }
-
+        _dataBirdOnBranchs = DataBirdOnBranchs;
     }
     public List<Branch>  BonrAllBirdOnBranch()
-    {  
-        for (int i = 0; i < dataBirdOnBranchs.dataBirdOnBranch.Count; i++)
+    {
+        for (int i = 0; i < _dataBirdOnBranchs.dataBirdOnBranch.Count; i++)
         {
-            DataBirdOnBranch data = dataBirdOnBranchs.dataBirdOnBranch[i];
+            DataBirdOnBranch data = _dataBirdOnBranchs.dataBirdOnBranch[i];
             Vector3 RealPosBird = ListAllBranchs[data.idBranch - 1].GetPosSlot(data.slotBird - 1);
             GameObject Bird;
+
             if (data.idBranch % 2 != 0)
             {
                 Vector3 StartPosBird = new Vector3(RealPosBird.x - 2.5f, RealPosBird.y + 1.25f, 0);
-                Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, StartPosBird, new Quaternion(0f, 180f, 0f, 0f));
-
+                Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, StartPosBird, Quaternion.identity);
+                Bird.GetComponent<Bird>().FlipX();
             }
             else
             {
@@ -148,14 +46,14 @@ public class BranchManager : MonoBehaviour
         }
         return ListAllBranchs;
     }
-  public void MoveAllBirdSToAllBrachs()
+  public void MoveAllBirdSToAllBranchs()
     {
         for (int i = 0; i < ListAllBranchs.Count; i++)
         {
             ListAllBranchs[i].MoveALlBirdToALlSlot();
         }
     }
-    public void LoadAllBranchLeve(int AmountBranch)
+    public void LoadAllBranchLevel(int AmountBranch)
     {
         //DataLevel employeesInJson = new DataLevel();
         //employeesInJson = JsonUtility.FromJson<DataLevel>(jsonFile.text);
@@ -190,14 +88,11 @@ public class BranchManager : MonoBehaviour
             {
                 Bird firstBirdBranch1 = ListAllBranchs[IdBranch1].birds[ListAllBranchs[IdBranch1].birds.Count - 1];
                 Bird firstBirdBranh2 = ListAllBranchs[IdBranch2].birds[ListAllBranchs[IdBranch2].birds.Count - 1];
-
                 return (firstBirdBranch1.id == firstBirdBranh2.id) ? true : false;
             }
 
         }
     }
-    //[SerializeField] BranchRightManager _branchRightManager;
-    //[SerializeField] BranchLeftManger _branchLeftManger;
     public void MoveToScreen()
     {
         StartCoroutine(Move(_branchRightManager.transform, new Vector3(0f, 0f, 0f), 0.4f));

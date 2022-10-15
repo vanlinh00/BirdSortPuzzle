@@ -5,18 +5,16 @@ using UnityEngine.EventSystems;
 
 public class GamePlay : MonoBehaviour
 {
-    [SerializeField] Vector3 _posStartRightBranch;
-    [SerializeField] Vector3 _posStartLeftBranch;
     [SerializeField] BranchManager _branchManager;
-
     public List<Branch> ListAllBranchs = new List<Branch>();
-    private int CountClick = 0;
-    private int idCurrentBranch;
-    private int idNextBranch;
+    private int _countClick = 0;
+    private int _idCurrentBranch;
+    private int _idNextBranch;
     private bool _canClick=true;
-    public bool _isChangeBird = false;
+    private bool _isChangeBird = false;
+   // private int _idOldNextBranch=-1000;
+    public LoadData loadData;
 
-    public int idOldNextBranch=-1;
     private void Update()
     {
         CheckCantClick();
@@ -32,57 +30,51 @@ public class GamePlay : MonoBehaviour
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
             RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+
             if (hit.collider != null)
             {
                 Branch branch = hit.collider.gameObject.GetComponent<Branch>();
                
-                CountClick++;
+                _countClick++;
 
-                if(CountClick==1)
+                if(_countClick==1)
                 {
-                    idCurrentBranch = branch.id;
+                    _idCurrentBranch = branch.id;
 
-                    if(ListAllBranchs[idCurrentBranch-1].birds.Count!=0)
+                    if(ListAllBranchs[_idCurrentBranch-1].birds.Count!=0&& !ListAllBranchs[_idCurrentBranch - 1].IsFullSameBirdsOnBranch() /*_idOldNextBranch!= _idCurrentBranch*/)
                     {
                         branch.Touching();
                     }
                     else
                     {
-                        CountClick = 0;
+                        _countClick = 0;
                     }
                 }
-                if(CountClick==2)
+                if(_countClick==2)
                 {
-                   idNextBranch = branch.id;
+                   _idNextBranch = branch.id;
 
-                   if(idNextBranch!=idCurrentBranch)
+                   if(_idNextBranch!=_idCurrentBranch)
                     {
-                        if(idOldNextBranch!= idNextBranch)
-                        {
-                            if (_branchManager.IsSameIdBird(idCurrentBranch - 1, idNextBranch - 1))
+                            if (_branchManager.IsSameIdBird(_idCurrentBranch - 1, _idNextBranch - 1))
                             {
                                 StartCoroutine(MoveBirdToNextBranch());
                             }
                             else
                             {
-                                int indexCurrent = idCurrentBranch - 1;
+                                int indexCurrent = _idCurrentBranch - 1;
                                 ListAllBranchs[indexCurrent].UnTouching();
-                                CountClick = 0;
                                 ListAllBranchs[indexCurrent].listBirdMove.Clear();
                                 _isChangeBird = true;
+                                _countClick = 0;
                             }
-                        }
-                        else
-                        {
-                            CountClick = 1;
-                        }      
                     }
                     else
                     {
-                        int indexCurrent = idCurrentBranch - 1;
+                        int indexCurrent = _idCurrentBranch - 1;
                         ListAllBranchs[indexCurrent].UnTouching();
                         ListAllBranchs[indexCurrent].ClearBirdMove();
-                        CountClick = 0;
+                        _countClick = 0;
                     }
                 }
             }
@@ -101,7 +93,6 @@ public class GamePlay : MonoBehaviour
                 _canClick = true;
             }
         }
-
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
@@ -117,73 +108,111 @@ public class GamePlay : MonoBehaviour
 
     IEnumerator MoveBirdToNextBranch()
     {
-        int indexCurrentB = idCurrentBranch-1;
-        int indexNextB = idNextBranch-1;
+     //   _idOldNextBranch = _idNextBranch;
 
-        int AmountSlot = ListAllBranchs[indexNextB].PositionSlotAvailable().Count;
-        int AmountBirdMove = ListAllBranchs[indexCurrentB].listBirdMove.Count;
+        int indexCurrentBranch = _idCurrentBranch-1;
+        int indexNextBranch = _idNextBranch-1;
+
+        int AmountSlotNextBranch = ListAllBranchs[indexNextBranch].PositionSlotAvailable().Count;
+        int AmountBirdMove = ListAllBranchs[indexCurrentBranch].listBirdMove.Count;
+
+        bool  lastBridMoveToBranch = false;
 
         int index = 0;
-        
-        if(AmountSlot>AmountBirdMove)
+
+        if(AmountSlotNextBranch>AmountBirdMove)
         {
             index = AmountBirdMove;
         }
         else
         {
-            index = AmountSlot;
-
+            index = AmountSlotNextBranch;
+            lastBridMoveToBranch = true;
         }
+
+        float timeWaitBirdMove = 0f;
         for (int i = 0; i < index; i++)
         {
-             ListAllBranchs[indexCurrentB].listBirdMove[i].MoveToTarget(ListAllBranchs[indexNextB].PositionSlotAvailable()[i]);
+             bool IsMoveDown = (ListAllBranchs[indexCurrentBranch].id % 2 == ListAllBranchs[indexNextBranch].id % 2) ? true : false;
+             ListAllBranchs[indexCurrentBranch].listBirdMove[i].transform.parent=ListAllBranchs[indexNextBranch].transform;
+
+            if (IsMoveDown)
+            {
+                if(  ListAllBranchs[indexCurrentBranch].listBirdMove[i].transform.position.x <= ListAllBranchs[indexNextBranch].PositionSlotAvailable()[i].x)
+                {
+                    if(ListAllBranchs[indexCurrentBranch].id % 2==0)
+                     {
+                        ListAllBranchs[indexCurrentBranch].listBirdMove[i].FlipX();
+                        ListAllBranchs[indexCurrentBranch].listBirdMove[i].MoveToTarget(ListAllBranchs[indexNextBranch].PositionSlotAvailable()[i], true);
+                    }
+                    else
+                    {
+                       if(ListAllBranchs[indexCurrentBranch].listBirdMove[i].transform.position.x == ListAllBranchs[indexNextBranch].PositionSlotAvailable()[i].x)
+                        {
+                            ListAllBranchs[indexCurrentBranch].listBirdMove[i].FlipX();
+                            ListAllBranchs[indexCurrentBranch].listBirdMove[i].MoveToTarget(ListAllBranchs[indexNextBranch].PositionSlotAvailable()[i], true);
+                        }
+                        ListAllBranchs[indexCurrentBranch].listBirdMove[i].MoveToTarget(ListAllBranchs[indexNextBranch].PositionSlotAvailable()[i], false);
+                    }
+                }
+                else
+                {
+                     if (ListAllBranchs[indexCurrentBranch].id % 2 == 0)
+                      {
+                        ListAllBranchs[indexCurrentBranch].listBirdMove[i].MoveToTarget(ListAllBranchs[indexNextBranch].PositionSlotAvailable()[i], false);
+                      }
+                    else
+                    {
+                        ListAllBranchs[indexCurrentBranch].listBirdMove[i].FlipX();
+                        ListAllBranchs[indexCurrentBranch].listBirdMove[i].MoveToTarget(ListAllBranchs[indexNextBranch].PositionSlotAvailable()[i], true);
+                    }
+
+                }
+            }
+            else
+            {
+                ListAllBranchs[indexCurrentBranch].listBirdMove[i].MoveToTarget(ListAllBranchs[indexNextBranch].PositionSlotAvailable()[i], true);
+            }
+
+            timeWaitBirdMove = Random.RandomRange(0.05f, 0.1f);
+            yield return new WaitForSeconds(timeWaitBirdMove);
         }
+
         for (int i = 0; i < index; i++)
         {
-            ListAllBranchs[indexNextB].birds.Add(ListAllBranchs[indexCurrentB].listBirdMove[i]);
+            ListAllBranchs[indexNextBranch].birds.Add(ListAllBranchs[indexCurrentBranch].listBirdMove[i]);
         }
-        ListAllBranchs[indexCurrentB].ClearBirdMove();
-        ListAllBranchs[indexCurrentB].RemoveBirdPromListBird(index);
-        CountClick = 0;
 
-        idOldNextBranch = idNextBranch;
-
-        yield return new WaitForSeconds(0.5f);
-        yield return new WaitForSeconds(0.54f);
-        ListAllBranchs[indexNextB].StateShaky();
+        ListAllBranchs[indexCurrentBranch].ClearBirdMove();
+        ListAllBranchs[indexCurrentBranch].RemoveBirdPromListBird(index);
+        _countClick = 0;
+        yield return new WaitForSeconds(timeWaitBirdMove+ 0.54f);
+        ListAllBranchs[indexNextBranch].StateShaky();
         yield return new WaitForSeconds(0.4f);
-        ListAllBranchs[indexNextB].StateIdle();
-        idOldNextBranch = -1;
-        if (ListAllBranchs[indexNextB].IsFullSameBirdsOnBranch())
+        ListAllBranchs[indexNextBranch].StateIdle();
+        //_idOldNextBranch = -100;
+
+        if (lastBridMoveToBranch)
         {
-            ListAllBranchs[indexNextB].MoveAllBirdToOutScreen();
+            if (ListAllBranchs[indexNextBranch].IsFullSameBirdsOnBranch())
+            {
+                yield return new WaitForSeconds(0.18f);
+                ListAllBranchs[indexNextBranch].MoveAllBirdToOutScreen();
+            }
+          
         }
     }
-    int CountBrach = 0;
-   [SerializeField] int level ;
-    public void Start()
+
+  public  IEnumerator WaitTimeLoadData(int level)
     {
-        if(level==1)
-        {
-            CountBrach = 2;
-        }
-        if(level==2||level==3)
-        {
-            CountBrach = 5;
-        }
-       
-        _branchManager.LoadDataLevel(level);
-        StartCoroutine(WaitTime());
-    }
-    IEnumerator WaitTime()
-    {
+        _branchManager.LoadDataBirdOnBranchs(loadData.LoadDataLevel(level));
         yield return new WaitForSeconds(0.1f); 
-        _branchManager.LoadAllBranchLeve(CountBrach);
+        _branchManager.LoadAllBranchLevel(5);   /// CountBrach
         yield return new WaitForSeconds(0.1f);
         _branchManager.MoveToScreen();
         yield return new WaitForSeconds(0.4f);
         ListAllBranchs = _branchManager.BonrAllBirdOnBranch();
         yield return new WaitForSeconds(0.1f);
-        _branchManager.MoveAllBirdSToAllBrachs();
+        _branchManager.MoveAllBirdSToAllBranchs();
     }
 }
