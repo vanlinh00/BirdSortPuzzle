@@ -7,18 +7,24 @@ using UnityEngine.UI;
 public class Uicontroller : MonoBehaviour
 {
     [SerializeField] Button _restartBtn;
-    [SerializeField] Button _nextLevelBtn;
+    [SerializeField] Button _ChangeSteatsBtn;
+    [SerializeField] Button _undo;
     private void Awake()
     {
         _restartBtn.onClick.AddListener(RestartGame);
-        _nextLevelBtn.onClick.AddListener(NextLevel);
+        _ChangeSteatsBtn.onClick.AddListener(ChangeSeatsLevel);
+        _undo.onClick.AddListener(Undo);
     }
     public void RestartGame()
     {
         SceneManager.LoadScene(0);
     }
-    public void NextLevel()
+    public void ChangeSeatsLevel()
     {
-
+        GameManager._instance.gameState = GameManager.GameState.ChangeSeatsBirds;
+    }
+    public void Undo()
+    {
+        GameManager._instance.Undo();
     }
 }

@@ -13,7 +13,6 @@ public class DataLevel
     //        { "id": 4,"idBird":9,"idBranch":2,"posBird":2}
     //    ]
     //}
-
 public int AmountBranch;
 }
 public class DataBirdOnBranchs

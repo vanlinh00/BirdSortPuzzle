@@ -43,8 +43,9 @@ public class Bird : MonoBehaviour
         {
             FlipX();
         }
+        yield return new WaitForSeconds(0.1f);
         StateGrounding();
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
         StateIdle();
     }
     public void FlipX()
@@ -67,6 +68,7 @@ public class Bird : MonoBehaviour
     IEnumerator WaitTimeChangeStateWhenStartGame()
     {
         yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.1f);
         StateGrounding();
         yield return new WaitForSeconds(0.4f);
         StateIdle();

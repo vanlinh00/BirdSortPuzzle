@@ -6,14 +6,18 @@ public class Branch : MonoBehaviour
 {   
     public int id;
     public List<GameObject> allSlots = new List<GameObject>();
-    public List<Bird> birds = new List<Bird>();
+    public List<Bird> listBirds = new List<Bird>();
     public List<Bird> listBirdMove = new List<Bird>();
-    public List<GameObject> listBirdsFlyingToBrach = new List<GameObject>();
     public Animator _animator;
     public Vector3 posOutScreen;
+
     public void AddToListBrids(Bird bird)
     {
-        birds.Add(bird);
+        listBirds.Add(bird);
+    }
+    public void DeleteLastBird()
+    {
+        listBirds.RemoveAt(listBirds.Count - 1);
     }
     public Vector3 GetPosSlot(int Number)
     {
@@ -21,26 +25,26 @@ public class Branch : MonoBehaviour
     }
     public void RemoveBirdPromListBird(int CountBirdMoved)
     { 
-        int index = birds.Count - CountBirdMoved;
-        for (int i = birds.Count - 1; i >= index; i--)
+        int index = listBirds.Count - CountBirdMoved;
+        for (int i = listBirds.Count - 1; i >= index; i--)
         {
-            birds.RemoveAt(i);
+            listBirds.RemoveAt(i);
         }
     }
     public void Touching()
     {
-        if (birds.Count != 0)
+        if (listBirds.Count != 0)
         {
-            int CountBirds = birds.Count - 1;
-            int IdFistBird = birds[birds.Count - 1].id;
-            birds[birds.Count - 1].GetComponent<Bird>().Statetouching();
-            listBirdMove.Add(birds[birds.Count - 1]);
+            int CountBirds = listBirds.Count - 1;
+            int IdFistBird = listBirds[listBirds.Count - 1].id;
+            listBirds[listBirds.Count - 1].GetComponent<Bird>().Statetouching();
+            listBirdMove.Add(listBirds[listBirds.Count - 1]);
             for (int i = CountBirds - 1; i >= 0; i--)
             {
-                if (IdFistBird == birds[i].id)
+                if (IdFistBird == listBirds[i].id)
                 {
-                    listBirdMove.Add(birds[i]);
-                    birds[i].GetComponent<Bird>().Statetouching();
+                    listBirdMove.Add(listBirds[i]);
+                    listBirds[i].GetComponent<Bird>().Statetouching();
                 }
                 else
                 {
@@ -51,16 +55,16 @@ public class Branch : MonoBehaviour
     }
     public void UnTouching()
     {
-        if(birds.Count!=0)
+        if(listBirds.Count!=0)
         {
-            int CountBirds = birds.Count - 1;
-            int IdFistBird = birds[birds.Count - 1].id;
-            birds[birds.Count - 1].GetComponent<Bird>().StateIdle();
+            int CountBirds = listBirds.Count - 1;
+            int IdFistBird = listBirds[listBirds.Count - 1].id;
+            listBirds[listBirds.Count - 1].GetComponent<Bird>().StateIdle();
             for (int i = CountBirds - 1; i >= 0; i--)
             {
-                if (IdFistBird == birds[i].id)
+                if (IdFistBird == listBirds[i].id)
                 {
-                    birds[i].GetComponent<Bird>().StateIdle();
+                    listBirds[i].GetComponent<Bird>().StateIdle();
                 }
                 else
                 {
@@ -70,6 +74,7 @@ public class Branch : MonoBehaviour
         }
      
     }
+
     public void ClearBirdMove()
     {
         listBirdMove.Clear();
@@ -77,7 +82,7 @@ public class Branch : MonoBehaviour
     public List<Vector3> PositionSlotAvailable()
     {  
         List<Vector3> PositionSlots = new List<Vector3>();
-        for (int i = birds.Count; i<4;i++)
+        for (int i = listBirds.Count; i<4;i++)
         {
             PositionSlots.Add(allSlots[i].transform.position);
         }
@@ -99,30 +104,47 @@ public class Branch : MonoBehaviour
     {
         id = 0;
         allSlots.Clear();
-        birds.Clear();
+        listBirds.Clear();
         listBirdMove.Clear();
     }
     public void MoveALlBirdToALlSlot()
     {
-        StartCoroutine(FadeMoveAllBirdToAllSlot());
+      StartCoroutine(FadeMoveAllBirdToAllSlot());
 
     }
     IEnumerator FadeMoveAllBirdToAllSlot()
     {
         float TimeWaitBridMove = 0f;
-        for (int j = 0; j < birds.Count; j++)
-        {
-            birds[j].transform.parent = transform;
-            Vector3 RealPosBird = birds[j].RealPosBird;
-            birds[j].MoveToOnScreen(RealPosBird);
-            TimeWaitBridMove = Random.RandomRange(0.07f, 0.15f);
-            yield return new WaitForSeconds(TimeWaitBridMove);
-
-            if (j== birds.Count-1)
+        for (int j = 0; j < listBirds.Count; j++)
+        {    
+            listBirds[j].transform.parent= _animator.gameObject.transform; 
+            Vector3 RealPosBird = listBirds[j].RealPosBird;
+            listBirds[j].MoveToOnScreen(RealPosBird);
+            yield return new WaitForSeconds(Random.RandomRange(0.07f, 0.15f));
+           
+            if (j== listBirds.Count-1)
             {
+                TimeWaitBridMove = CalculerTimeWait(listBirds[j].id);
                 AllBirdsTouchBranch(TimeWaitBridMove);
             }
         }
+    }
+    public float CalculerTimeWait(int IdBird)
+    {
+        float TimeWait = 0f;
+        if (IdBird == 2)
+        {
+            TimeWait = 0.78f;
+        }
+        else if (IdBird == 1)
+        {
+            TimeWait = 1.1f;
+        }
+        else if (IdBird == 3)
+        {
+            TimeWait = 1.12f;
+        }
+        return TimeWait;
     }
     public void AllBirdsTouchBranch(float TimeWaitBridMove)
     {
@@ -130,20 +152,20 @@ public class Branch : MonoBehaviour
     }
     IEnumerator WaitTimeTouchBranch(float TimeWaitBridMove)
     {
-        yield return new WaitForSeconds(TimeWaitBridMove+1.4f);
+        yield return new WaitForSeconds(TimeWaitBridMove+0.46f);
         StateShaky();
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.15f);
         StateIdle();
     }
     public bool IsFullSameBirdsOnBranch()
     {
-        if(birds.Count!=0)
+        if(listBirds.Count!=0)
         {
             int CountSameBird = 0;
-            int IdFistBird = birds[0].id;
-            for (int i = 0; i < birds.Count; i++)
+            int IdFistBird = listBirds[0].id;
+            for (int i = 0; i < listBirds.Count; i++)
             {
-                if (IdFistBird == birds[i].id)
+                if (IdFistBird == listBirds[i].id)
                 {
                     CountSameBird++;
                 }
@@ -165,9 +187,9 @@ public class Branch : MonoBehaviour
     }
     IEnumerator FadeMoveBirdToOutScreen()
     {
-        for (int j = 0; j < birds.Count; j++)
+        for (int j = 0; j < listBirds.Count; j++)
         {
-            Vector3 RealPosBird = birds[j].RealPosBird;
+            Vector3 RealPosBird = listBirds[j].RealPosBird;
 
             float TimeWait = Random.RandomRange(0.05f,0.1f);
        
@@ -175,8 +197,59 @@ public class Branch : MonoBehaviour
 
             Vector3 NewPosOutScreen = new Vector3(Random.RandomRange(posOutScreen.x, posOutScreen.x + 1f), posOutScreen.y, 0f);
 
-            birds[j].MoveToTarget(NewPosOutScreen,true);
+            listBirds[j].MoveToTarget(NewPosOutScreen,true);
         }
-        birds.Clear();
+        listBirds.Clear();
+    }
+    private void OnMouseDown()
+    {
+        if (GameManager._instance.gameState == GameManager.GameState.ChangeSeatsBirds)
+        {
+            ChangeSeats();
+        }
+    }
+    public void ChangeSeats()
+    {
+        ///  1 2 3 4
+        ///  1 4 2 3    // 4 lui ve so 2, 2 len 3 , 3 len 4 cung luc  => 1 du nguyen
+        ///  1 3 4 2   // 2 len so 4, 3 lui ve so 2 , 4 lui ve so 3
+        ///  2 4 3 1    // 1 len so 4, 2 lui ve so 1, 4 lui ve so 2   => 3 du nguyen
+
+        List<Bird> ListFakeBirds = new List<Bird>();
+        ListFakeBirds.AddRange(listBirds);
+        listBirds.Clear();
+        int Number = Random.RandomRange(1, 3);
+        if (Number == 1)
+        {
+            if (ListFakeBirds.Count == 4)
+            {
+                listBirds.Add(ListFakeBirds[0]);
+                listBirds.Add(ListFakeBirds[3]);
+                listBirds.Add(ListFakeBirds[1]);
+                listBirds.Add(ListFakeBirds[2]);
+            }
+        }
+        if (Number == 2)
+        {
+            if (ListFakeBirds.Count == 4)
+            {
+                listBirds.Add(ListFakeBirds[1]);
+                listBirds.Add(ListFakeBirds[3]);
+                listBirds.Add(ListFakeBirds[2]);
+                listBirds.Add(ListFakeBirds[0]);
+            }
+        }
+
+        for (int i = 0; i < listBirds.Count; i++)
+        {
+            listBirds[i].MoveToTarget(allSlots[i].transform.position, false);
+        }
+
+        StartCoroutine(WaitTimeChangeSeats());
+    }
+    IEnumerator WaitTimeChangeSeats()
+    {
+        yield return new WaitForSeconds(0.54f);
+        GameManager._instance.gameState = GameManager.GameState.SortBirds;
     }
 }

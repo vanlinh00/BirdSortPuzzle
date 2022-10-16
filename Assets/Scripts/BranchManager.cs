@@ -74,20 +74,20 @@ public class BranchManager : MonoBehaviour
     }
     public bool IsSameIdBird(int IdBranch1,int IdBranch2)
     {
-        if (ListAllBranchs[IdBranch2].birds.Count == 4|| ListAllBranchs[IdBranch1].birds.Count == 0)
+        if (ListAllBranchs[IdBranch2].listBirds.Count == 4|| ListAllBranchs[IdBranch1].listBirds.Count == 0)
         {
             return false;
         }
         else
         {
-            if (ListAllBranchs[IdBranch2].birds.Count == 0)
+            if (ListAllBranchs[IdBranch2].listBirds.Count == 0)
             {
                 return true;
             }
             else
             {
-                Bird firstBirdBranch1 = ListAllBranchs[IdBranch1].birds[ListAllBranchs[IdBranch1].birds.Count - 1];
-                Bird firstBirdBranh2 = ListAllBranchs[IdBranch2].birds[ListAllBranchs[IdBranch2].birds.Count - 1];
+                Bird firstBirdBranch1 = ListAllBranchs[IdBranch1].listBirds[ListAllBranchs[IdBranch1].listBirds.Count - 1];
+                Bird firstBirdBranh2 = ListAllBranchs[IdBranch2].listBirds[ListAllBranchs[IdBranch2].listBirds.Count - 1];
                 return (firstBirdBranch1.id == firstBirdBranh2.id) ? true : false;
             }
 
