@@ -82,6 +82,11 @@ public class GamePlay : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            _countClick = 0;
+        }
+      
     }
     void CheckCantClick()
     {
@@ -116,7 +121,6 @@ public class GamePlay : MonoBehaviour
         int AmountBirdMove = ListAllBranchs[indexCurrentBranch].listBirdMove.Count;
 
         bool  lastBridMoveToBranch = false;
-
         int CountBirdMove = 0;
 
         if(AmountSlotNextBranch>AmountBirdMove)
@@ -127,7 +131,6 @@ public class GamePlay : MonoBehaviour
         {
             CountBirdMove = AmountSlotNextBranch;
             lastBridMoveToBranch = true;
-
             if(AmountBirdMove- AmountSlotNextBranch > 0)
             {
                 ListAllBranchs[indexCurrentBranch].UnTouching();

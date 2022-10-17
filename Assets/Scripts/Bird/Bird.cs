@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Spine;
 
 public class Bird : MonoBehaviour
 {
@@ -11,43 +12,61 @@ public class Bird : MonoBehaviour
     public Vector3 RealPosBird;
     public GameObject ParentObj;
     public float TimeMove = 0.54f;
+ 
     public void Start()
     {
         StateIdle();
     }
     public void StateFly()
     {
-        _skeletonAnimation.AnimationName = "fly";
+        // _skeletonAnimation.AnimationName = "fly";
+        _skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
+        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
     }
     public void StateIdle()
     {
-        _skeletonAnimation.AnimationName = "idle";
+      //  _skeletonAnimation.AnimationName = "idle";
+       _skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
     }
     public void StateGrounding()
     {
-        _skeletonAnimation.AnimationName = "grounding";
+        // _skeletonAnimation.AnimationName = "grounding";
+
+        _skeletonAnimation.AnimationState.SetAnimation(0, "grounding", true);
+        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+
     }
     public void Statetouching()
     {
-        _skeletonAnimation.AnimationName = "touching";
+       //  _skeletonAnimation.AnimationName = "touching";
+       //_skeletonAnimation.AnimationState.SetAnimation(1, "touching", true);
     }
     public void MoveToTarget(Vector3 Target, bool IsFlipX)
     {
-        StateFly();
+        //  StateFly();
+        MixStateFlyAndTouching();
         //  StartCoroutine(Move(transform, Target, 0.54f));
         transform.DOMove(Target, TimeMove);
-        StartCoroutine(WaitTimeChangeState(IsFlipX));
+        StartCoroutine(WaitTimeChangeState(IsFlipX, TimeMove));
     }
-    IEnumerator WaitTimeChangeState(bool IsFlipX)
+    public void ChangeSeats(Vector3 Target, bool IsFlipX)
     {
-        yield return new WaitForSeconds(TimeMove);
+        StateFly();
+        transform.DOMove(Target, 0.5f);
+        StartCoroutine(WaitTimeChangeState(IsFlipX,0.5f));
+    }
+    IEnumerator WaitTimeChangeState(bool IsFlipX, float WaitTime)
+    {
+        yield return new WaitForSeconds(WaitTime);
         if (IsFlipX)
         {
             FlipX();
         }
         yield return new WaitForSeconds(0.02f);
-        yield return new WaitForSeconds(TimeMove*0.3f/ 8f);
         StateGrounding();
+        yield return new WaitForSeconds(0.2f);
+        StateIdle();
         if (ParentObj != null)
         {
             transform.parent = ParentObj.transform;
@@ -56,17 +75,21 @@ public class Bird : MonoBehaviour
         {
             Debug.Log(id);
         }
-        yield return new WaitForSeconds(0.2f);
-        StateIdle();
     }
-    public void Mix2Animation(AnimationReferenceAsset animation, bool loop)
+    public void MixStateFlyAndTouching()
     {
-        Spine.TrackEntry animationEntry = _skeletonAnimation.state.AddAnimation(1, animation, loop, 0);
-        animationEntry.Complete += AnimationEntry_Complete;
-    }
-    private void AnimationEntry_Complete(Spine.TrackEntry trackEntry)
-    {
+        _skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
+        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
+        _skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, 100f);
 
+    }
+    public void MixStateIdleAndTouching(float TimeTouching)
+    {
+        _skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
+        _skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, TimeTouching);
     }
     public void FlipX()
     {
@@ -91,38 +114,19 @@ public class Bird : MonoBehaviour
         yield return new WaitForSeconds(0.7f);
         StateGrounding();
         yield return new WaitForSeconds(0.4f);
+
         StateIdle();
     }
     public void Renew()
     {
         TimeMove = 0.54f;
+
         StateIdle();
         _skeletonAnimation.skeleton.FlipX = false;
         ObjectPooler._instance.AddElement("Bird"+id, gameObject);
         gameObject.transform.parent = ObjectPooler._instance.transform;
         gameObject.SetActive(false);
-       
     }
-   //public void Mix2Animation()
-   // {
-   // }
-   // public void AddAnimation(AnimationReferenceAsset animation,bool loop)
-   // {
-   //     Spine.TrackEntry animationEntry = _skeletonAnimation.state.AddAnimation();
-   // }
-    //IEnumerator Move(Transform CurrentTransform, Vector3 Target, float TotalTime)
-    //{
-    //    var passed = 0f;
-    //    var init = CurrentTransform.transform.position;
-    //    while (passed < TotalTime)
-    //    {
-    //        passed += Time.deltaTime;
-    //        var normalized = passed / TotalTime;
-    //        var current = Vector3.Lerp(init, Target, normalized);
-    //        CurrentTransform.position = current;
-    //        yield return null;
-    //    }
 
-    //}
     
 }

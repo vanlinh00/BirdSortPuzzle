@@ -37,14 +37,14 @@ public class Branch : MonoBehaviour
         {
             int CountBirds = listBirds.Count - 1;
             int IdFistBird = listBirds[listBirds.Count - 1].id;
-            listBirds[listBirds.Count - 1].GetComponent<Bird>().Statetouching();
+            listBirds[listBirds.Count - 1].GetComponent<Bird>().MixStateIdleAndTouching(10f);
             listBirdMove.Add(listBirds[listBirds.Count - 1]);
             for (int i = CountBirds - 1; i >= 0; i--)
             {
                 if (IdFistBird == listBirds[i].id)
                 {
                     listBirdMove.Add(listBirds[i]);
-                    listBirds[i].GetComponent<Bird>().Statetouching();
+                    listBirds[i].GetComponent<Bird>().MixStateIdleAndTouching(10f);
                 }
                 else
                 {
@@ -213,6 +213,8 @@ public class Branch : MonoBehaviour
     {
         if (GameManager._instance.gameState == GameManager.GameState.ChangeSeatsBirds)
         {
+            UnTouching();
+            ClearBirdMove();
             ChangeSeats();
         }
     }
@@ -226,35 +228,91 @@ public class Branch : MonoBehaviour
         List<Bird> ListFakeBirds = new List<Bird>();
         ListFakeBirds.AddRange(listBirds);
         listBirds.Clear();
-        int Number = Random.RandomRange(1, 3);
-        if (Number == 1)
+
+        //int Number = Random.RandomRange(1, 3);
+        //if (Number == 1)
+        //{
+        //    if (ListFakeBirds.Count == 4)
+        //    {
+        //        listBirds.Add(ListFakeBirds[0]);
+        //        listBirds.Add(ListFakeBirds[3]);
+        //        listBirds.Add(ListFakeBirds[1]);
+        //        listBirds.Add(ListFakeBirds[2]);
+        //    }
+        //}
+        //if (Number == 2)
+        //{
+        //    if (ListFakeBirds.Count == 4)
+        //    {
+        //        listBirds.Add(ListFakeBirds[1]);
+        //        listBirds.Add(ListFakeBirds[3]);
+        //        listBirds.Add(ListFakeBirds[2]);
+        //        listBirds.Add(ListFakeBirds[0]);
+        //    }
+        //}
+
+        /// 1 2 3 4 
+        /// 5 5 1 2
+
+        List<int> ListNumberBird = new List<int>();
+
+        int[] a = new int[20];
+        for (int i=0;i< ListFakeBirds.Count-1;i++)
         {
-            if (ListFakeBirds.Count == 4)
+            for (int j=i+1;j<ListFakeBirds.Count;j++)
             {
-                listBirds.Add(ListFakeBirds[0]);
-                listBirds.Add(ListFakeBirds[3]);
-                listBirds.Add(ListFakeBirds[1]);
-                listBirds.Add(ListFakeBirds[2]);
+                if(ListFakeBirds[i].id==ListFakeBirds[j].id)
+                {
+                    a[ListFakeBirds[i].id]++;
+                }
             }
         }
-        if (Number == 2)
+
+        int max = 0;
+        int IdMax = 0;
+        for(int i=0;i<a.Length;i++ )
         {
-            if (ListFakeBirds.Count == 4)
+            if(a[i]>max)
             {
-                listBirds.Add(ListFakeBirds[1]);
-                listBirds.Add(ListFakeBirds[3]);
-                listBirds.Add(ListFakeBirds[2]);
-                listBirds.Add(ListFakeBirds[0]);
+                IdMax = i;
+                max = a[i];
             }
+        }
+
+        List<Bird> ListLastBird = new List<Bird>();
+        for(int i=0;i<ListFakeBirds.Count; i++)
+        {
+            if(IdMax== ListFakeBirds[i].id)
+            {
+                ListLastBird.Add(ListFakeBirds[i]);
+            }
+            else
+            {
+                listBirds.Add(ListFakeBirds[i]);
+
+            }
+        }
+
+        foreach(Bird bird in ListLastBird)
+        {
+            listBirds.Add(bird);
         }
 
         for (int i = 0; i < listBirds.Count; i++)
         {
             listBirds[i].ParentObj = _animator.gameObject;
-            listBirds[i].MoveToTarget(allSlots[i].transform.position, false);
+            listBirds[i].ChangeSeats(allSlots[i].transform.position, false);
         }
 
         StartCoroutine(WaitTimeChangeSeats());
+        StartCoroutine(WaitTimeChangeStateWhenChangeSeats());
+    }
+    IEnumerator WaitTimeChangeStateWhenChangeSeats()
+    {
+        yield return new WaitForSeconds(0.5f);
+        StateShaky();
+        yield return new WaitForSeconds(0.2f);
+        StateIdle();
     }
     IEnumerator WaitTimeChangeSeats()
     {

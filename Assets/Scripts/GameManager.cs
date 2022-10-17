@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    [SerializeField] GamePlay _gamePlay;
+   public GamePlay _gamePlay;
     int CountBrach = 0;
     [SerializeField] int level;
     protected override void Awake()
@@ -73,7 +73,7 @@ public class GameManager : Singleton<GameManager>
                 if (_gamePlay.ListAllBranchs[IndexCurrentBranch].id % 2 == 0)
                 {
                     Bird.FlipX();
-                    Bird.MoveToTarget(PosOldSlot, true);
+                    Bird.ChangeSeats(PosOldSlot, true);
                 }
                 else
                 {
@@ -82,25 +82,25 @@ public class GameManager : Singleton<GameManager>
                         Bird.FlipX();
                         Bird.MoveToTarget(PosOldSlot, true);
                     }
-                    Bird.MoveToTarget(PosOldSlot, false);
+                    Bird.ChangeSeats(PosOldSlot, false);
                 }
             }
             else
             {
                 if (_gamePlay.ListAllBranchs[IndexCurrentBranch].id % 2 == 0)
                 {
-                    Bird.MoveToTarget(PosOldSlot, false);
+                    Bird.ChangeSeats(PosOldSlot, false);
                 }
                 else
                 {
                     Bird.FlipX();
-                    Bird.MoveToTarget(PosOldSlot, true);
+                    Bird.ChangeSeats(PosOldSlot, true);
                 }
             }
         }
         else
         {
-            Bird.MoveToTarget(PosOldSlot, true);
+            Bird.ChangeSeats(PosOldSlot, true);
         }
         timeWaitBirdMove = Random.RandomRange(0.05f, 0.1f);
         yield return new WaitForSeconds(timeWaitBirdMove);
