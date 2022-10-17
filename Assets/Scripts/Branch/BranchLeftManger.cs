@@ -31,5 +31,21 @@ public class BranchLeftManger : MonoBehaviour
         BrachRight.transform.localPosition = PoslastChild;
         return BrachRight.GetComponent<Branch>();
     }
-   
+    public void Renew()
+    {
+        transform.position = new Vector3(2.5f, 0, 0f);
+        CountBrach = 2;
+    }
+    //public void ResetBranchs()
+    //{
+    //    GameObject Branch;
+    //    int NumChild = transform.childCount;
+    //    for (int i = 0; i < NumChild; i++)
+    //    {
+    //        Branch = transform.GetChild(0).gameObject;
+    //        //Branch.SetActive(false);
+    //        ObjectPooler._instance.AddElement("Branch", Branch);
+    //        Branch.transform.parent = ObjectPooler._instance.transform;
+    //    }
+    //}
 }

@@ -5,9 +5,10 @@ using UnityEngine;
 public class BranchManager : MonoBehaviour
 {
     [SerializeField] DataBirdOnBranchs _dataBirdOnBranchs = new DataBirdOnBranchs();
-    [SerializeField]  List<Branch> ListAllBranchs = new List<Branch>();
+    [SerializeField]  List<Branch> _listAllBranchs = new List<Branch>();
     [SerializeField] BranchRightManager _branchRightManager;
     [SerializeField] BranchLeftManger _branchLeftManger;
+    [SerializeField] List<Bird> _listBirds = new List<Bird>();
 
     //{
     //    "AmountBranch": 2,
@@ -22,12 +23,13 @@ public class BranchManager : MonoBehaviour
     {
         _dataBirdOnBranchs = DataBirdOnBranchs;
     }
+
     public List<Branch>  BonrAllBirdOnBranch()
     {
         for (int i = 0; i < _dataBirdOnBranchs.dataBirdOnBranch.Count; i++)
         {
             DataBirdOnBranch data = _dataBirdOnBranchs.dataBirdOnBranch[i];
-            Vector3 RealPosBird = ListAllBranchs[data.idBranch - 1].GetPosSlot(data.slotBird - 1);
+            Vector3 RealPosBird = _listAllBranchs[data.idBranch - 1].GetPosSlot(data.slotBird - 1);
             GameObject Bird;
 
             if (data.idBranch % 2 != 0)
@@ -42,55 +44,73 @@ public class BranchManager : MonoBehaviour
                 Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, StartPosBird, Quaternion.identity);
             }
             Bird.GetComponent<Bird>().RealPosBird = RealPosBird;
-            ListAllBranchs[data.idBranch - 1].AddToListBrids(Bird.GetComponent<Bird>());
+            _listBirds.Add(Bird.GetComponent<Bird>());
+            _listAllBranchs[data.idBranch - 1].AddToListBrids(Bird.GetComponent<Bird>());
         }
-        return ListAllBranchs;
+        return _listAllBranchs;
     }
   public void MoveAllBirdSToAllBranchs()
     {
-        for (int i = 0; i < ListAllBranchs.Count; i++)
+        for (int i = 0; i < _listAllBranchs.Count; i++)
         {
-            ListAllBranchs[i].MoveALlBirdToALlSlot();
+            _listAllBranchs[i].MoveALlBirdToALlSlot();
         }
     }
-    public void LoadAllBranchLevel(int AmountBranch)
+    public void LoadAllBranchLevel()
     {
         //DataLevel employeesInJson = new DataLevel();
         //employeesInJson = JsonUtility.FromJson<DataLevel>(jsonFile.text);
         //Debug.Log(employeesInJson.AmountBranch);
     
-        for (int i = 1; i <= AmountBranch; i++)
+        for (int i = 1; i <= _dataBirdOnBranchs.AmountBranch; i++)
         {
             if (i % 2 != 0)
             {
-                ListAllBranchs.Add(_branchRightManager.BonrNewBranch());
+                _listAllBranchs.Add(_branchRightManager.BonrNewBranch());
             }
             else
             {
-                ListAllBranchs.Add(_branchLeftManger.BonrNewBranch());
+                _listAllBranchs.Add(_branchLeftManger.BonrNewBranch());
             }
 
         }
     }
-    public bool IsSameIdBird(int IdBranch1,int IdBranch2)
+
+    public bool IsSameIdBird(int IdCurrentBranch,int IdNextBranch)
     {
-        if (ListAllBranchs[IdBranch2].listBirds.Count == 4|| ListAllBranchs[IdBranch1].listBirds.Count == 0)
+        if (_listAllBranchs[IdNextBranch].listBirds.Count == 4|| _listAllBranchs[IdCurrentBranch].listBirds.Count == 0)
         {
             return false;
         }
         else
         {
-            if (ListAllBranchs[IdBranch2].listBirds.Count == 0)
+            if (_listAllBranchs[IdNextBranch].listBirds.Count == 0)
             {
                 return true;
             }
             else
             {
-                Bird firstBirdBranch1 = ListAllBranchs[IdBranch1].listBirds[ListAllBranchs[IdBranch1].listBirds.Count - 1];
-                Bird firstBirdBranh2 = ListAllBranchs[IdBranch2].listBirds[ListAllBranchs[IdBranch2].listBirds.Count - 1];
+                Bird firstBirdBranch1 = _listAllBranchs[IdCurrentBranch].listBirds[_listAllBranchs[IdCurrentBranch].listBirds.Count - 1];
+                Bird firstBirdBranh2 = _listAllBranchs[IdNextBranch].listBirds[_listAllBranchs[IdNextBranch].listBirds.Count - 1];
                 return (firstBirdBranch1.id == firstBirdBranh2.id) ? true : false;
             }
 
+        }
+    }
+    public void RenewAllBranchs()
+    {
+        for (int i=0;i<_listAllBranchs.Count;i++)
+        {
+            _listAllBranchs[i].Renew();
+        }
+        _branchLeftManger.Renew();
+        _branchRightManager.Renew();
+    }
+    public void RenewAllBirds()
+    {
+        for (int i = 0; i < _listBirds.Count; i++)
+        {
+            _listBirds[i].Renew();
         }
     }
     public void MoveToScreen()

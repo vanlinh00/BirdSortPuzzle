@@ -17,6 +17,7 @@ public int AmountBranch;
 }
 public class DataBirdOnBranchs
 {
+    public int AmountBranch;
     public List<DataBirdOnBranch> dataBirdOnBranch = new List<DataBirdOnBranch>();
 }
 public class DataBirdOnBranch

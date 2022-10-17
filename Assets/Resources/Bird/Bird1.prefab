@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2597231893900849591
+--- !u!1 &2930824305076979735
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2597231893900849587}
-  - component: {fileID: 2597231893900849586}
-  - component: {fileID: 2597231893900849589}
-  - component: {fileID: 2597231893900849588}
-  - component: {fileID: 2597231893900849584}
+  - component: {fileID: 2930824305076979739}
+  - component: {fileID: 2930824305076979736}
+  - component: {fileID: 2930824305076979737}
+  - component: {fileID: 2930824305076979734}
+  - component: {fileID: 5347877977115944488}
   m_Layer: 0
   m_Name: Bird1
   m_TagString: Untagged
@@ -20,35 +20,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2597231893900849587
+--- !u!4 &2930824305076979739
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2597231893900849591}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 2.39, y: 1.69, z: 0}
+  m_GameObject: {fileID: 2930824305076979735}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!33 &2597231893900849586
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &2930824305076979736
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2597231893900849591}
+  m_GameObject: {fileID: 2930824305076979735}
   m_Mesh: {fileID: 0}
---- !u!23 &2597231893900849589
+--- !u!23 &2930824305076979737
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2597231893900849591}
+  m_GameObject: {fileID: 2930824305076979735}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c9e2e5c0f3cfe2544934a8dab5a86a5c, type: 2}
+  - {fileID: 2100000, guid: f5f1e0f86d36e774da5da9f720df3d1a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,19 +83,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 25
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2597231893900849588
+--- !u!114 &2930824305076979734
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2597231893900849591}
+  m_GameObject: {fileID: 2930824305076979735}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 3ba799fcbc071244ead6785710942fe2, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: fd4b36281be71fb46b0fe25b251dc261, type: 2}
   initialSkinName: 1
   fixPrefabOverrideViaMeshFilter: 2
   initialFlipX: 0
@@ -120,21 +120,21 @@ MonoBehaviour:
   disableRenderingOnOverride: 1
   updateTiming: 1
   unscaledTime: 0
-  _animationName: idle
+  _animationName: 
   loop: 1
   timeScale: 1
---- !u!114 &2597231893900849584
+--- !u!114 &5347877977115944488
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2597231893900849591}
+  m_GameObject: {fileID: 2930824305076979735}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5cfabbbe43812b4c9a1804d37966b88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
-  _skeletonAnimation: {fileID: 2597231893900849588}
+  id: 1
+  _skeletonAnimation: {fileID: 2930824305076979734}
   RealPosBird: {x: 0, y: 0, z: 0}

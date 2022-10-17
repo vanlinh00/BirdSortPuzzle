@@ -10,6 +10,7 @@ public class LoadData : MonoBehaviour
 
     public DataBirdOnBranchs LoadDataLevel(int level)
     {
+     
         //DataBirdOnBranchs DataBirdOnBranchsJson = JsonUtility.FromJson<DataBirdOnBranchs>(jsonFile.text);
         //foreach (DataBirdOnBranch dataBirdOnBranch in DataBirdOnBranchsJson.dataBirdOnBranch)
         //{
@@ -18,6 +19,8 @@ public class LoadData : MonoBehaviour
         //   "AmountBranch": 3   
         if (level == 1)
         {
+            dataBirdOnBranchs.AmountBranch = 2;
+
             DataBirdOnBranch dataBirdOnBranch = new DataBirdOnBranch(1, 1, 1, 1);
             dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch);
 
@@ -34,7 +37,8 @@ public class LoadData : MonoBehaviour
         }
         if (level == 2)
         {
-
+            dataBirdOnBranchs.AmountBranch = 5;
+            
             DataBirdOnBranch dataBirdOnBranch = new DataBirdOnBranch(1, 1, 1, 1);
             dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch);
 
@@ -65,7 +69,7 @@ public class LoadData : MonoBehaviour
         }
         if (level == 3)
         {
-
+            dataBirdOnBranchs.AmountBranch = 5; 
             // "branch": 5,
             DataBirdOnBranch dataBirdOnBranch = new DataBirdOnBranch(1, 3, 1, 1);
             dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch);
@@ -89,7 +93,6 @@ public class LoadData : MonoBehaviour
             DataBirdOnBranch dataBirdOnBranch6 = new DataBirdOnBranch(6, 2, 2, 2);
             dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch6);
 
-
             DataBirdOnBranch dataBirdOnBranch7 = new DataBirdOnBranch(7, 1, 2, 3);
             dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch7);
 
@@ -110,6 +113,12 @@ public class LoadData : MonoBehaviour
         }
         return dataBirdOnBranchs;
 
+    }
+    
+    public void Renew()
+    {
+        dataBirdOnBranchs.AmountBranch = 0;
+        dataBirdOnBranchs.dataBirdOnBranch.Clear();
     }
 }
 

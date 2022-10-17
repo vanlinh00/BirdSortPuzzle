@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 public class Branch : MonoBehaviour
 {   
     public int id;
@@ -99,13 +99,15 @@ public class Branch : MonoBehaviour
         _animator.SetBool("Shaky", false);
 
     }
-
     public void Renew()
     {
+        StateIdle();
         id = 0;
-        allSlots.Clear();
-        listBirds.Clear();
         listBirdMove.Clear();
+        listBirds.Clear();
+        ObjectPooler._instance.AddElement("Branch", gameObject);
+        gameObject.transform.parent = ObjectPooler._instance.transform;
+        gameObject.SetActive(false);
     }
     public void MoveALlBirdToALlSlot()
     {
@@ -134,15 +136,15 @@ public class Branch : MonoBehaviour
         float TimeWait = 0f;
         if (IdBird == 2)
         {
-            TimeWait = 0.78f;
+            TimeWait = 0.68f;
         }
         else if (IdBird == 1)
         {
-            TimeWait = 1.1f;
+            TimeWait = 1f;
         }
         else if (IdBird == 3)
         {
-            TimeWait = 1.12f;
+            TimeWait = 1.02f;
         }
         return TimeWait;
     }
@@ -152,7 +154,7 @@ public class Branch : MonoBehaviour
     }
     IEnumerator WaitTimeTouchBranch(float TimeWaitBridMove)
     {
-        yield return new WaitForSeconds(TimeWaitBridMove+0.46f);
+        yield return new WaitForSeconds(TimeWaitBridMove+0.1f);
         StateShaky();
         yield return new WaitForSeconds(0.15f);
         StateIdle();
@@ -187,18 +189,24 @@ public class Branch : MonoBehaviour
     }
     IEnumerator FadeMoveBirdToOutScreen()
     {
-        for (int j = 0; j < listBirds.Count; j++)
-        {
-            Vector3 RealPosBird = listBirds[j].RealPosBird;
+        Vector3 NewPosOutScreen = new Vector3(Random.RandomRange(posOutScreen.x, posOutScreen.x + 1f), posOutScreen.y, 0f);
 
-            float TimeWait = Random.RandomRange(0.05f,0.1f);
-       
-           yield return new WaitForSeconds(TimeWait);
+        listBirds[1].StateFly();
+        listBirds[1].transform.DOMove(posOutScreen, 1f);
+        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
 
-            Vector3 NewPosOutScreen = new Vector3(Random.RandomRange(posOutScreen.x, posOutScreen.x + 1f), posOutScreen.y, 0f);
+        listBirds[2].StateFly();
+        listBirds[2].transform.DOMove(posOutScreen, 1f);
+        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
 
-            listBirds[j].MoveToTarget(NewPosOutScreen,true);
-        }
+        listBirds[0].StateFly();
+        listBirds[0].transform.DOMove(posOutScreen, 1f);
+        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
+
+        listBirds[3].StateFly();
+        listBirds[3].transform.DOMove(posOutScreen, 1f);
+        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
+
         listBirds.Clear();
     }
     private void OnMouseDown()
@@ -242,6 +250,7 @@ public class Branch : MonoBehaviour
 
         for (int i = 0; i < listBirds.Count; i++)
         {
+            listBirds[i].ParentObj = _animator.gameObject;
             listBirds[i].MoveToTarget(allSlots[i].transform.position, false);
         }
 
