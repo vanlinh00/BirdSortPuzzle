@@ -14,7 +14,7 @@ public class UiGamePlay : MonoBehaviour
     {
         _restartGame.onClick.AddListener(RestartGame);
         _nextLevelBtn.onClick.AddListener(NextLevel);
-        _ChangeSteatsBtn.onClick.AddListener(ChangeSeatsLevel);
+        _ChangeSteatsBtn.onClick.AddListener(ChangeSeats);
         _undoBtn.onClick.AddListener(Undo);
     }
     public void NextLevel()
@@ -27,13 +27,12 @@ public class UiGamePlay : MonoBehaviour
         GameManager._instance.ReNewGame();
         yield return new WaitForSeconds(0.1f);
         GameManager._instance.ReplayLevel();
-
     }
     public void RestartGame()
     {
         SceneManager.LoadScene(0);
     }
-    public void ChangeSeatsLevel()
+    public void ChangeSeats()
     {
         GameManager._instance.gameState = GameManager.GameState.ChangeSeatsBirds;
     }

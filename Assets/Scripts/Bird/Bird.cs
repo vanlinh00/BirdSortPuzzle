@@ -50,20 +50,20 @@ public class Bird : MonoBehaviour
         transform.DOMove(Target, TimeMove);
         StartCoroutine(WaitTimeChangeState(IsFlipX, TimeMove));
     }
-    public void ChangeSeats(Vector3 Target, bool IsFlipX)
+    public void ChangeSeats(Vector3 Target, bool IsFlipX,float TimeMove)
     {
         StateFly();
-        transform.DOMove(Target, 0.5f);
-        StartCoroutine(WaitTimeChangeState(IsFlipX,0.5f));
+        transform.DOMove(Target, TimeMove);
+       StartCoroutine(WaitTimeChangeState(IsFlipX, TimeMove));
     }
-    IEnumerator WaitTimeChangeState(bool IsFlipX, float WaitTime)
+    IEnumerator WaitTimeChangeState(bool IsFlipX, float TimeMove)
     {
-        yield return new WaitForSeconds(WaitTime);
+      
+        yield return new WaitForSeconds(TimeMove-0.1f);
         if (IsFlipX)
         {
             FlipX();
         }
-        yield return new WaitForSeconds(0.02f);
         StateGrounding();
         yield return new WaitForSeconds(0.2f);
         StateIdle();
@@ -114,7 +114,6 @@ public class Bird : MonoBehaviour
         yield return new WaitForSeconds(0.7f);
         StateGrounding();
         yield return new WaitForSeconds(0.4f);
-
         StateIdle();
     }
     public void Renew()

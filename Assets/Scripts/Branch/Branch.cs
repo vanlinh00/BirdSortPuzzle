@@ -17,7 +17,10 @@ public class Branch : MonoBehaviour
     }
     public void DeleteLastBird()
     {
-        listBirds.RemoveAt(listBirds.Count - 1);
+        if(listBirds.Count!=0)
+        {
+            listBirds.RemoveAt(listBirds.Count - 1);
+        } 
     }
     public Vector3 GetPosSlot(int Number)
     {
@@ -127,7 +130,7 @@ public class Branch : MonoBehaviour
             if (j== listBirds.Count-1)
             {
                 TimeWaitBridMove = CalculerTimeWait(listBirds[j].id);
-                AllBirdsTouchBranch(TimeWaitBridMove);
+                AllBirdsTouchBranch(TimeWaitBridMove-0.1f);
             }
         }
     }
@@ -207,7 +210,13 @@ public class Branch : MonoBehaviour
         listBirds[3].transform.DOMove(posOutScreen, 1f);
         yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
 
+        for(int i=0;i<listBirds.Count;i++)
+        {
+            listBirds[i].transform.parent = null;
+        }
+
         listBirds.Clear();
+        listBirdMove.Clear();
     }
     private void OnMouseDown()
     {
@@ -220,39 +229,10 @@ public class Branch : MonoBehaviour
     }
     public void ChangeSeats()
     {
-        ///  1 2 3 4
-        ///  1 4 2 3    // 4 lui ve so 2, 2 len 3 , 3 len 4 cung luc  => 1 du nguyen
-        ///  1 3 4 2   // 2 len so 4, 3 lui ve so 2 , 4 lui ve so 3
-        ///  2 4 3 1    // 1 len so 4, 2 lui ve so 1, 4 lui ve so 2   => 3 du nguyen
-
         List<Bird> ListFakeBirds = new List<Bird>();
         ListFakeBirds.AddRange(listBirds);
         listBirds.Clear();
 
-        //int Number = Random.RandomRange(1, 3);
-        //if (Number == 1)
-        //{
-        //    if (ListFakeBirds.Count == 4)
-        //    {
-        //        listBirds.Add(ListFakeBirds[0]);
-        //        listBirds.Add(ListFakeBirds[3]);
-        //        listBirds.Add(ListFakeBirds[1]);
-        //        listBirds.Add(ListFakeBirds[2]);
-        //    }
-        //}
-        //if (Number == 2)
-        //{
-        //    if (ListFakeBirds.Count == 4)
-        //    {
-        //        listBirds.Add(ListFakeBirds[1]);
-        //        listBirds.Add(ListFakeBirds[3]);
-        //        listBirds.Add(ListFakeBirds[2]);
-        //        listBirds.Add(ListFakeBirds[0]);
-        //    }
-        //}
-
-        /// 1 2 3 4 
-        /// 5 5 1 2
 
         List<int> ListNumberBird = new List<int>();
 
@@ -289,7 +269,6 @@ public class Branch : MonoBehaviour
             else
             {
                 listBirds.Add(ListFakeBirds[i]);
-
             }
         }
 
@@ -298,12 +277,18 @@ public class Branch : MonoBehaviour
             listBirds.Add(bird);
         }
 
+        List<BirdUndo> ListBirdUndo = new List<BirdUndo>();
         for (int i = 0; i < listBirds.Count; i++)
         {
             listBirds[i].ParentObj = _animator.gameObject;
-            listBirds[i].ChangeSeats(allSlots[i].transform.position, false);
+            listBirds[i].ChangeSeats(allSlots[i].transform.position, false, 0.5f);
+            Vector3 PosOldSlot = listBirds[i].transform.position;
+            BirdUndo BirdUndos = new BirdUndo(id, listBirds[i], PosOldSlot, id, true);
+            ListBirdUndo.Add(BirdUndos);
         }
 
+        StateUndo NewStateUndo = new StateUndo(ListBirdUndo, ListFakeBirds);
+        GameManager._instance.StackStateUndos.Push(NewStateUndo);
         StartCoroutine(WaitTimeChangeSeats());
         StartCoroutine(WaitTimeChangeStateWhenChangeSeats());
     }
