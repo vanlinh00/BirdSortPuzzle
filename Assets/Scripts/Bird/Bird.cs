@@ -19,27 +19,28 @@ public class Bird : MonoBehaviour
     }
     public void StateFly()
     {
-        // _skeletonAnimation.AnimationName = "fly";
-        _skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
-        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+         _skeletonAnimation.AnimationName = "fly";
+        //_skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
+        //_skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
     }
     public void StateIdle()
     {
-      //  _skeletonAnimation.AnimationName = "idle";
-       _skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
-        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+       _skeletonAnimation.AnimationName = "idle";
+
+       //_skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+       // _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
     }
     public void StateGrounding()
     {
-        // _skeletonAnimation.AnimationName = "grounding";
+         _skeletonAnimation.AnimationName = "grounding";
 
-        _skeletonAnimation.AnimationState.SetAnimation(0, "grounding", true);
-        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+        //_skeletonAnimation.AnimationState.SetAnimation(0, "grounding", true);
+        //_skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
 
     }
     public void Statetouching()
     {
-       //  _skeletonAnimation.AnimationName = "touching";
+        _skeletonAnimation.AnimationName = "touching";
        //_skeletonAnimation.AnimationState.SetAnimation(1, "touching", true);
     }
     public void MoveToTarget(Vector3 Target, bool IsFlipX)
@@ -78,18 +79,21 @@ public class Bird : MonoBehaviour
     }
     public void MixStateFlyAndTouching()
     {
-        _skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
-        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
-        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
-        _skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, 100f);
+        StateFly();
+
+        //_skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
+        //_skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+        //_skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
+        //_skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, 100f);
 
     }
     public void MixStateIdleAndTouching(float TimeTouching)
     {
-        _skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
-        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
-        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
-        _skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, TimeTouching);
+        Statetouching();
+        //_skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+        //_skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+        //_skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
+        //_skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, TimeTouching);
     }
     public void FlipX()
     {

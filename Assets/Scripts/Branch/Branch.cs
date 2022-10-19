@@ -233,55 +233,179 @@ public class Branch : MonoBehaviour
         ListFakeBirds.AddRange(listBirds);
         listBirds.Clear();
 
+        //   1 2 3 4
+        //   1 1 3 4
+        //   1 1 1 4
+        //   4 4 3 3 
 
-        List<int> ListNumberBird = new List<int>();
+        //int[] NumberBirds = new int[20];
+        //for (int i = 0; i < ListFakeBirds.Count - 1; i++)
+        //{
+        //    for (int j = i + 1; j < ListFakeBirds.Count; j++)
+        //    {
+        //        if (ListFakeBirds[i].id == ListFakeBirds[j].id)
+        //        {
+        //            Debug.Log(ListFakeBirds[i].id);
+        //            NumberBirds[ListFakeBirds[i].id]++;
+        //        }
+        //    }
+        //}
 
-        int[] a = new int[20];
-        for (int i=0;i< ListFakeBirds.Count-1;i++)
+        int[] NumberBirds = new int[20];
+        for (int i = 0; i < ListFakeBirds.Count; i++)
         {
-            for (int j=i+1;j<ListFakeBirds.Count;j++)
+
+            NumberBirds[ListFakeBirds[i].id]++;
+        }
+
+        List<int> ListID = new List<int>();
+
+        for(int i=0;i<NumberBirds.Length;i++)
+        {
+            if(NumberBirds[i]!=0)
             {
-                if(ListFakeBirds[i].id==ListFakeBirds[j].id)
+                ListID.Add(i);
+            }
+        }
+
+        List<List<Bird>> ListListBirds = new List<List<Bird>>();
+        for (int i = 0; i < ListID.Count; i++)
+        {
+            List<Bird> smallListBird = new List<Bird>();
+            for (int j = 0; j < ListFakeBirds.Count; j++)
+            {
+                if(ListFakeBirds[j].id==ListID[i])
                 {
-                    a[ListFakeBirds[i].id]++;
+                    smallListBird.Add(ListFakeBirds[j]);
                 }
             }
+            ListListBirds.Add(smallListBird);
         }
 
-        int max = 0;
-        int IdMax = 0;
-        for(int i=0;i<a.Length;i++ )
+        if (ListListBirds.Count == 2)
         {
-            if(a[i]>max)
+            if(ListFakeBirds[0].id== ListListBirds[0][0].id)
             {
-                IdMax = i;
-                max = a[i];
-            }
-        }
-
-        List<Bird> ListLastBird = new List<Bird>();
-        for(int i=0;i<ListFakeBirds.Count; i++)
-        {
-            if(IdMax== ListFakeBirds[i].id)
-            {
-                ListLastBird.Add(ListFakeBirds[i]);
+                for (int i = ListListBirds.Count-1; i >= 0 ; i--)
+                {
+                    for (int j = 0; j < ListListBirds[i].Count; j++)
+                    {
+                        listBirds.Add(ListListBirds[i][j]);
+                    }
+                }
             }
             else
             {
-                listBirds.Add(ListFakeBirds[i]);
+                for (int i = 0; i < ListListBirds.Count; i++)
+                {
+                    for (int j = 0; j < ListListBirds[i].Count; j++)
+                    {
+                        listBirds.Add(ListListBirds[i][j]);
+                    }
+                }
             }
         }
-
-        foreach(Bird bird in ListLastBird)
+        else if(ListListBirds.Count==3)
         {
-            listBirds.Add(bird);
+            int max = 0;
+            int IdMax = 0;
+            for (int i = 0; i < NumberBirds.Length; i++)
+            {
+                if (NumberBirds[i] > max)
+                {
+                    IdMax = i;
+                    max = NumberBirds[i];
+                }
+            }
+
+            int CountListBirds = ListFakeBirds.Count;
+            if (ListFakeBirds[CountListBirds - 1].id != IdMax || ListFakeBirds[CountListBirds - 1].id == IdMax && ListFakeBirds[CountListBirds - 2].id != IdMax)
+            {
+                //  if(Random.RandomRange(1,3)==1)
+                //    {
+
+                //    }
+
+                List<Bird> ListLastBird = new List<Bird>();
+                for (int i = 0; i < ListFakeBirds.Count; i++)
+                {
+                    if (IdMax == ListFakeBirds[i].id)
+                    {
+                        ListLastBird.Add(ListFakeBirds[i]);
+                    }
+                    else
+                    {
+                        listBirds.Add(ListFakeBirds[i]);
+                    }
+                }
+
+                foreach (Bird bird in ListLastBird)
+                {
+                    listBirds.Add(bird);
+                }
+
+               //  1 2 3 
+               //   3 2 1
+
+            }
+            else
+            {
+                List<Bird> ListLastBird = new List<Bird>();
+                for (int i = 0; i < ListFakeBirds.Count; i++)
+                {
+                    if (IdMax != ListFakeBirds[i].id)
+                    {
+                        ListLastBird.Add(ListFakeBirds[i]);
+                    }
+                    else
+                    {
+                        listBirds.Add(ListFakeBirds[i]);
+                    }
+                }
+
+                foreach (Bird bird in ListLastBird)
+                {
+                    listBirds.Add(bird);
+                }
+
+                List<Bird> ListBirds3ID = new List<Bird>();
+                ListBirds3ID.AddRange(listBirds);
+                listBirds.Clear();
+                listBirds.Add(ListBirds3ID[0]);
+                listBirds.Add(ListBirds3ID[1]);
+
+                if (Random.RandomRange(0, 2) == 1)
+                {
+                    listBirds.Add(ListBirds3ID[2]);
+                    listBirds.Add(ListBirds3ID[3]);
+                }
+                else
+                {
+                    listBirds.Add(ListBirds3ID[3]);
+                    listBirds.Add(ListBirds3ID[2]);
+                }
+    
+            }
+
+            // 1 2 33
+            // 33 1 2
+            // 3 1 3 2 
+
+        }
+        else if(ListListBirds.Count==4)
+        {
+
         }
 
+
+      
         List<BirdUndo> ListBirdUndo = new List<BirdUndo>();
+
         for (int i = 0; i < listBirds.Count; i++)
         {
-            listBirds[i].ParentObj = _animator.gameObject;
-            listBirds[i].ChangeSeats(allSlots[i].transform.position, false, 0.5f);
+           listBirds[i].ParentObj = _animator.gameObject;
+           listBirds[i].ChangeSeats(allSlots[i].transform.position, false, 0.7f);
+
             Vector3 PosOldSlot = listBirds[i].transform.position;
             BirdUndo BirdUndos = new BirdUndo(id, listBirds[i], PosOldSlot, id, true);
             ListBirdUndo.Add(BirdUndos);

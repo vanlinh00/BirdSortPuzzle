@@ -222,9 +222,10 @@ public class GamePlay : MonoBehaviour
         {
             if (ListAllBranchs[indexNextBranch].IsFullSameBirdsOnBranch())
             {
-                yield return new WaitForSeconds(0.2f);
                 SaveStateBirdsWhenFinishBranch(CountBirdMove, indexNextBranch);
+                yield return new WaitForSeconds(0.2f);
                 ListAllBranchs[indexNextBranch].MoveAllBirdToOutScreen();
+         
             }
         }
     }
