@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BranchManager : MonoBehaviour
+public class BranchManager : Singleton<BranchManager>
 {
     [SerializeField] DataBirdOnBranchs _dataBirdOnBranchs = new DataBirdOnBranchs();
     [SerializeField]  List<Branch> _listAllBranchs = new List<Branch>();
@@ -19,6 +19,50 @@ public class BranchManager : MonoBehaviour
     //        { "id": 4,"idBird":9,"idBranch":2,"posBird":2}
     //    ]
     //}
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+    public void AddNewBranch()
+    {
+        int CountLeftChildOb = _branchLeftManger.gameObject.transform.childCount;
+        int CountRightChildOb = _branchRightManager.gameObject.transform.childCount;
+
+        if (CountLeftChildOb<CountRightChildOb)
+        {
+            StartCoroutine(FadeBranchsLeftMoveUp());
+        }
+        else
+        {
+            StartCoroutine(FadeBranchsRightMoveUp());
+        }
+    }
+    IEnumerator FadeBranchsLeftMoveUp()
+    {
+       for(int i=0;i< _listAllBranchs.Count;i++)
+        {
+            if(_listAllBranchs[i].id%2==0)
+            {
+                _listAllBranchs[i].MoveUp();
+            }
+        }
+        yield return new WaitForSeconds(0.33f);
+        _listAllBranchs.Add(_branchLeftManger.BonrNewBranch());
+    }
+
+    IEnumerator FadeBranchsRightMoveUp()
+    {
+        for (int i = 0; i < _listAllBranchs.Count; i++)
+        {
+            if (_listAllBranchs[i].id % 2 != 0)
+            {
+                _listAllBranchs[i].MoveUp();
+            }
+        }
+        yield return new WaitForSeconds(0.33f);
+        _listAllBranchs.Add(_branchRightManager.BonrNewBranch());
+    }
+
     public void LoadDataBirdOnBranchs(DataBirdOnBranchs DataBirdOnBranchs)
     {
         _dataBirdOnBranchs = DataBirdOnBranchs;
@@ -26,6 +70,7 @@ public class BranchManager : MonoBehaviour
 
     public List<Branch>  BonrAllBirdOnBranch()
     {
+        _listBirds.Clear();
         for (int i = 0; i < _dataBirdOnBranchs.dataBirdOnBranch.Count; i++)
         {
             DataBirdOnBranch data = _dataBirdOnBranchs.dataBirdOnBranch[i];

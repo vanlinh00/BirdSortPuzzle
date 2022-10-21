@@ -138,3 +138,5 @@ MonoBehaviour:
   id: 3
   _skeletonAnimation: {fileID: 4409710867917984505}
   RealPosBird: {x: 0, y: 0, z: 0}
+  ParentObj: {fileID: 0}
+  TimeMove: 0

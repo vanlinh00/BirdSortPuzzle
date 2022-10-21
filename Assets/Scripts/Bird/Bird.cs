@@ -17,40 +17,43 @@ public class Bird : MonoBehaviour
     {
         StateIdle();
     }
+    public void SetOrderLayer(int NumberLayer)
+    {
+        _skeletonAnimation.GetComponent<MeshRenderer>().sortingOrder = NumberLayer;
+    }
     public void StateFly()
     {
-         _skeletonAnimation.AnimationName = "fly";
-        //_skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
-        //_skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+        //_skeletonAnimation.AnimationName = "fly";
+        _skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
+        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
     }
     public void StateIdle()
     {
-       _skeletonAnimation.AnimationName = "idle";
+        //  _skeletonAnimation.AnimationName = "idle";
 
-       //_skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
-       // _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+        _skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
     }
     public void StateGrounding()
     {
-         _skeletonAnimation.AnimationName = "grounding";
+        //_skeletonAnimation.AnimationName = "grounding";
 
-        //_skeletonAnimation.AnimationState.SetAnimation(0, "grounding", true);
-        //_skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+        _skeletonAnimation.AnimationState.SetAnimation(0, "grounding", true);
+        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
 
     }
-    public void Statetouching()
-    {
-        _skeletonAnimation.AnimationName = "touching";
-       //_skeletonAnimation.AnimationState.SetAnimation(1, "touching", true);
-    }
+    //public void Statetouching()
+    //{
+    //    // _skeletonAnimation.AnimationName = "touching";
+    //}
     public void MoveToTarget(Vector3 Target, bool IsFlipX)
     {
         //  StateFly();
         MixStateFlyAndTouching();
-        //  StartCoroutine(Move(transform, Target, 0.54f));
         transform.DOMove(Target, TimeMove);
         StartCoroutine(WaitTimeChangeState(IsFlipX, TimeMove));
     }
+
     public void ChangeSeats(Vector3 Target, bool IsFlipX,float TimeMove)
     {
         StateFly();
@@ -60,13 +63,13 @@ public class Bird : MonoBehaviour
     IEnumerator WaitTimeChangeState(bool IsFlipX, float TimeMove)
     {
       
-        yield return new WaitForSeconds(TimeMove-0.1f);
+       yield return new WaitForSeconds(TimeMove-0.1f);
         if (IsFlipX)
         {
             FlipX();
         }
         StateGrounding();
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.3f);
         StateIdle();
         if (ParentObj != null)
         {
@@ -81,19 +84,18 @@ public class Bird : MonoBehaviour
     {
         StateFly();
 
-        //_skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
-        //_skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
-        //_skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
-        //_skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, 100f);
+        _skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
+        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
+        _skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, 100f);
 
     }
     public void MixStateIdleAndTouching(float TimeTouching)
     {
-        Statetouching();
-        //_skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
-        //_skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
-        //_skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
-        //_skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, TimeTouching);
+        _skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
+        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
+        _skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, TimeTouching);
     }
     public void FlipX()
     {
@@ -108,6 +110,7 @@ public class Bird : MonoBehaviour
     }
     public void MoveToOnScreen(Vector3 RealPosBird)
     {
+        GameManager._instance._gamePlay.IsBirdMoving = true;
         StateFly();
         //StartCoroutine(Move(transform, RealPosBird, 1f));
         transform.DOMove(RealPosBird, 0.7f) ;
@@ -119,6 +122,7 @@ public class Bird : MonoBehaviour
         StateGrounding();
         yield return new WaitForSeconds(0.4f);
         StateIdle();
+        GameManager._instance._gamePlay.IsBirdMoving = false;
     }
     public void Renew()
     {
@@ -130,6 +134,4 @@ public class Bird : MonoBehaviour
         gameObject.transform.parent = ObjectPooler._instance.transform;
         gameObject.SetActive(false);
     }
-
-    
 }

@@ -13,16 +13,15 @@ public class BranchRightManager : MonoBehaviour
         if (transform.childCount!=0)
         {
             GameObject lastChildBranch = transform.GetChild(transform.childCount - 1).gameObject;
-            PoslastChild = new Vector3(lastChildBranch.transform.localPosition.x, lastChildBranch.transform.localPosition.y - 1.50f, 0);
+            PoslastChild = new Vector3(lastChildBranch.transform.localPosition.x, lastChildBranch.transform.localPosition.y - 0.9f, 0);
             BrachRight.GetComponent<Branch>().id = CountBrach + 2;
             CountBrach += 2;
         }
         else
         {
-            PoslastChild = new Vector3(-2.71f, 2.04f, 0);
+            PoslastChild = new Vector3(-2.71f, 2.04f - 0.9f, 0);
             BrachRight.GetComponent<Branch>().id = CountBrach;
         }
-
         Vector3 PosOutScreen = new Vector3(1.8f, 6.27f, 0);
         BrachRight.GetComponent<Branch>().posOutScreen = PosOutScreen;
         BrachRight.transform.parent = transform;
@@ -34,17 +33,5 @@ public class BranchRightManager : MonoBehaviour
         transform.position = new Vector3(-2.5f, 0, 0f);
         CountBrach = 1;
     }
-    //public void ReSetBranchs()
-    //{
-    //    GameObject Branch;
-    //    int NumChild = transform.childCount;
-    //    for (int i = 0; i < NumChild; i++)
-    //     {
-    //            Branch = transform.GetChild(0).gameObject;
-    //           // Branch.SetActive(false);
-    //            ObjectPooler._instance.AddElement("Branch", Branch);
-    //            Branch.transform.parent = ObjectPooler._instance.transform;
-    //     }
-    //}
 
 }

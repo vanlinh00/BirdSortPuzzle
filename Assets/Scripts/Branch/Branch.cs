@@ -10,6 +10,7 @@ public class Branch : MonoBehaviour
     public List<Bird> listBirdMove = new List<Bird>();
     public Animator _animator;
     public Vector3 posOutScreen;
+    [SerializeField] SpriteRenderer _spriteRenderer;
 
     public void AddToListBrids(Bird bird)
     {
@@ -82,10 +83,10 @@ public class Branch : MonoBehaviour
     {
         listBirdMove.Clear();
     }
-    public List<Vector3> PositionSlotAvailable()
+    public List<Vector3> PositionSlotAvailable(int CountBirdMove)
     {  
         List<Vector3> PositionSlots = new List<Vector3>();
-        for (int i = listBirds.Count; i<4;i++)
+        for (int i = listBirds.Count- CountBirdMove; i<4;i++)
         {
             PositionSlots.Add(allSlots[i].transform.position);
         }
@@ -190,37 +191,73 @@ public class Branch : MonoBehaviour
     {
         StartCoroutine(FadeMoveBirdToOutScreen());
     }
+    public bool CanChangeSeats()
+    {
+        if(listBirds.Count!=0)
+        {
+            int FristIdBird = listBirds[0].id;
+            for (int i = 0; i < listBirds.Count; i++)
+            {
+                if (FristIdBird != listBirds[i].id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        else {
+            return false;
+        }
+    }
+    
+  public  void SetOrderBirdsAndBrands(int OrderLayer)
+    {
+        // int OrderLayer = 20;
+        if(listBirds.Count!=0)
+        {
+            _spriteRenderer.sortingOrder = OrderLayer+1;
+            for (int i = 0; i < listBirds.Count; i++)
+            {
+                OrderLayer++;
+                listBirds[i].SetOrderLayer(OrderLayer);
+            }
+        }
+    }
     IEnumerator FadeMoveBirdToOutScreen()
     {
-        Vector3 NewPosOutScreen = new Vector3(Random.RandomRange(posOutScreen.x, posOutScreen.x + 1f), posOutScreen.y, 0f);
-
-        listBirds[1].StateFly();
-        listBirds[1].transform.DOMove(posOutScreen, 1f);
-        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
-
-        listBirds[2].StateFly();
-        listBirds[2].transform.DOMove(posOutScreen, 1f);
-        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
-
-        listBirds[0].StateFly();
-        listBirds[0].transform.DOMove(posOutScreen, 1f);
-        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
-
-        listBirds[3].StateFly();
-        listBirds[3].transform.DOMove(posOutScreen, 1f);
-        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
+        List<Bird> ListFakeBirds = new List<Bird>();
+        ListFakeBirds.AddRange(listBirds);
 
         for(int i=0;i<listBirds.Count;i++)
         {
+            listBirds[i].SetOrderLayer(40);
             listBirds[i].transform.parent = null;
         }
-
         listBirds.Clear();
-        listBirdMove.Clear();
+        yield return new WaitForSeconds(0.2f);
+        Vector3 NewPosOutScreen = new Vector3(Random.RandomRange(posOutScreen.x, posOutScreen.x + 1f), posOutScreen.y, 0f);
+
+        ListFakeBirds[1].StateFly();
+        ListFakeBirds[1].transform.DOMove(posOutScreen, 1f);
+        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
+
+        ListFakeBirds[2].StateFly();
+        ListFakeBirds[2].transform.DOMove(posOutScreen, 1f);
+        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
+
+        ListFakeBirds[0].StateFly();
+        ListFakeBirds[0].transform.DOMove(posOutScreen, 1f);
+        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
+
+        ListFakeBirds[3].StateFly();
+        ListFakeBirds[3].transform.DOMove(posOutScreen, 1f);
+        yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
+
+
     }
     private void OnMouseDown()
     {
-        if (GameManager._instance.gameState == GameManager.GameState.ChangeSeatsBirds)
+        if (GameManager._instance.gameState == GameManager.GameState.ChangeSeatsBirds&& CanChangeSeats())
         {
             UnTouching();
             ClearBirdMove();
@@ -233,28 +270,9 @@ public class Branch : MonoBehaviour
         ListFakeBirds.AddRange(listBirds);
         listBirds.Clear();
 
-        //   1 2 3 4
-        //   1 1 3 4
-        //   1 1 1 4
-        //   4 4 3 3 
-
-        //int[] NumberBirds = new int[20];
-        //for (int i = 0; i < ListFakeBirds.Count - 1; i++)
-        //{
-        //    for (int j = i + 1; j < ListFakeBirds.Count; j++)
-        //    {
-        //        if (ListFakeBirds[i].id == ListFakeBirds[j].id)
-        //        {
-        //            Debug.Log(ListFakeBirds[i].id);
-        //            NumberBirds[ListFakeBirds[i].id]++;
-        //        }
-        //    }
-        //}
-
         int[] NumberBirds = new int[20];
         for (int i = 0; i < ListFakeBirds.Count; i++)
         {
-
             NumberBirds[ListFakeBirds[i].id]++;
         }
 
@@ -317,15 +335,9 @@ public class Branch : MonoBehaviour
                     max = NumberBirds[i];
                 }
             }
-
             int CountListBirds = ListFakeBirds.Count;
             if (ListFakeBirds[CountListBirds - 1].id != IdMax || ListFakeBirds[CountListBirds - 1].id == IdMax && ListFakeBirds[CountListBirds - 2].id != IdMax)
             {
-                //  if(Random.RandomRange(1,3)==1)
-                //    {
-
-                //    }
-
                 List<Bird> ListLastBird = new List<Bird>();
                 for (int i = 0; i < ListFakeBirds.Count; i++)
                 {
@@ -338,19 +350,15 @@ public class Branch : MonoBehaviour
                         listBirds.Add(ListFakeBirds[i]);
                     }
                 }
-
                 foreach (Bird bird in ListLastBird)
                 {
                     listBirds.Add(bird);
                 }
-
-               //  1 2 3 
-               //   3 2 1
-
             }
             else
             {
                 List<Bird> ListLastBird = new List<Bird>();
+
                 for (int i = 0; i < ListFakeBirds.Count; i++)
                 {
                     if (IdMax != ListFakeBirds[i].id)
@@ -384,21 +392,35 @@ public class Branch : MonoBehaviour
                     listBirds.Add(ListBirds3ID[3]);
                     listBirds.Add(ListBirds3ID[2]);
                 }
-    
             }
-
-            // 1 2 33
-            // 33 1 2
-            // 3 1 3 2 
-
         }
         else if(ListListBirds.Count==4)
         {
-
+            int a = Random.RandomRange(0, 3);
+            if(a==0)
+            {
+                for(int i=3;i<=0;i++)
+                {
+                    listBirds.Add(ListFakeBirds[i]);
+                }
+            }
+            else if (a == 1)
+            {
+                listBirds.Add(ListFakeBirds[3]);
+                listBirds.Add(ListFakeBirds[0]);
+                listBirds.Add(ListFakeBirds[2]);
+                listBirds.Add(ListFakeBirds[1]);
+            }else if(a==2)
+            {
+                listBirds.Add(ListFakeBirds[0]);
+                listBirds.Add(ListFakeBirds[3]);
+                listBirds.Add(ListFakeBirds[1]);
+                listBirds.Add(ListFakeBirds[2]);
+            }
         }
 
+        SetOrderBirdsAndBrands(20);
 
-      
         List<BirdUndo> ListBirdUndo = new List<BirdUndo>();
 
         for (int i = 0; i < listBirds.Count; i++)
@@ -427,5 +449,11 @@ public class Branch : MonoBehaviour
     {
         yield return new WaitForSeconds(0.54f);
         GameManager._instance.gameState = GameManager.GameState.SortBirds;
+        UiGamePlay._instance.DisableChangeSeats();
+    }
+    public void MoveUp()
+    {
+        Vector3 Target = new Vector3(transform.position.x, transform.position.y+0.9f, 0);
+        transform.DOMove(Target, 0.3f);
     }
 }
