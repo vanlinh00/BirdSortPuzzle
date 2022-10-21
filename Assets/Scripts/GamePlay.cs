@@ -13,7 +13,6 @@ public class GamePlay : MonoBehaviour
     private bool _canClick=true;
     private bool _isChangeBird = false;
     public LoadData loadData;
-    public float _TimeMove;
     public bool IsBirdMoving;
     private void Awake()
     {
@@ -142,7 +141,7 @@ public class GamePlay : MonoBehaviour
                 ListAllBranchs[indexCurrentBranch].UnTouching();
             }
         }
-        float timeWaitBirdMove = 0f;
+
 
         List<BirdUndo> ListBirdUndo = new List<BirdUndo>();
 
@@ -174,24 +173,20 @@ public class GamePlay : MonoBehaviour
         for (int i = 0; i < CountBirdMove; i++)
         {
             Vector3 PosNewSlot = ListAllBranchs[indexNextBranch].PositionSlotAvailable(CountBirdMove)[i];
-            float DistanceBirdMove = Vector3.Distance(ListAllBranchs[indexCurrentBranch].listBirdMove[i].transform.position, PosNewSlot);
-
-            _TimeMove = 0.44f * DistanceBirdMove / 1.863758f;
-            ListAllBranchs[indexCurrentBranch].listBirdMove[i].TimeMove = _TimeMove;
-            ListAllBranchs[indexCurrentBranch].listBirdMove[i].transform.parent = null;
-            ListAllBranchs[indexCurrentBranch].listBirdMove[i].ParentObj = ListAllBranchs[indexNextBranch]._animator.gameObject;
-
-           // Vector3 PosOldSlot = ListAllBranchs[indexCurrentBranch].allSlots[ListAllBranchs[indexCurrentBranch].listBirds.Count-1- i].transform.position; /*ListAllBranchs[indexCurrentBranch].listBirdMove[i].transform.position;*/
-
+          
             Bird birdMove = ListAllBranchs[indexCurrentBranch].listBirdMove[i];
-    
+            float DistanceBirdMove = Vector3.Distance(birdMove.transform.position, PosNewSlot);
+            birdMove.transform.parent = null;
+            birdMove.ParentObj = ListAllBranchs[indexNextBranch]._animator.gameObject;
             birdMove.SetOrderLayer(40);
-
             bool IsMoveDown = (ListAllBranchs[indexCurrentBranch].id % 2 == ListAllBranchs[indexNextBranch].id % 2) ? true : false;
-
+            birdMove.idBranchStand = indexNextBranch;
+            birdMove.TimeMove = 0.55f * DistanceBirdMove / 2.5f;
             if (IsMoveDown)
             {
-                if(birdMove.transform.position.x <= PosNewSlot.x)
+                birdMove.TimeMove = 0.7f * DistanceBirdMove / 2.5f;
+
+                if (birdMove.transform.position.x <= PosNewSlot.x)
                 {
                     if(ListAllBranchs[indexCurrentBranch].id % 2==0)
                      {
@@ -213,7 +208,7 @@ public class GamePlay : MonoBehaviour
                      if (ListAllBranchs[indexCurrentBranch].id % 2 == 0)
                       {
                         birdMove.MoveToTarget(PosNewSlot, false);
-                      }
+                    }
                     else
                     {
                         birdMove.FlipX();
@@ -226,21 +221,14 @@ public class GamePlay : MonoBehaviour
                 birdMove.MoveToTarget(PosNewSlot, true);
             }
             yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
-
-            timeWaitBirdMove= CalculerTimeWait(ListAllBranchs[indexCurrentBranch].listBirdMove[i].id);
-            timeWaitBirdMove = timeWaitBirdMove * DistanceBirdMove/2.6f;
         }
 
         ListAllBranchs[indexCurrentBranch].ClearBirdMove();
         ListAllBranchs[indexCurrentBranch].RemoveBirdPromListBird(CountBirdMove);
         _countClick = 0;
-        yield return new WaitForSeconds(timeWaitBirdMove-0.12f);
-        ListAllBranchs[indexNextBranch].StateShaky();
-        yield return new WaitForSeconds(0.15f);
-        ListAllBranchs[indexNextBranch].StateIdle();
-        yield return new WaitForSeconds(0.2f);
+
+        yield return new WaitForSeconds(1.2f);
         ListAllBranchs[indexNextBranch].SetOrderBirdsAndBrands(20);
-  
         //_idOldNextBranch = -100;
 
         if (lastBridMoveToBranch)
@@ -248,9 +236,9 @@ public class GamePlay : MonoBehaviour
             if (ListAllBranchs[indexNextBranch].IsFullSameBirdsOnBranch())
             {
                 IsBirdMoving = true;
-                yield return new WaitForSeconds(0.2f);
+                //yield return new WaitForSeconds(0.15f);
                 ListAllBranchs[indexNextBranch].MoveAllBirdToOutScreen();
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(1.2f);
                 IsBirdMoving = false;
             }else
             {
@@ -261,6 +249,15 @@ public class GamePlay : MonoBehaviour
         {
             IsBirdMoving = false;
         }
+    }
+
+    public IEnumerator ShakyBranch(int indexNextBranch)
+    {
+        yield return new WaitForSeconds(0.4f);
+        ListAllBranchs[indexNextBranch].StateShaky();
+        yield return new WaitForSeconds(0.15f);
+        ListAllBranchs[indexNextBranch].StateIdle();
+        yield return new WaitForSeconds(0.2f);
     }
     public void SaveStateBirdsWhenFinishBranch(int CountBirdMoveToBranch, int indexNextBranch)
     {
@@ -275,23 +272,7 @@ public class GamePlay : MonoBehaviour
         StateUndo NewStateUndo = new StateUndo(ListBirdUndo, null);
         GameManager._instance.StackStateUndos.Push(NewStateUndo);
     }
-    public float CalculerTimeWait(int IdBird)
-    {
-        float TimeWait = 0f;
-        if (IdBird == 2)
-        {
-            TimeWait = 0.68f;
-        }
-        else if (IdBird == 1)
-        {
-            TimeWait = 1f;
-        }
-        else if (IdBird == 3)
-        {
-            TimeWait = 1.02f;
-        }
-        return TimeWait;
-    }
+
     public  IEnumerator WaitTimeLoadData(int level)
     {
         _branchManager.LoadDataBirdOnBranchs(loadData.LoadDataLevel(level));

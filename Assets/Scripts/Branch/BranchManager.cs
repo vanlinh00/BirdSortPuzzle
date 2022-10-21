@@ -88,6 +88,7 @@ public class BranchManager : Singleton<BranchManager>
                 Vector3 StartPosBird = new Vector3(RealPosBird.x + 2.5f, RealPosBird.y + 1.25f, 0);
                 Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, StartPosBird, Quaternion.identity);
             }
+            Bird.GetComponent<Bird>().SetOrderLayer(30);
             Bird.GetComponent<Bird>().RealPosBird = RealPosBird;
             _listBirds.Add(Bird.GetComponent<Bird>());
             _listAllBranchs[data.idBranch - 1].AddToListBrids(Bird.GetComponent<Bird>());

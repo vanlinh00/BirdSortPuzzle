@@ -95,10 +95,10 @@ public class GameManager : Singleton<GameManager>
             {
 
                 PosOldSlot = StateBirdUndos.listStateBirdUndo[i].posOldSlot;
-                timeWaitBirdMove = Random.RandomRange(0.05f, 0.1f);
                 if (IsChangeSeats)
                 {
-                    StateBirdUndos.listStateBirdUndo[i].bird.ChangeSeats(PosOldSlot, false, 0.7f);
+                    StateBirdUndos.listStateBirdUndo[i].bird.idBranchStand = IdNexBranch - 1;
+                    StateBirdUndos.listStateBirdUndo[i].bird.ChangeSeats(PosOldSlot, false);
                 }
                 else
                 {
@@ -107,68 +107,82 @@ public class GameManager : Singleton<GameManager>
                     {
                         _gamePlay.ListAllBranchs[IdNexBranch - 1].DeleteLastBird();
                     }
-                    StartCoroutine(MoveBirdsToOldBranch(IdNexBranch - 1, IdOldBranch - 1, StateBirdUndos.listStateBirdUndo[i].bird, PosOldSlot, timeWaitBirdMove));
+                    StartCoroutine(MoveBirdsToOldBranch(IdNexBranch - 1, IdOldBranch - 1, StateBirdUndos.listStateBirdUndo[i].bird, PosOldSlot));
                     yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
                 }
             }
         }
 
     }
- public   IEnumerator MoveBirdsToOldBranch(int IndexCurrentBranch, int IndexNextBranch, Bird Bird, Vector3 PosOldSlot,float timeWaitBirdMove)
+ public   IEnumerator MoveBirdsToOldBranch(int IndexCurrentBranch, int IndexNextBranch, Bird Bird, Vector3 PosOldSlot)
     {
         GameManager._instance._gamePlay.IsBirdMoving = true;
-
         Bird.transform.parent = null;
         Bird.SetOrderLayer(40);
         Bird.ParentObj = _gamePlay.ListAllBranchs[IndexNextBranch]._animator.gameObject;
         bool IsMoveDown = (_gamePlay.ListAllBranchs[IndexCurrentBranch].id % 2 == _gamePlay.ListAllBranchs[IndexNextBranch].id % 2) ? true : false;
-
+        int idNextBranch = _gamePlay.ListAllBranchs[IndexNextBranch].id-1;
+        Bird.idBranchStand = idNextBranch;
         float DistanceBirdMove = Vector3.Distance(Bird.transform.position, PosOldSlot);
-        float TimeMove = 0f;
-            TimeMove = 0.44f * DistanceBirdMove / 1.863758f;
-            if (IsMoveDown)
+
+        if (IsMoveDown)
+          {
+            if (IndexCurrentBranch == IndexNextBranch)
             {
-                if (Bird.transform.position.x <= PosOldSlot.x)
+                Bird.TimeMove = 0.8f;
+            }
+            else
+            {
+                Bird.TimeMove = 0.7f * DistanceBirdMove / 2.5f;
+
+            }
+
+            if (Bird.transform.position.x <= PosOldSlot.x)
                 {
                     if (_gamePlay.ListAllBranchs[IndexCurrentBranch].id % 2 == 0)
                     {
                         Bird.FlipX();
-                        Bird.ChangeSeats(PosOldSlot, true, TimeMove);
+                        Bird.ChangeSeats(PosOldSlot, true);
                     }
                     else
                     {
                         if (Bird.transform.position.x == PosOldSlot.x)
                         {
                             Bird.FlipX();
-                            Bird.ChangeSeats(PosOldSlot, true, TimeMove);
+                            Bird.ChangeSeats(PosOldSlot, true);
                         }
-                        Bird.ChangeSeats(PosOldSlot, false, TimeMove);
+                        Bird.ChangeSeats(PosOldSlot, false);
                     }
                 }
                 else
                 {
                     if (_gamePlay.ListAllBranchs[IndexCurrentBranch].id % 2 == 0)
                     {
-                        Bird.ChangeSeats(PosOldSlot, false, TimeMove);
+                        Bird.ChangeSeats(PosOldSlot, false);
                     }
                     else
                     {
                         Bird.FlipX();
-                        Bird.ChangeSeats(PosOldSlot, true, TimeMove);
+                        Bird.ChangeSeats(PosOldSlot, true);
                     }
                 }
             }
             else
             {
-                Bird.ChangeSeats(PosOldSlot, true, TimeMove);
+            if (IndexCurrentBranch == IndexNextBranch)
+            {
+                Bird.TimeMove = 0.5f;
+            }
+            else
+            {
+                Bird.TimeMove = 0.55f * DistanceBirdMove / 2.5f;
+
+            }
+            Bird.ChangeSeats(PosOldSlot, true);
             }
 
-        yield return new WaitForSeconds(TimeMove);
+        yield return new WaitForSeconds(1f);
         _gamePlay.ListAllBranchs[IndexNextBranch].SetOrderBirdsAndBrands(20);
-        yield return new WaitForSeconds(timeWaitBirdMove - 0.12f);
-        _gamePlay.ListAllBranchs[IndexNextBranch].StateShaky();
-        yield return new WaitForSeconds(0.15f);
-        _gamePlay.ListAllBranchs[IndexNextBranch].StateIdle();
         GameManager._instance._gamePlay.IsBirdMoving = false;
     }
     public void ReNewGame()

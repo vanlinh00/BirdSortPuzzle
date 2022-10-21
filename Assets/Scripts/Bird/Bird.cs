@@ -11,7 +11,8 @@ public class Bird : MonoBehaviour
     [SerializeField] SkeletonAnimation _skeletonAnimation;
     public Vector3 RealPosBird;
     public GameObject ParentObj;
-    public float TimeMove = 0.54f;
+    public float TimeMove = 0.5f;
+    public int idBranchStand;
  
     public void Start()
     {
@@ -23,54 +24,56 @@ public class Bird : MonoBehaviour
     }
     public void StateFly()
     {
-        //_skeletonAnimation.AnimationName = "fly";
         _skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
         _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
     }
     public void StateIdle()
     {
-        //  _skeletonAnimation.AnimationName = "idle";
-
         _skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
         _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
     }
     public void StateGrounding()
     {
-        //_skeletonAnimation.AnimationName = "grounding";
-
         _skeletonAnimation.AnimationState.SetAnimation(0, "grounding", true);
         _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
 
     }
-    //public void Statetouching()
-    //{
-    //    // _skeletonAnimation.AnimationName = "touching";
-    //}
+
     public void MoveToTarget(Vector3 Target, bool IsFlipX)
     {
-        //  StateFly();
         MixStateFlyAndTouching();
-        transform.DOMove(Target, TimeMove);
-        StartCoroutine(WaitTimeChangeState(IsFlipX, TimeMove));
+        StartCoroutine(TestMove(Target,IsFlipX));
     }
 
-    public void ChangeSeats(Vector3 Target, bool IsFlipX,float TimeMove)
+    IEnumerator TestMove(Vector3 Target, bool IsFlipX)
+    {
+        //bool isMove = true;
+        //while (isMove)
+        //{
+        //    transform.position = Vector3.MoveTowards(transform.position, Target, Speed * Time.deltaTime);
+        //    if (transform.position == Target)
+        //    {
+        //        isMove = false;
+        //        StartCoroutine(WaitTimeChangeState(IsFlipX));
+        //        StartCoroutine(GameManager._instance._gamePlay.ShakyBranch(idBranchStand));
+
+        //    }
+        //    yield return new WaitForEndOfFrame();
+        //}
+        transform.DOMove(Target, TimeMove).SetEase(Ease.Linear);
+        yield return new WaitForSeconds(TimeMove);
+        StartCoroutine(WaitTimeChangeState(IsFlipX));
+        StartCoroutine(GameManager._instance._gamePlay.ShakyBranch(idBranchStand));
+
+    }
+
+    public void ChangeSeats(Vector3 Target, bool IsFlipX)
     {
         StateFly();
-        transform.DOMove(Target, TimeMove);
-       StartCoroutine(WaitTimeChangeState(IsFlipX, TimeMove));
+        StartCoroutine(TestMove(Target, IsFlipX));
     }
-    IEnumerator WaitTimeChangeState(bool IsFlipX, float TimeMove)
+    IEnumerator WaitTimeChangeState(bool IsFlipX)
     {
-      
-       yield return new WaitForSeconds(TimeMove-0.1f);
-        if (IsFlipX)
-        {
-            FlipX();
-        }
-        StateGrounding();
-        yield return new WaitForSeconds(0.3f);
-        StateIdle();
         if (ParentObj != null)
         {
             transform.parent = ParentObj.transform;
@@ -79,6 +82,14 @@ public class Bird : MonoBehaviour
         {
             Debug.Log(id);
         }
+        if (IsFlipX)
+        {
+            FlipX();
+        }
+        StateGrounding();
+        yield return new WaitForSeconds(0.3f);
+        StateIdle();
+      
     }
     public void MixStateFlyAndTouching()
     {
@@ -112,7 +123,6 @@ public class Bird : MonoBehaviour
     {
         GameManager._instance._gamePlay.IsBirdMoving = true;
         StateFly();
-        //StartCoroutine(Move(transform, RealPosBird, 1f));
         transform.DOMove(RealPosBird, 0.7f) ;
         StartCoroutine(WaitTimeChangeStateWhenStartGame());
     }
@@ -126,7 +136,7 @@ public class Bird : MonoBehaviour
     }
     public void Renew()
     {
-        TimeMove = 0.54f;
+        TimeMove = 5f;
 
         StateIdle();
         _skeletonAnimation.skeleton.FlipX = false;

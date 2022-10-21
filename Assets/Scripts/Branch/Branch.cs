@@ -231,7 +231,6 @@ public class Branch : MonoBehaviour
         for(int i=0;i<listBirds.Count;i++)
         {
             listBirds[i].SetOrderLayer(40);
-            listBirds[i].transform.parent = null;
         }
         listBirds.Clear();
         yield return new WaitForSeconds(0.2f);
@@ -254,6 +253,11 @@ public class Branch : MonoBehaviour
         yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
 
 
+        for (int i = 0; i < ListFakeBirds.Count; i++)
+        {
+            ListFakeBirds[i].transform.parent = null;
+        }
+   
     }
     private void OnMouseDown()
     {
@@ -426,7 +430,9 @@ public class Branch : MonoBehaviour
         for (int i = 0; i < listBirds.Count; i++)
         {
            listBirds[i].ParentObj = _animator.gameObject;
-           listBirds[i].ChangeSeats(allSlots[i].transform.position, false, 0.7f);
+            listBirds[i].idBranchStand = id - 1;
+            listBirds[i].TimeMove = 0.55f;
+           listBirds[i].ChangeSeats(allSlots[i].transform.position, false);
 
             Vector3 PosOldSlot = listBirds[i].transform.position;
             BirdUndo BirdUndos = new BirdUndo(id, listBirds[i], PosOldSlot, id, true);
