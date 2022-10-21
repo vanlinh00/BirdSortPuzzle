@@ -70,6 +70,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
 
         if (_addBranch.GetComponent<ButtonGP>().IsReady())
         {
+            GameManager._instance.StackStateUndos.Clear();
             BranchManager._instance.AddNewBranch();
             CountAddBranch--;
             if (CountAddBranch <= 0)

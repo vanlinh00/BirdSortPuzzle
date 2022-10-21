@@ -253,7 +253,7 @@ public class GamePlay : MonoBehaviour
 
     public IEnumerator ShakyBranch(int indexNextBranch)
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.24f);
         ListAllBranchs[indexNextBranch].StateShaky();
         yield return new WaitForSeconds(0.15f);
         ListAllBranchs[indexNextBranch].StateIdle();

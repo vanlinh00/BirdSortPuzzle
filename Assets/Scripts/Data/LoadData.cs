@@ -110,6 +110,18 @@ public class LoadData : MonoBehaviour
 
             DataBirdOnBranch dataBirdOnBranch12 = new DataBirdOnBranch(12, 3, 3, 4);
             dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch12);
+        
+        }else if(level==4)
+        {
+            dataBirdOnBranchs.AmountBranch = 7;
+
+            DataBirdOnBranch dataBirdOnBranch = new DataBirdOnBranch(1, 4, 1, 1);
+            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch);
+
+            DataBirdOnBranch dataBirdOnBranch2 = new DataBirdOnBranch(1, 6, 1, 2);
+            dataBirdOnBranchs.dataBirdOnBranch.Add(dataBirdOnBranch2);
+
+
         }
         return dataBirdOnBranchs;
 

@@ -548,7 +548,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 75686c49605f6e447a3faa4118951b04, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ee38f9895a7327242833f6a9022e2a4d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -990,7 +990,6 @@ MonoBehaviour:
   _branchManager: {fileID: 123871960}
   ListAllBranchs: []
   loadData: {fileID: 207091297}
-  _TimeMove: 0
   IsBirdMoving: 0
 --- !u!4 &1001684953
 Transform:
@@ -1063,6 +1062,15 @@ MonoBehaviour:
     size: 4
   - tag: Bird3
     prefab: {fileID: 4409710867917984506, guid: 518cda077830315428abe38c9a82daf8, type: 3}
+    size: 4
+  - tag: Bird4
+    prefab: {fileID: 2684425010809149286, guid: 953e4e08320151848a23324668762dbc, type: 3}
+    size: 4
+  - tag: Bird5
+    prefab: {fileID: 5350160029707819488, guid: fd3e409068d7ca344a0cab8a83b5e9ef, type: 3}
+    size: 4
+  - tag: Bird6
+    prefab: {fileID: 7199443957254253826, guid: e093c933ddcc8744ca44903d6903adc7, type: 3}
     size: 4
 --- !u!1 &1164320547
 GameObject:
@@ -1168,7 +1176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e85b350b208fb3b4eb970205e0533ecc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fe807b032542e114b925207e62f3064e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

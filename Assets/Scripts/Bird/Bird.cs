@@ -119,18 +119,18 @@ public class Bird : MonoBehaviour
             _skeletonAnimation.skeleton.FlipX = true;
         }
     }
-    public void MoveToOnScreen(Vector3 RealPosBird)
+    public void MoveToOnScreen(Vector3 Target)
     {
         GameManager._instance._gamePlay.IsBirdMoving = true;
         StateFly();
-        transform.DOMove(RealPosBird, 0.7f) ;
+        transform.DOMove(Target, 0.7f);
         StartCoroutine(WaitTimeChangeStateWhenStartGame());
     }
     IEnumerator WaitTimeChangeStateWhenStartGame()
     {
         yield return new WaitForSeconds(0.7f);
         StateGrounding();
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.3f);
         StateIdle();
         GameManager._instance._gamePlay.IsBirdMoving = false;
     }

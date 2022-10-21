@@ -114,11 +114,13 @@ public class GameManager : Singleton<GameManager>
         }
 
     }
+    int OrderLayer = 40;
  public   IEnumerator MoveBirdsToOldBranch(int IndexCurrentBranch, int IndexNextBranch, Bird Bird, Vector3 PosOldSlot)
     {
         GameManager._instance._gamePlay.IsBirdMoving = true;
         Bird.transform.parent = null;
-        Bird.SetOrderLayer(40);
+        OrderLayer++;
+        Bird.SetOrderLayer(OrderLayer);
         Bird.ParentObj = _gamePlay.ListAllBranchs[IndexNextBranch]._animator.gameObject;
         bool IsMoveDown = (_gamePlay.ListAllBranchs[IndexCurrentBranch].id % 2 == _gamePlay.ListAllBranchs[IndexNextBranch].id % 2) ? true : false;
         int idNextBranch = _gamePlay.ListAllBranchs[IndexNextBranch].id-1;
