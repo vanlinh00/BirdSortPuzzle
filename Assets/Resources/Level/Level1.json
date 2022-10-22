@@ -1,0 +1,8 @@
+{   "AmountBranch":2,
+    "BirdOnBranch": [
+             {"id": 1,"idBird":1,"idBranch":1,"slotBird":1},
+            { "id": 2,"idBird":1,"idBranch":1,"slotBird":2},
+            { "id": 3,"idBird":1,"idBranch":2,"slotBird":1},
+            { "id": 4,"idBird":1,"idBranch":2,"slotBird":2}
+        ]
+}

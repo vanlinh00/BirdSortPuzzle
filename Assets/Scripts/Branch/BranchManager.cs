@@ -10,15 +10,6 @@ public class BranchManager : Singleton<BranchManager>
     [SerializeField] BranchLeftManger _branchLeftManger;
     [SerializeField] List<Bird> _listBirds = new List<Bird>();
 
-    //{
-    //    "AmountBranch": 2,
-    //    "BirdOnBranch": [
-    //         {"id": 1,"idBird":9,"idBranch":1,"posBird":1},
-    //        { "id": 2,"idBird":9,"idBranch":1,"posBird":2},
-    //        { "id": 3,"idBird":9,"idBranch":2,"posBird":1},
-    //        { "id": 4,"idBird":9,"idBranch":2,"posBird":2}
-    //    ]
-    //}
     protected override void Awake()
     {
         base.Awake();
@@ -71,9 +62,9 @@ public class BranchManager : Singleton<BranchManager>
     public List<Branch>  BonrAllBirdOnBranch()
     {
         _listBirds.Clear();
-        for (int i = 0; i < _dataBirdOnBranchs.dataBirdOnBranch.Count; i++)
+        for (int i = 0; i < _dataBirdOnBranchs.BirdOnBranch.Length; i++)
         {
-            DataBirdOnBranch data = _dataBirdOnBranchs.dataBirdOnBranch[i];
+            BirdOnBranch data = _dataBirdOnBranchs.BirdOnBranch[i];
             Vector3 RealPosBird = _listAllBranchs[data.idBranch - 1].GetPosSlot(data.slotBird - 1);
             GameObject Bird;
 
@@ -104,10 +95,7 @@ public class BranchManager : Singleton<BranchManager>
     }
     public void LoadAllBranchLevel()
     {
-        //DataLevel employeesInJson = new DataLevel();
-        //employeesInJson = JsonUtility.FromJson<DataLevel>(jsonFile.text);
-        //Debug.Log(employeesInJson.AmountBranch);
-    
+
         for (int i = 1; i <= _dataBirdOnBranchs.AmountBranch; i++)
         {
             if (i % 2 != 0)
@@ -118,7 +106,6 @@ public class BranchManager : Singleton<BranchManager>
             {
                 _listAllBranchs.Add(_branchLeftManger.BonrNewBranch());
             }
-
         }
     }
 

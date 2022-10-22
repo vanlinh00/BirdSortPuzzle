@@ -1,0 +1,25 @@
+{
+         "AmountBranch": 7,
+      "BirdOnBranch": [
+        {"id": 1,"idBird":6,"idBranch":1,"slotBird":1},
+        {"id": 2,"idBird":1,"idBranch":1,"slotBird":2},
+        {"id": 3,"idBird":1,"idBranch":1,"slotBird":3},
+        {"id": 4,"idBird":6,"idBranch":1,"slotBird":4},
+        {"id": 5,"idBird":1,"idBranch":2,"slotBird":1},
+        {"id": 6,"idBird":9,"idBranch":2,"slotBird":2},
+        {"id": 7,"idBird":9,"idBranch":2,"slotBird":3},
+        {"id": 8,"idBird":2,"idBranch":2,"slotBird":4},
+        {"id": 9,"idBird":6,"idBranch":3,"slotBird":1},
+        {"id": 10,"idBird":2,"idBranch":3,"slotBird":2},
+        {"id": 11,"idBird":9,"idBranch":3,"slotBird":3},
+        {"id": 12,"idBird":4,"idBranch":3,"slotBird":4},
+        {"id": 13,"idBird":2,"idBranch":4,"slotBird":1},
+        {"id": 14,"idBird":9,"idBranch":4,"slotBird":2},
+        {"id": 15,"idBird":2,"idBranch":4,"slotBird":3},
+        {"id": 16,"idBird":4,"idBranch":4,"slotBird":4},
+        {"id": 17,"idBird":6,"idBranch":5,"slotBird":1},
+        {"id": 18,"idBird":4,"idBranch":5,"slotBird":2},
+        {"id": 19,"idBird":4,"idBranch":5,"slotBird":3},
+        {"id": 20,"idBird":1,"idBranch":5,"slotBird":4}
+    ]
+}

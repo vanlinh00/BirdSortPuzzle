@@ -340,70 +340,90 @@ public class Branch : MonoBehaviour
                 }
             }
             int CountListBirds = ListFakeBirds.Count;
-            if (ListFakeBirds[CountListBirds - 1].id != IdMax || ListFakeBirds[CountListBirds - 1].id == IdMax && ListFakeBirds[CountListBirds - 2].id != IdMax)
+
+            if(max==1)
             {
-                List<Bird> ListLastBird = new List<Bird>();
-                for (int i = 0; i < ListFakeBirds.Count; i++)
+                if (Random.RandomRange(0, 2) == 1)
                 {
-                    if (IdMax == ListFakeBirds[i].id)
-                    {
-                        ListLastBird.Add(ListFakeBirds[i]);
-                    }
-                    else
-                    {
-                        listBirds.Add(ListFakeBirds[i]);
-                    }
+                    listBirds.Add(ListFakeBirds[2]);
+                    listBirds.Add(ListFakeBirds[0]);
+                    listBirds.Add(ListFakeBirds[1]);
                 }
-                foreach (Bird bird in ListLastBird)
+                else
                 {
-                    listBirds.Add(bird);
+                    listBirds.Add(ListFakeBirds[0]);
+                    listBirds.Add(ListFakeBirds[2]);
+                    listBirds.Add(ListFakeBirds[1]);
                 }
             }
             else
             {
-                List<Bird> ListLastBird = new List<Bird>();
-
-                for (int i = 0; i < ListFakeBirds.Count; i++)
+                if (ListFakeBirds[CountListBirds - 1].id != IdMax || ListFakeBirds[CountListBirds - 1].id == IdMax && ListFakeBirds[CountListBirds - 2].id != IdMax)
                 {
-                    if (IdMax != ListFakeBirds[i].id)
+                    List<Bird> ListLastBird = new List<Bird>();
+                    for (int i = 0; i < ListFakeBirds.Count; i++)
                     {
-                        ListLastBird.Add(ListFakeBirds[i]);
+                        if (IdMax == ListFakeBirds[i].id)
+                        {
+                            ListLastBird.Add(ListFakeBirds[i]);
+                        }
+                        else
+                        {
+                            listBirds.Add(ListFakeBirds[i]);
+                        }
                     }
-                    else
+                    foreach (Bird bird in ListLastBird)
                     {
-                        listBirds.Add(ListFakeBirds[i]);
+                        listBirds.Add(bird);
                     }
-                }
-
-                foreach (Bird bird in ListLastBird)
-                {
-                    listBirds.Add(bird);
-                }
-
-                List<Bird> ListBirds3ID = new List<Bird>();
-                ListBirds3ID.AddRange(listBirds);
-                listBirds.Clear();
-                listBirds.Add(ListBirds3ID[0]);
-                listBirds.Add(ListBirds3ID[1]);
-
-                if (Random.RandomRange(0, 2) == 1)
-                {
-                    listBirds.Add(ListBirds3ID[2]);
-                    listBirds.Add(ListBirds3ID[3]);
                 }
                 else
                 {
-                    listBirds.Add(ListBirds3ID[3]);
-                    listBirds.Add(ListBirds3ID[2]);
+                    List<Bird> ListLastBird = new List<Bird>();
+
+                    for (int i = 0; i < ListFakeBirds.Count; i++)
+                    {
+                        if (IdMax != ListFakeBirds[i].id)
+                        {
+                            ListLastBird.Add(ListFakeBirds[i]);
+                        }
+                        else
+                        {
+                            listBirds.Add(ListFakeBirds[i]);
+                        }
+                    }
+
+                    foreach (Bird bird in ListLastBird)
+                    {
+                        listBirds.Add(bird);
+                    }
+
+                    List<Bird> ListBirds3ID = new List<Bird>();
+                    ListBirds3ID.AddRange(listBirds);
+                    listBirds.Clear();
+                    listBirds.Add(ListBirds3ID[0]);
+                    listBirds.Add(ListBirds3ID[1]);
+
+                    if (Random.RandomRange(0, 2) == 1)
+                    {
+                        listBirds.Add(ListBirds3ID[2]);
+                        listBirds.Add(ListBirds3ID[3]);
+                    }
+                    else
+                    {
+                        listBirds.Add(ListBirds3ID[3]);
+                        listBirds.Add(ListBirds3ID[2]);
+                    }
                 }
             }
+ 
         }
         else if(ListListBirds.Count==4)
         {
             int a = Random.RandomRange(0, 3);
             if(a==0)
             {
-                for(int i=3;i<=0;i++)
+                for(int i=3;i>=0;i--)
                 {
                     listBirds.Add(ListFakeBirds[i]);
                 }
@@ -422,6 +442,7 @@ public class Branch : MonoBehaviour
                 listBirds.Add(ListFakeBirds[2]);
             }
         }
+
 
         SetOrderBirdsAndBrands(20);
 

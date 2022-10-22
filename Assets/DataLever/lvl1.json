@@ -1,8 +1,0 @@
-{
-    "BirdOnBranch": [
-             {"id": 1,"idBird":9,"idBranch":1,"posBird":1},
-            { "id": 2,"idBird":9,"idBranch":1,"posBird":2},
-            { "id": 3,"idBird":9,"idBranch":2,"posBird":1},
-            { "id": 4,"idBird":9,"idBranch":2,"posBird":2}
-        ]
-}

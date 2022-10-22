@@ -42,10 +42,10 @@ public class Bird : MonoBehaviour
     public void MoveToTarget(Vector3 Target, bool IsFlipX)
     {
         MixStateFlyAndTouching();
-        StartCoroutine(TestMove(Target,IsFlipX));
+        StartCoroutine(Move(Target,IsFlipX));
     }
 
-    IEnumerator TestMove(Vector3 Target, bool IsFlipX)
+    IEnumerator Move(Vector3 Target, bool IsFlipX)
     {
         //bool isMove = true;
         //while (isMove)
@@ -70,7 +70,7 @@ public class Bird : MonoBehaviour
     public void ChangeSeats(Vector3 Target, bool IsFlipX)
     {
         StateFly();
-        StartCoroutine(TestMove(Target, IsFlipX));
+        StartCoroutine(Move(Target, IsFlipX));
     }
     IEnumerator WaitTimeChangeState(bool IsFlipX)
     {

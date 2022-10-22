@@ -22,7 +22,8 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        ReplayLevel();
+       // level = 1;
+      ReplayLevel();
     }
 
     public Stack<StateUndo> StackStateUndos = new Stack<StateUndo>();
@@ -38,9 +39,9 @@ public class GameManager : Singleton<GameManager>
         //    CountBrach = 5;
         //}
         StackStateUndos.Clear();
-        gameState = GameState.SortBirds;
-        level = Random.RandomRange(1, 4);
+        gameState = GameState.SortBirds; //Random.RandomRange(1, 4);
         StartCoroutine(_gamePlay.WaitTimeLoadData(level));
+        level ++;
     }
     int numberUndo = 1;
 
