@@ -13,10 +13,55 @@ public class Bird : MonoBehaviour
     public GameObject ParentObj;
     public float TimeMove = 0.5f;
     public int idBranchStand;
- 
+    public int idSlot;
+
+    public Vector3 _target;
+    public bool _isMove = false;
+    public float duration;
+    public bool isMovtToSlot;
+
+    Parabola _parabola;
+    Vector3 _startPos;
+    private float _preTime;
+
+    public bool isMoveCurve;
+
+
+
     public void Start()
     {
         StateIdle();
+    }
+    private void Update()
+    {
+        if (_isMove)
+        {
+            if (((Time.time - _preTime) / duration) <= 1)
+            {
+                _parabola.Move(transform, _startPos, _target, (Time.time - _preTime) / duration);
+            }
+            else
+            {
+                if(!isMovtToSlot)
+                {
+                    transform.position = _target;
+                }
+                else
+                {
+                    transform.position = GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position;
+                }
+             
+                _isMove = false;
+            }
+        }
+    }
+    public void UpdateMoveMent(Vector3 Target, float Duration,float H)
+    {
+        _target = Target;
+        duration = Duration;
+        _preTime = Time.time;
+        _startPos = transform.position;
+        _parabola = new Parabola(H);
     }
     public void SetOrderLayer(int NumberLayer)
     {
@@ -42,25 +87,23 @@ public class Bird : MonoBehaviour
     public void MoveToTarget(Vector3 Target, bool IsFlipX)
     {
         MixStateFlyAndTouching();
-        StartCoroutine(Move(Target,IsFlipX));
+        StartCoroutine(Move(Target,IsFlipX,true));
     }
 
-    IEnumerator Move(Vector3 Target, bool IsFlipX)
+    IEnumerator Move(Vector3 Target, bool IsFlipX,bool isMoveToNextBranch)
     {
-        //bool isMove = true;
-        //while (isMove)
-        //{
-        //    transform.position = Vector3.MoveTowards(transform.position, Target, Speed * Time.deltaTime);
-        //    if (transform.position == Target)
-        //    {
-        //        isMove = false;
-        //        StartCoroutine(WaitTimeChangeState(IsFlipX));
-        //        StartCoroutine(GameManager._instance._gamePlay.ShakyBranch(idBranchStand));
+        if (isMoveToNextBranch)
+        {
+            UpdateMoveMent(Target, TimeMove,0.5f);
+            _isMove = true;
+        }
+        else
+        {
+            UpdateMoveMent(Target, TimeMove, 0.15f);
+            _isMove = true;
+            //    transform.DOMove(Target, TimeMove).SetEase(Ease.Linear);
+        }
 
-        //    }
-        //    yield return new WaitForEndOfFrame();
-        //}
-        transform.DOMove(Target, TimeMove).SetEase(Ease.Linear);
         yield return new WaitForSeconds(TimeMove);
         StartCoroutine(WaitTimeChangeState(IsFlipX));
         StartCoroutine(GameManager._instance._gamePlay.ShakyBranch(idBranchStand));
@@ -70,7 +113,15 @@ public class Bird : MonoBehaviour
     public void ChangeSeats(Vector3 Target, bool IsFlipX)
     {
         StateFly();
-        StartCoroutine(Move(Target, IsFlipX));
+
+        if (isMoveCurve)
+        {
+            StartCoroutine(Move(Target, IsFlipX, true));
+        }
+        else
+        {
+            StartCoroutine(Move(Target, IsFlipX, false));
+        }
     }
     IEnumerator WaitTimeChangeState(bool IsFlipX)
     {
@@ -87,7 +138,7 @@ public class Bird : MonoBehaviour
             FlipX();
         }
         StateGrounding();
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         StateIdle();
       
     }

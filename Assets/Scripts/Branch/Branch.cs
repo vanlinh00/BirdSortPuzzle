@@ -93,6 +93,17 @@ public class Branch : MonoBehaviour
 
         return PositionSlots;
     }
+    public List<int> ListIdSlotAvailable(int CountBirdMove)
+    {
+        List<int> ListSlots = new List<int>();
+        for (int i = listBirds.Count - CountBirdMove; i < 4; i++)
+        {
+            ListSlots.Add(i);
+        }
+
+        return ListSlots;
+
+    }
     public void StateShaky()
     {
         _animator.SetBool("Shaky", true);
@@ -453,7 +464,10 @@ public class Branch : MonoBehaviour
            listBirds[i].ParentObj = _animator.gameObject;
             listBirds[i].idBranchStand = id - 1;
             listBirds[i].TimeMove = 0.55f;
-           listBirds[i].ChangeSeats(allSlots[i].transform.position, false);
+            listBirds[i].isMoveCurve = false;
+            listBirds[i].isMovtToSlot = false;
+            listBirds[i].ChangeSeats(allSlots[i].transform.position, false);
+
 
             Vector3 PosOldSlot = listBirds[i].transform.position;
             BirdUndo BirdUndos = new BirdUndo(id, listBirds[i], PosOldSlot, id, true);

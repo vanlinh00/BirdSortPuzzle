@@ -11,11 +11,12 @@ public class UiGamePlay : Singleton<UiGamePlay>
     [SerializeField] Button _nextLevelBtn;
     [SerializeField] Button _changeSteatsBtn;
     [SerializeField] Button _undoBtn;
-
     [SerializeField] GameObject _darkBgChangeSeats;
     [SerializeField] Button _darkBgBtn;
 
     int CountAddBranch = 2;
+    [SerializeField] Button _pauseGameBtn;
+    [SerializeField] Text _levelTxt;
     protected override void Awake()
     {
         base.Awake();
@@ -25,21 +26,59 @@ public class UiGamePlay : Singleton<UiGamePlay>
         _undoBtn.onClick.AddListener(Undo);
         _addBranch.onClick.AddListener(AddBranch);
         _darkBgBtn.onClick.AddListener(DisableChangeSeats);
+        _pauseGameBtn.onClick.AddListener(OpenPauseGame);
+    }
+    public void FunctionGame(int level)
+    {
+        if(level<=2)
+        {
+            _nextLevelBtn.gameObject.SetActive(true);
+            _undoBtn.gameObject.SetActive(false);
+            _changeSteatsBtn.gameObject.SetActive(false);
+            _addBranch.gameObject.SetActive(false);
+        }
+        else if(level<=3)
+        {
+            _nextLevelBtn.gameObject.SetActive(true);
+            _undoBtn.gameObject.SetActive(true);
+            _changeSteatsBtn.gameObject.SetActive(false);
+            _addBranch.gameObject.SetActive(false);
+
+        }
+        else if(level<6)
+        {
+            _nextLevelBtn.gameObject.SetActive(true);
+            _undoBtn.gameObject.SetActive(true);
+            _changeSteatsBtn.gameObject.SetActive(true);
+            _addBranch.gameObject.SetActive(false);
+
+        }
+        else if(level<=100)
+        {
+            _nextLevelBtn.gameObject.SetActive(true);
+            _undoBtn.gameObject.SetActive(true);
+            _changeSteatsBtn.gameObject.SetActive(true);
+            _addBranch.gameObject.SetActive(true);
+        }
+
+    }
+
+
+    public void UpdateLevel(int level)
+    {
+        _levelTxt.text = "LEVEL " + level;
+    }
+    public void OpenPauseGame()
+    {
+        Uicontroller._instance.OpenUiPauseGame();
     }
     public void NextLevel()
     {
-        // SceneManager.LoadScene(0);
-        StartCoroutine(WaitTimeRenew());
+        GameManager._instance.NextLevel();
     }
-    IEnumerator WaitTimeRenew()
-    {
-        GameManager._instance.ReNewGame();
-        yield return new WaitForSeconds(0.1f);
-        GameManager._instance.ReplayLevel();
-    }
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(0);
+        public void RestartGame()
+     {  
+        StartCoroutine(GameManager._instance.WaitTimeRenew());
     }
     public void ChangeSeats()
     {      

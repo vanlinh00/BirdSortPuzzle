@@ -7,7 +7,6 @@ using DG.Tweening;
 public class GameManager : Singleton<GameManager>
 {
    public GamePlay _gamePlay;
-    int CountBrach = 0;
     [SerializeField] int level;
     protected override void Awake()
     {
@@ -17,32 +16,39 @@ public class GameManager : Singleton<GameManager>
     {
         SortBirds,
         ChangeSeatsBirds,
+        FinishGame,
     }
     public GameState gameState;
 
     private void Start()
     {
-       // level = 1;
       ReplayLevel();
     }
 
     public Stack<StateUndo> StackStateUndos = new Stack<StateUndo>();
     public void ReplayLevel()
     {
-        /// cho nay chua chuan load level thi no co canh CountBranch luon roi
-        //if (level == 1)
-        //{
-        //    CountBrach = 2;
-        //}
-        //if (level == 2 || level == 3)
-        //{
-        //    CountBrach = 5;
-        //}
         StackStateUndos.Clear();
-        gameState = GameState.SortBirds; //Random.RandomRange(1, 4);
+        gameState = GameState.SortBirds; 
         StartCoroutine(_gamePlay.WaitTimeLoadData(level));
-        level ++;
+
     }
+    public void NextLevel()
+    {
+        level++;
+        StartCoroutine(WaitTimeRenew());
+    }
+    public int  Getlevel()
+    {
+        return level;
+    }
+  public  IEnumerator WaitTimeRenew()
+    {
+         ReNewGame();
+        yield return new WaitForSeconds(0.1f);
+         ReplayLevel();
+    }
+
     int numberUndo = 1;
 
     public void Undo()
@@ -98,7 +104,9 @@ public class GameManager : Singleton<GameManager>
                 PosOldSlot = StateBirdUndos.listStateBirdUndo[i].posOldSlot;
                 if (IsChangeSeats)
                 {
+
                     StateBirdUndos.listStateBirdUndo[i].bird.idBranchStand = IdNexBranch - 1;
+                    StateBirdUndos.listStateBirdUndo[i].bird.isMovtToSlot = false;
                     StateBirdUndos.listStateBirdUndo[i].bird.ChangeSeats(PosOldSlot, false);
                 }
                 else
@@ -126,6 +134,8 @@ public class GameManager : Singleton<GameManager>
         bool IsMoveDown = (_gamePlay.ListAllBranchs[IndexCurrentBranch].id % 2 == _gamePlay.ListAllBranchs[IndexNextBranch].id % 2) ? true : false;
         int idNextBranch = _gamePlay.ListAllBranchs[IndexNextBranch].id-1;
         Bird.idBranchStand = idNextBranch;
+        Bird.isMovtToSlot = false;
+        Bird.isMoveCurve = true;
         float DistanceBirdMove = Vector3.Distance(Bird.transform.position, PosOldSlot);
 
         if (IsMoveDown)

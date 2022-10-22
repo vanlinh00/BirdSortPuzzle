@@ -14,6 +14,7 @@ public class GamePlay : MonoBehaviour
     private bool _isChangeBird = false;
     public LoadData loadData;
     public bool IsBirdMoving;
+    public float _timeWait;
     private void Awake()
     {
         IsBirdMoving = true;
@@ -179,6 +180,9 @@ public class GamePlay : MonoBehaviour
             birdMove.transform.parent = null;
             birdMove.ParentObj = ListAllBranchs[indexNextBranch]._animator.gameObject;
             birdMove.SetOrderLayer(40);
+            birdMove.idSlot = ListAllBranchs[indexNextBranch].ListIdSlotAvailable(CountBirdMove)[i];
+            birdMove.isMovtToSlot = true;
+
             bool IsMoveDown = (ListAllBranchs[indexCurrentBranch].id % 2 == ListAllBranchs[indexNextBranch].id % 2) ? true : false;
             birdMove.idBranchStand = indexNextBranch;
             birdMove.TimeMove = 0.55f * DistanceBirdMove / 2.5f;
@@ -240,6 +244,12 @@ public class GamePlay : MonoBehaviour
                 ListAllBranchs[indexNextBranch].MoveAllBirdToOutScreen();
                 yield return new WaitForSeconds(1.2f);
                 IsBirdMoving = false;
+
+                if (IsFinishGame())
+                {
+                    Uicontroller._instance.OpenUiAndGame();
+                }
+
             }else
             {
                 IsBirdMoving = false;
@@ -250,15 +260,49 @@ public class GamePlay : MonoBehaviour
             IsBirdMoving = false;
         }
     }
-
+    public bool IsFinishGame()
+    {
+        for(int i=0;i< ListAllBranchs.Count;i++)
+        {
+            if(ListAllBranchs[i].listBirds.Count!=0)
+            { 
+                return false;
+            }
+        }
+        return true;
+    }
     public IEnumerator ShakyBranch(int indexNextBranch)
     {
-        yield return new WaitForSeconds(0.24f);
+        yield return new WaitForSeconds(0.28f);
         ListAllBranchs[indexNextBranch].StateShaky();
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.2f);
         ListAllBranchs[indexNextBranch].StateIdle();
         yield return new WaitForSeconds(0.2f);
     }
+    //public void CalculateTimeWait(int IdBird)
+    //{
+    //    if(IdBird==2)
+    //    {
+    //        _timeWait = 0.25f;
+    //    }
+    //    else if(IdBird==1)
+    //    {
+    //        _timeWait = 0.6f;
+    //    }
+    //    else if (IdBird == 5)
+    //    {
+    //        _timeWait = 0.55f;
+    //    }
+    //    else if (IdBird == 4)
+    //    {
+    //        _timeWait = 0.3f;
+    //    }
+    //    else
+    //    {
+    //        _timeWait = 0.5f;
+    //    }
+
+    //}
     public void SaveStateBirdsWhenFinishBranch(int CountBirdMoveToBranch, int indexNextBranch)
     {
         List<BirdUndo> ListBirdUndo = new List<BirdUndo>();
