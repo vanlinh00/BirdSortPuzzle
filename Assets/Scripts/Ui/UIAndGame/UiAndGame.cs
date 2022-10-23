@@ -1,19 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UiAndGame : MonoBehaviour
+public class UiAndGame : Singleton<UiAndGame>
 {
     [SerializeField] Button _homeBtn;
     [SerializeField] Text _totalcointTxt;
-    [SerializeField] Button _continueGmaeBtn;
-    [SerializeField] Text _countCoinTxt;
+    [SerializeField] Button _continueGameBtn;
 
     [SerializeField] CanvasGroup _canvasGroup;
-    private void Awake()
+
+    [Header("UI references")]
+    [SerializeField] TMP_Text coinUIText;
+    private int _c;
+    protected override void Awake()
     {
-        _continueGmaeBtn.onClick.AddListener(ContinueGame);
+        base.Awake();
+        _continueGameBtn.onClick.AddListener(ContinueGame);
+    }
+    private void Start()
+    {
+        coinUIText.text = DataPlayer.GetInforPlayer().countCoins.ToString() ;
+        _c = DataPlayer.GetInforPlayer().countCoins;
+
+    }
+    public int Coins
+    {
+        get { return _c; }
+        set
+        {
+            _c = value;
+            coinUIText.text = Coins.ToString();
+        }
     }
     public void ContinueGame()
     {
@@ -23,6 +43,17 @@ public class UiAndGame : MonoBehaviour
             Uicontroller._instance.OpenUiGamePlay(true);
         }
 
+    }
+    private void OnEnable()
+    {
+        StartCoroutine(WaitTimeBornCoins());
+    }
+    IEnumerator WaitTimeBornCoins()
+    {
+        yield return new WaitForSeconds(0.4f);
+        CoinsManager._instance.Animate(12);
+        yield return new WaitForSeconds(0.5f);
+        _continueGameBtn.gameObject.SetActive(true);
     }
     public void In()
     {
@@ -40,6 +71,7 @@ public class UiAndGame : MonoBehaviour
     }
     public void Out()
     {
+        _continueGameBtn.gameObject.SetActive(false);
         StartCoroutine(FadeOut());
     }
     IEnumerator FadeOut()

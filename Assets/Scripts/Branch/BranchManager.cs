@@ -59,7 +59,7 @@ public class BranchManager : Singleton<BranchManager>
         _dataBirdOnBranchs = DataBirdOnBranchs;
     }
 
-    public List<Branch>  BonrAllBirdOnBranch()
+    IEnumerator BonrAllBirdOnBranch()
     {
         _listBirds.Clear();
         for (int i = 0; i < _dataBirdOnBranchs.BirdOnBranch.Length; i++)
@@ -83,7 +83,14 @@ public class BranchManager : Singleton<BranchManager>
             Bird.GetComponent<Bird>().RealPosBird = RealPosBird;
             _listBirds.Add(Bird.GetComponent<Bird>());
             _listAllBranchs[data.idBranch - 1].AddToListBrids(Bird.GetComponent<Bird>());
-        }
+            yield return new WaitForSeconds(0f);
+        // yield return new WaitForSeconds(Random.RandomRange(0.05f)));
+        //StartCoroutine(ShuffleAnimationBird(Bird.gameObject)); 
+         }
+    }
+    public  List<Branch> GetListAllBranhs()
+    {
+        StartCoroutine(BonrAllBirdOnBranch());
         return _listAllBranchs;
     }
   public void MoveAllBirdSToAllBranchs()

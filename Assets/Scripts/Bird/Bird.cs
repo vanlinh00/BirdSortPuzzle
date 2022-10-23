@@ -18,7 +18,7 @@ public class Bird : MonoBehaviour
     public Vector3 _target;
     public bool _isMove = false;
     public float duration;
-    public bool isMovtToSlot;
+    public bool isMoveToSlot;
 
     Parabola _parabola;
     Vector3 _startPos;
@@ -42,7 +42,7 @@ public class Bird : MonoBehaviour
             }
             else
             {
-                if(!isMovtToSlot)
+                if(!isMoveToSlot)
                 {
                     transform.position = _target;
                 }
@@ -176,6 +176,7 @@ public class Bird : MonoBehaviour
         GameManager._instance._gamePlay.IsBirdMoving = true;
         StateFly();
         transform.DOMove(Target, 0.7f);
+
         StartCoroutine(WaitTimeChangeStateWhenStartGame());
     }
     IEnumerator WaitTimeChangeStateWhenStartGame()

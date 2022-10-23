@@ -186,7 +186,7 @@ public class GamePlay : MonoBehaviour
             birdMove.ParentObj = ListAllBranchs[indexNextBranch]._animator.gameObject;
             birdMove.SetOrderLayer(40);
             birdMove.idSlot = ListAllBranchs[indexNextBranch].ListIdSlotAvailable(CountBirdMove)[i];
-            birdMove.isMovtToSlot = true;
+            birdMove.isMoveToSlot = true;
 
             bool IsMoveDown = (ListAllBranchs[indexCurrentBranch].id % 2 == ListAllBranchs[indexNextBranch].id % 2) ? true : false;
             birdMove.idBranchStand = indexNextBranch;
@@ -340,7 +340,7 @@ public class GamePlay : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         _branchManager.MoveToScreen();
         yield return new WaitForSeconds(0.4f);
-        ListAllBranchs = _branchManager.BonrAllBirdOnBranch();
+        ListAllBranchs = _branchManager.GetListAllBranhs();
         yield return new WaitForSeconds(0.1f);
         _branchManager.MoveAllBirdSToAllBranchs();
         AmountListBirdsFinishGame = BranchManager._instance.CountListBirdsFinishGame();

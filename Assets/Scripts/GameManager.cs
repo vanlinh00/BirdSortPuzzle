@@ -105,7 +105,7 @@ public class GameManager : Singleton<GameManager>
                 {
 
                     StateBirdUndos.listStateBirdUndo[i].bird.idBranchStand = IdNexBranch - 1;
-                    StateBirdUndos.listStateBirdUndo[i].bird.isMovtToSlot = false;
+                    StateBirdUndos.listStateBirdUndo[i].bird.isMoveToSlot = false;
                     StateBirdUndos.listStateBirdUndo[i].bird.ChangeSeats(PosOldSlot, false);
                 }
                 else
@@ -133,7 +133,7 @@ public class GameManager : Singleton<GameManager>
         bool IsMoveDown = (_gamePlay.ListAllBranchs[IndexCurrentBranch].id % 2 == _gamePlay.ListAllBranchs[IndexNextBranch].id % 2) ? true : false;
         int idNextBranch = _gamePlay.ListAllBranchs[IndexNextBranch].id-1;
         Bird.idBranchStand = idNextBranch;
-        Bird.isMovtToSlot = false;
+        Bird.isMoveToSlot = false;
         Bird.isMoveCurve = true;
         float DistanceBirdMove = Vector3.Distance(Bird.transform.position, PosOldSlot);
 
