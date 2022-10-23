@@ -15,6 +15,17 @@ public class UiAndGame : Singleton<UiAndGame>
     [Header("UI references")]
     [SerializeField] TMP_Text coinUIText;
     private int _c;
+
+    [SerializeField] TMP_Text coinMidlleText;
+    private int _coinMidlle;
+
+    [SerializeField] GameObject _effectWinGame;
+    private void OnEnable()
+    {
+        CoinsMidlle = 12;
+        StartCoroutine(WaitTimeBornCoins());
+       
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -35,25 +46,35 @@ public class UiAndGame : Singleton<UiAndGame>
             coinUIText.text = Coins.ToString();
         }
     }
+    public int CoinsMidlle
+    {
+        get { return _coinMidlle; }
+        set
+        {
+            _coinMidlle = value;
+            coinMidlleText.text ="+"+ _coinMidlle.ToString();
+        }
+    }
     public void ContinueGame()
     {
         if(_canvasGroup.alpha==1)
         {
+            _effectWinGame.SetActive(false);
             GameManager._instance.NextLevel();
             Uicontroller._instance.OpenUiGamePlay(true);
+
         }
 
     }
-    private void OnEnable()
-    {
-        StartCoroutine(WaitTimeBornCoins());
-    }
+ 
     IEnumerator WaitTimeBornCoins()
     {
         yield return new WaitForSeconds(0.4f);
+        _effectWinGame.SetActive(true);
         CoinsManager._instance.Animate(12);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         _continueGameBtn.gameObject.SetActive(true);
+    
     }
     public void In()
     {

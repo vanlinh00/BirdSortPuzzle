@@ -59,7 +59,7 @@ public class BranchManager : Singleton<BranchManager>
         _dataBirdOnBranchs = DataBirdOnBranchs;
     }
 
-    IEnumerator BonrAllBirdOnBranch()
+  public  List<Branch> GetListAllBranhs()
     {
         _listBirds.Clear();
         for (int i = 0; i < _dataBirdOnBranchs.BirdOnBranch.Length; i++)
@@ -73,24 +73,28 @@ public class BranchManager : Singleton<BranchManager>
                 Vector3 StartPosBird = new Vector3(RealPosBird.x - 2.5f, RealPosBird.y + 1.25f, 0);
                 Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, StartPosBird, Quaternion.identity);
                 Bird.GetComponent<Bird>().FlipX();
+
+                //if (Random.RandomRange(1, 3) == 2)
+                //{
+                  
+                //}
             }
             else
             {
                 Vector3 StartPosBird = new Vector3(RealPosBird.x + 2.5f, RealPosBird.y + 1.25f, 0);
                 Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, StartPosBird, Quaternion.identity);
+
+                if (Random.RandomRange(1, 3) == 2)
+                {
+                    Bird.GetComponent<Bird>().StateGrounding();
+                }
             }
             Bird.GetComponent<Bird>().SetOrderLayer(30);
             Bird.GetComponent<Bird>().RealPosBird = RealPosBird;
             _listBirds.Add(Bird.GetComponent<Bird>());
             _listAllBranchs[data.idBranch - 1].AddToListBrids(Bird.GetComponent<Bird>());
-            yield return new WaitForSeconds(0f);
-        // yield return new WaitForSeconds(Random.RandomRange(0.05f)));
-        //StartCoroutine(ShuffleAnimationBird(Bird.gameObject)); 
-         }
-    }
-    public  List<Branch> GetListAllBranhs()
-    {
-        StartCoroutine(BonrAllBirdOnBranch());
+
+        }
         return _listAllBranchs;
     }
   public void MoveAllBirdSToAllBranchs()

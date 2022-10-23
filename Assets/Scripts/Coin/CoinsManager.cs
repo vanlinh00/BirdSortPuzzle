@@ -27,6 +27,7 @@ public class CoinsManager : Singleton<CoinsManager>
     {
 		for (int i = 0; i < amount; i++)
 		{
+			UiAndGame._instance.CoinsMidlle--;
 			GameObject coin = ObjectPooler._instance.SpawnFromPool("Coin", desPosition, Quaternion.identity);
 			coin.transform.position = desPosition;// + new Vector3(Random.Range(-spread, spread), 0f, 0f);
 			float duration = 1f;//Random.Range(minAnimDuration, maxAnimDuration);

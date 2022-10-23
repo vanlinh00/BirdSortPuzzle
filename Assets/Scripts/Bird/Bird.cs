@@ -26,8 +26,11 @@ public class Bird : MonoBehaviour
 
     public bool isMoveCurve;
 
-
-
+    public ParticleSystem SprakleEffect;
+    private void OnEnable()
+    {
+        SprakleEffect.Stop();
+    }
     public void Start()
     {
         StateIdle();

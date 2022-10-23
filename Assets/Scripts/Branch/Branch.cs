@@ -241,6 +241,7 @@ public class Branch : MonoBehaviour
 
         for(int i=0;i<listBirds.Count;i++)
         {
+            listBirds[i].SprakleEffect.Play();
             listBirds[i].SetOrderLayer(40);
         }
         listBirds.Clear();
