@@ -6,7 +6,7 @@ using UnityEngine;
 using DG.Tweening;
 public class GameManager : Singleton<GameManager>
 {
-   public GamePlay _gamePlay;
+    public GamePlay _gamePlay;
     [SerializeField] int level;
     protected override void Awake()
     {
@@ -73,6 +73,7 @@ public class GameManager : Singleton<GameManager>
             {
                 if (IdOldBranch == IdNexBranch)
                 {
+                    _gamePlay.AmountListBirdsFinishGame++;
                     numberUndo = 2;
                     StartCoroutine(WaitTimeUndo());
                     StartCoroutine(WaitTimeUndo());
@@ -85,8 +86,6 @@ public class GameManager : Singleton<GameManager>
             }
         }
     }
-
-
     IEnumerator WaitTimeUndo()
     {
         if (StackStateUndos.Count != 0)

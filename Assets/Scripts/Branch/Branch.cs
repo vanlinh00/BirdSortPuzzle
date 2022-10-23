@@ -463,7 +463,7 @@ public class Branch : MonoBehaviour
         {
            listBirds[i].ParentObj = _animator.gameObject;
             listBirds[i].idBranchStand = id - 1;
-            listBirds[i].TimeMove = 0.55f;
+            listBirds[i].TimeMove = 0.3f;
             listBirds[i].isMoveCurve = false;
             listBirds[i].isMovtToSlot = false;
             listBirds[i].ChangeSeats(allSlots[i].transform.position, false);

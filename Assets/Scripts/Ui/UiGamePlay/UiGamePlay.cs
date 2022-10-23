@@ -17,6 +17,11 @@ public class UiGamePlay : Singleton<UiGamePlay>
     int CountAddBranch = 2;
     [SerializeField] Button _pauseGameBtn;
     [SerializeField] Text _levelTxt;
+
+    bool IsNextLevel = false;
+    bool addBranch = true;
+
+    [SerializeField] CanvasGroup _canvasGroup;
     protected override void Awake()
     {
         base.Awake();
@@ -28,7 +33,12 @@ public class UiGamePlay : Singleton<UiGamePlay>
         _darkBgBtn.onClick.AddListener(DisableChangeSeats);
         _pauseGameBtn.onClick.AddListener(OpenPauseGame);
     }
-    public void FunctionGame(int level)
+    private void Start()
+    {
+        IsNextLevel = true;
+        addBranch = true;
+    }
+    public IEnumerator FunctionGame(int level)
     {
         if(level<=2)
         {
@@ -37,33 +47,46 @@ public class UiGamePlay : Singleton<UiGamePlay>
             _changeSteatsBtn.gameObject.SetActive(false);
             _addBranch.gameObject.SetActive(false);
         }
-        else if(level<=3)
+        else if(level==3)
         {
             _nextLevelBtn.gameObject.SetActive(true);
             _undoBtn.gameObject.SetActive(true);
             _changeSteatsBtn.gameObject.SetActive(false);
             _addBranch.gameObject.SetActive(false);
-
         }
-        else if(level<6)
+        else if(level==4)
         {
             _nextLevelBtn.gameObject.SetActive(true);
             _undoBtn.gameObject.SetActive(true);
-            _changeSteatsBtn.gameObject.SetActive(true);
             _addBranch.gameObject.SetActive(false);
+            yield return new WaitForSeconds(0.7f);
+            _changeSteatsBtn.gameObject.SetActive(true);
+            TutorialManager._instance.MoveHandToTarget(new Vector3(-0.261f, -3.046f, 0));
 
         }
-        else if(level<=100)
+        else if(level==5)
         {
+            CountAddBranch = 2;
             _nextLevelBtn.gameObject.SetActive(true);
             _undoBtn.gameObject.SetActive(true);
             _changeSteatsBtn.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.7f);
+            _addBranch.gameObject.SetActive(true);
+            TutorialManager._instance.MoveHandToTarget(new Vector3(-1.45f, -3.046f, 0));
+        }
+        else
+        {
+            TutorialManager._instance.SetActiveHand(false);
+            _nextLevelBtn.gameObject.SetActive(true);
+            _undoBtn.gameObject.SetActive(true);
+            _changeSteatsBtn.gameObject.SetActive(true);
+
+            CountAddBranch=2;
+            _addBranch.gameObject.SetActive(true);
             _addBranch.gameObject.SetActive(true);
         }
 
     }
-
-
     public void UpdateLevel(int level)
     {
         _levelTxt.text = "LEVEL " + level;
@@ -72,17 +95,38 @@ public class UiGamePlay : Singleton<UiGamePlay>
     {
         Uicontroller._instance.OpenUiPauseGame();
     }
+
     public void NextLevel()
     {
-        GameManager._instance.NextLevel();
+        if(IsNextLevel)
+        {
+            IsNextLevel = false;
+            GameManager._instance.NextLevel();
+            Uicontroller._instance.OpenUiGamePlay(false);
+            StartCoroutine(WaitTimeNextLevel());
+
+        }
+    }
+    IEnumerator WaitTimeNextLevel()
+    {
+        yield return new WaitForSeconds(3f);
+        IsNextLevel = true;
     }
         public void RestartGame()
-     {  
-        StartCoroutine(GameManager._instance.WaitTimeRenew());
+     {
+        if (IsNextLevel)
+        {
+            IsNextLevel = false;
+            StartCoroutine(GameManager._instance.WaitTimeRenew());
+            StartCoroutine(WaitTimeNextLevel());
+            StartCoroutine(FunctionGame(GameManager._instance.Getlevel()));
+
+        }
     }
     public void ChangeSeats()
-    {      
-        if(_changeSteatsBtn.GetComponent<ButtonGP>().IsReady())
+    {
+        TutorialManager._instance.SetActiveHand(false);
+        if (_changeSteatsBtn.GetComponent<ButtonGP>().IsReady())
         {
             _darkBgChangeSeats.SetActive(true);
             GameManager._instance._gamePlay.EnableBirdsCanChangeSeats();
@@ -98,6 +142,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
     }
     public void Undo()
     {
+        TutorialManager._instance.SetActiveHand(false);
         if (_undoBtn.GetComponent<ButtonGP>().IsReady())
         {
             GameManager._instance.Undo();
@@ -106,17 +151,59 @@ public class UiGamePlay : Singleton<UiGamePlay>
     }
     public void AddBranch()
     {
+        TutorialManager._instance.SetActiveHand(false);
 
-        if (_addBranch.GetComponent<ButtonGP>().IsReady())
+        if(addBranch)
         {
-            GameManager._instance.StackStateUndos.Clear();
-            BranchManager._instance.AddNewBranch();
-            CountAddBranch--;
-            if (CountAddBranch <= 0)
+            addBranch = false;
+            StartCoroutine(WaitTimeAddBranch());
+            if (_addBranch.GetComponent<ButtonGP>().IsReady())
             {
-                _addBranch.gameObject.SetActive(false);
+                GameManager._instance.StackStateUndos.Clear();
+                BranchManager._instance.AddNewBranch();
+                CountAddBranch--;
+                if (CountAddBranch <= 0)
+                {
+                    _addBranch.gameObject.SetActive(false);
+                }
             }
         }
+       
     
+    }
+
+    IEnumerator WaitTimeAddBranch()
+    {
+        yield return new WaitForSeconds(1f);
+        addBranch = true;
+    }
+
+    public void In()
+    {
+        StartCoroutine(FadeIn());
+    }
+    IEnumerator FadeIn()
+    {
+        float t = 0;
+        while (_canvasGroup.alpha < 1)
+        {
+            yield return new WaitForEndOfFrame();
+            _canvasGroup.alpha = t;
+            t += Time.deltaTime * 1.7f;
+        }
+    }
+    public void Out()
+    {
+        StartCoroutine(FadeOut());
+    }
+    IEnumerator FadeOut()
+    {
+        float t = 1;
+        while (_canvasGroup.alpha >= 0)
+        {
+            yield return new WaitForEndOfFrame();
+            _canvasGroup.alpha = t;
+            t -= Time.deltaTime * 2f;
+        }
     }
 }

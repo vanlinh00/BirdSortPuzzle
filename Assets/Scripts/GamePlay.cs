@@ -15,6 +15,12 @@ public class GamePlay : MonoBehaviour
     public LoadData loadData;
     public bool IsBirdMoving;
     public float _timeWait;
+
+    // tutorial
+    public bool isDisplayTut = false;
+
+    // check finish game
+   public int AmountListBirdsFinishGame = 0;
     private void Awake()
     {
         IsBirdMoving = true;
@@ -143,7 +149,6 @@ public class GamePlay : MonoBehaviour
             }
         }
 
-
         List<BirdUndo> ListBirdUndo = new List<BirdUndo>();
 
         IsBirdMoving = true;
@@ -231,8 +236,17 @@ public class GamePlay : MonoBehaviour
         ListAllBranchs[indexCurrentBranch].RemoveBirdPromListBird(CountBirdMove);
         _countClick = 0;
 
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(0.7f);
+        if (GameManager._instance.Getlevel() == 3 && !isDisplayTut)
+        {
+            isDisplayTut = true;
+            TutorialManager._instance.MoveHandToTarget(new Vector3(0.89f, -3.046f, 0));
+        }
+
+        yield return new WaitForSeconds(0.5f);
         ListAllBranchs[indexNextBranch].SetOrderBirdsAndBrands(20);
+
+   
         //_idOldNextBranch = -100;
 
         if (lastBridMoveToBranch)
@@ -245,7 +259,8 @@ public class GamePlay : MonoBehaviour
                 yield return new WaitForSeconds(1.2f);
                 IsBirdMoving = false;
 
-                if (IsFinishGame())
+                AmountListBirdsFinishGame--;
+                if (AmountListBirdsFinishGame==0)
                 {
                     Uicontroller._instance.OpenUiAndGame();
                 }
@@ -260,20 +275,21 @@ public class GamePlay : MonoBehaviour
             IsBirdMoving = false;
         }
     }
-    public bool IsFinishGame()
-    {
-        for(int i=0;i< ListAllBranchs.Count;i++)
-        {
-            if(ListAllBranchs[i].listBirds.Count!=0)
-            { 
-                return false;
-            }
-        }
-        return true;
-    }
+    //public bool IsFinishGame()
+    //{
+    //    for(int i=0;i< ListAllBranchs.Count;i++)
+    //    {
+    //        if(ListAllBranchs[i].listBirds.Count!=0)
+    //        { 
+    //            return false;
+    //        }
+    //    }
+    //    return true;
+    //}
+
     public IEnumerator ShakyBranch(int indexNextBranch)
     {
-        yield return new WaitForSeconds(0.28f);
+        yield return new WaitForSeconds(0.35f);
         ListAllBranchs[indexNextBranch].StateShaky();
         yield return new WaitForSeconds(0.2f);
         ListAllBranchs[indexNextBranch].StateIdle();
@@ -301,7 +317,6 @@ public class GamePlay : MonoBehaviour
     //    {
     //        _timeWait = 0.5f;
     //    }
-
     //}
     public void SaveStateBirdsWhenFinishBranch(int CountBirdMoveToBranch, int indexNextBranch)
     {
@@ -328,6 +343,7 @@ public class GamePlay : MonoBehaviour
         ListAllBranchs = _branchManager.BonrAllBirdOnBranch();
         yield return new WaitForSeconds(0.1f);
         _branchManager.MoveAllBirdSToAllBranchs();
+        AmountListBirdsFinishGame = BranchManager._instance.CountListBirdsFinishGame();
     }
   public  void EnableBirdsCanChangeSeats()
     {

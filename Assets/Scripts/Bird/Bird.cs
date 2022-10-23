@@ -94,7 +94,7 @@ public class Bird : MonoBehaviour
     {
         if (isMoveToNextBranch)
         {
-            UpdateMoveMent(Target, TimeMove,0.5f);
+            UpdateMoveMent(Target, TimeMove,0.25f);
             _isMove = true;
         }
         else
@@ -104,7 +104,7 @@ public class Bird : MonoBehaviour
             //    transform.DOMove(Target, TimeMove).SetEase(Ease.Linear);
         }
 
-        yield return new WaitForSeconds(TimeMove);
+        yield return new WaitForSeconds(TimeMove-0.1f);
         StartCoroutine(WaitTimeChangeState(IsFlipX));
         StartCoroutine(GameManager._instance._gamePlay.ShakyBranch(idBranchStand));
 
@@ -137,6 +137,7 @@ public class Bird : MonoBehaviour
         {
             FlipX();
         }
+        yield return new WaitForSeconds(0.15f);
         StateGrounding();
         yield return new WaitForSeconds(0.2f);
         StateIdle();

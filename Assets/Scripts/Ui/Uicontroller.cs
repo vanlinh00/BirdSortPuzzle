@@ -16,28 +16,50 @@ public class Uicontroller : Singleton<Uicontroller>
     }
     public void Start()
     {
-        OpenUiGamePlay();
+        OpenUiGamePlay(false);
     }
-    public void OpenUiGamePlay()
+    IEnumerator WaitOutAndGame()
     {
+        _uiAndGame.GetComponent<UiAndGame>().Out();
+       yield return new WaitForSeconds(0.4f);
         _UiPauseGame.SetActive(false);
         _uiAndGame.SetActive(false);
         _uiGamePlay.SetActive(true);
+        _uiGamePlay.GetComponent<UiGamePlay>().In();
         _uiGamePlay.GetComponent<UiGamePlay>().UpdateLevel(GameManager._instance.Getlevel());
-        _uiGamePlay.GetComponent<UiGamePlay>().FunctionGame(GameManager._instance.Getlevel());
+        StartCoroutine(_uiGamePlay.GetComponent<UiGamePlay>().FunctionGame(GameManager._instance.Getlevel()));
+    }
+    public void OpenUiGamePlay(bool AndGameToGamePlay)
+    {
+        if(AndGameToGamePlay)
+        {
+            StartCoroutine(WaitOutAndGame());
+        }
+        else
+        {
+            _UiPauseGame.SetActive(false);
+            _uiAndGame.SetActive(false);
+            _uiGamePlay.SetActive(true);
+            _uiGamePlay.GetComponent<UiGamePlay>().In();
+            _uiGamePlay.GetComponent<UiGamePlay>().UpdateLevel(GameManager._instance.Getlevel());
+            StartCoroutine(_uiGamePlay.GetComponent<UiGamePlay>().FunctionGame(GameManager._instance.Getlevel()));
+        }
+       
     }
     public void OpenUiPauseGame()
     {
         _uiAndGame.SetActive(false);
         _uiGamePlay.SetActive(true);
         _UiPauseGame.SetActive(true);
+        _UiPauseGame.GetComponent<UiPause>().In();
     }
     public void OpenUiAndGame()
     {
         _uiGamePlay.SetActive(false);
         _UiPauseGame.SetActive(false);
         _uiAndGame.SetActive(true);
-
+        _uiAndGame.GetComponent<UiAndGame>().In();
+        TutorialManager._instance.SetActiveHand(false);
     }
 
 }

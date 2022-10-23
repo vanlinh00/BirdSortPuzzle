@@ -165,5 +165,8 @@ public class BranchManager : Singleton<BranchManager>
         }
 
     }
-
+    public int CountListBirdsFinishGame()
+    {
+        return _listBirds.Count/4;
+    }
 }
