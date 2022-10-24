@@ -22,6 +22,17 @@ public class UiGamePlay : Singleton<UiGamePlay>
     bool addBranch = true;
 
     [SerializeField] CanvasGroup _canvasGroup;
+    [SerializeField] Animator _headerUiGP;
+    [SerializeField] Text _undoTxt;
+
+    public void StateOutHeaderUiGP()
+    {
+        _headerUiGP.SetBool("Out", true);
+    }
+    public void StateInHeaderUiGP()
+    {
+        _headerUiGP.SetBool("Out", false);
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -95,7 +106,6 @@ public class UiGamePlay : Singleton<UiGamePlay>
     {
         Uicontroller._instance.OpenUiPauseGame();
     }
-
     public void NextLevel()
     {
         if(IsNextLevel)
@@ -104,15 +114,15 @@ public class UiGamePlay : Singleton<UiGamePlay>
             GameManager._instance.NextLevel();
             Uicontroller._instance.OpenUiGamePlay(false);
             StartCoroutine(WaitTimeNextLevel());
-
         }
     }
     IEnumerator WaitTimeNextLevel()
     {
+        ResetNumberUndo();
         yield return new WaitForSeconds(3f);
         IsNextLevel = true;
     }
-        public void RestartGame()
+    public void RestartGame()
      {
         if (IsNextLevel)
         {
@@ -120,7 +130,6 @@ public class UiGamePlay : Singleton<UiGamePlay>
             StartCoroutine(GameManager._instance.WaitTimeRenew());
             StartCoroutine(WaitTimeNextLevel());
             StartCoroutine(FunctionGame(GameManager._instance.Getlevel()));
-
         }
     }
     public void ChangeSeats()
@@ -128,6 +137,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
         TutorialManager._instance.SetActiveHand(false);
         if (_changeSteatsBtn.GetComponent<ButtonGP>().IsReady())
         {
+            StateOutHeaderUiGP();
             _darkBgChangeSeats.SetActive(true);
             GameManager._instance._gamePlay.EnableBirdsCanChangeSeats();
             GameManager._instance.gameState = GameManager.GameState.ChangeSeatsBirds;
@@ -136,7 +146,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
     }
     public void DisableChangeSeats()
     {
-
+        StateInHeaderUiGP();
         _darkBgChangeSeats.SetActive(false);
         GameManager._instance.gameState = GameManager.GameState.SortBirds;
     }
@@ -171,13 +181,11 @@ public class UiGamePlay : Singleton<UiGamePlay>
        
     
     }
-
     IEnumerator WaitTimeAddBranch()
     {
         yield return new WaitForSeconds(1f);
         addBranch = true;
     }
-
     public void In()
     {
         StartCoroutine(FadeIn());
@@ -205,5 +213,20 @@ public class UiGamePlay : Singleton<UiGamePlay>
             _canvasGroup.alpha = t;
             t -= Time.deltaTime * 2f;
         }
+    }
+    public void CountNumberUndo()
+    {
+        _undoBtn.GetComponent<ButtonGP>().numberClick++;
+        _undoTxt.text = _undoBtn.GetComponent<ButtonGP>().numberClick.ToString();
+    }
+    public void MinusNumberUndo()
+    {
+        _undoBtn.GetComponent<ButtonGP>().numberClick--;
+        _undoTxt.text = _undoBtn.GetComponent<ButtonGP>().numberClick.ToString();
+    }
+    public void ResetNumberUndo()
+    {
+        _undoBtn.GetComponent<ButtonGP>().numberClick = 0;
+        _undoTxt.text = 0.ToString();
     }
 }

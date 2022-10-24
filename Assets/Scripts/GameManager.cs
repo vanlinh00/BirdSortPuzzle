@@ -8,6 +8,7 @@ public class GameManager : Singleton<GameManager>
 {
     public GamePlay _gamePlay;
     [SerializeField] int level;
+    public int CountNumberShuffle = 0;
     protected override void Awake()
     {
         base.Awake();
@@ -67,7 +68,6 @@ public class GameManager : Singleton<GameManager>
                 _gamePlay.ListAllBranchs[IdOldBranch - 1].listBirds.Clear();
                 _gamePlay.ListAllBranchs[IdOldBranch - 1].listBirds = StateBirdUndos.listBirdsChangeState;
                 _gamePlay.ListAllBranchs[IdOldBranch - 1].SetOrderBirdsAndBrands(20);
-                StartCoroutine(WaitTimeUndo());
             }
             else
             {
@@ -75,16 +75,14 @@ public class GameManager : Singleton<GameManager>
                 {
                     _gamePlay.AmountListBirdsFinishGame++;
                     numberUndo = 2;
-                    StartCoroutine(WaitTimeUndo());
-                    StartCoroutine(WaitTimeUndo());
-                }
-                else
-                {
-                    StartCoroutine(WaitTimeUndo());
-
                 }
             }
         }
+        for(int i=0;i<numberUndo;i++)
+        {
+            UiGamePlay._instance.MinusNumberUndo();
+            StartCoroutine(WaitTimeUndo());
+        }    
     }
     IEnumerator WaitTimeUndo()
     {
@@ -119,6 +117,7 @@ public class GameManager : Singleton<GameManager>
                     yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
                 }
             }
+
         }
 
     }
@@ -192,7 +191,6 @@ public class GameManager : Singleton<GameManager>
             }
             Bird.ChangeSeats(PosOldSlot, true);
             }
-
         yield return new WaitForSeconds(1f);
         _gamePlay.ListAllBranchs[IndexNextBranch].SetOrderBirdsAndBrands(20);
         GameManager._instance._gamePlay.IsBirdMoving = false;
@@ -201,5 +199,8 @@ public class GameManager : Singleton<GameManager>
     {
         _gamePlay.Renew();
     }
-
+    public void AddCountNumberShuffle()
+    {
+       // CountNumberShuffle +;
+    }
 }

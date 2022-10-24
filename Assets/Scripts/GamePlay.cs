@@ -162,6 +162,7 @@ public class GamePlay : MonoBehaviour
         }
         StateUndo NewStateUndo = new StateUndo(ListBirdUndo, null);
         GameManager._instance.StackStateUndos.Push(NewStateUndo);
+        UiGamePlay._instance.CountNumberUndo();
 
         for (int i = 0; i < CountBirdMove; i++)
         {
@@ -275,6 +276,7 @@ public class GamePlay : MonoBehaviour
             IsBirdMoving = false;
         }
     }
+
     //public bool IsFinishGame()
     //{
     //    for(int i=0;i< ListAllBranchs.Count;i++)
@@ -287,9 +289,9 @@ public class GamePlay : MonoBehaviour
     //    return true;
     //}
 
-    public IEnumerator ShakyBranch(int indexNextBranch)
+    public IEnumerator ShakyBranch(int indexNextBranch, float TimeWait)
     {
-        yield return new WaitForSeconds(0.35f);
+        yield return new WaitForSeconds(TimeWait);
         ListAllBranchs[indexNextBranch].StateShaky();
         yield return new WaitForSeconds(0.2f);
         ListAllBranchs[indexNextBranch].StateIdle();
@@ -330,6 +332,7 @@ public class GamePlay : MonoBehaviour
         }
         StateUndo NewStateUndo = new StateUndo(ListBirdUndo, null);
         GameManager._instance.StackStateUndos.Push(NewStateUndo);
+        UiGamePlay._instance.CountNumberUndo();
     }
 
     public  IEnumerator WaitTimeLoadData(int level)

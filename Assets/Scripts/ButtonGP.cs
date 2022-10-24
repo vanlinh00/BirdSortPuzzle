@@ -5,17 +5,18 @@ using UnityEngine;
 public class ButtonGP : MonoBehaviour
 {
     [SerializeField] GameObject _darkBg;
-
+    [SerializeField] int idButton;
+    public  int numberClick;
     public void Update()
     {
-        if(GameManager._instance._gamePlay.IsBirdMoving)
+        if(GameManager._instance._gamePlay.IsBirdMoving|| numberClick<=0)
         {
             _darkBg.SetActive(true);
         }
         else
         {
             _darkBg.SetActive(false);
-        
+
         }
     }
     public void Click()

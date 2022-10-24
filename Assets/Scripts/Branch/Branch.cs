@@ -268,6 +268,7 @@ public class Branch : MonoBehaviour
         for (int i = 0; i < ListFakeBirds.Count; i++)
         {
             ListFakeBirds[i].transform.parent = null;
+            ListFakeBirds[i].SprakleEffect.Stop();
         }
    
     }
@@ -413,17 +414,22 @@ public class Branch : MonoBehaviour
                     List<Bird> ListBirds3ID = new List<Bird>();
                     ListBirds3ID.AddRange(listBirds);
                     listBirds.Clear();
-                    listBirds.Add(ListBirds3ID[0]);
-                    listBirds.Add(ListBirds3ID[1]);
 
                     if (Random.RandomRange(0, 2) == 1)
                     {
+                        listBirds.Add(ListBirds3ID[0]);
+                        listBirds.Add(ListBirds3ID[1]);
+
                         listBirds.Add(ListBirds3ID[2]);
                         listBirds.Add(ListBirds3ID[3]);
                     }
                     else
                     {
                         listBirds.Add(ListBirds3ID[3]);
+
+                        listBirds.Add(ListBirds3ID[0]);
+                        listBirds.Add(ListBirds3ID[1]);
+
                         listBirds.Add(ListBirds3ID[2]);
                     }
                 }
@@ -477,6 +483,7 @@ public class Branch : MonoBehaviour
 
         StateUndo NewStateUndo = new StateUndo(ListBirdUndo, ListFakeBirds);
         GameManager._instance.StackStateUndos.Push(NewStateUndo);
+        UiGamePlay._instance.CountNumberUndo();
         StartCoroutine(WaitTimeChangeSeats());
         StartCoroutine(WaitTimeChangeStateWhenChangeSeats());
     }

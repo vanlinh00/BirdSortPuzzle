@@ -5,6 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using Spine;
 
+// 1325 /2 463.8
 public class Bird : MonoBehaviour
 {
     public int id;
@@ -27,6 +28,7 @@ public class Bird : MonoBehaviour
     public bool isMoveCurve;
 
     public ParticleSystem SprakleEffect;
+
     private void OnEnable()
     {
         SprakleEffect.Stop();
@@ -97,7 +99,7 @@ public class Bird : MonoBehaviour
     {
         if (isMoveToNextBranch)
         {
-            UpdateMoveMent(Target, TimeMove,0.25f);
+            UpdateMoveMent(Target, TimeMove,0.4f); 
             _isMove = true;
         }
         else
@@ -109,7 +111,9 @@ public class Bird : MonoBehaviour
 
         yield return new WaitForSeconds(TimeMove-0.1f);
         StartCoroutine(WaitTimeChangeState(IsFlipX));
-        StartCoroutine(GameManager._instance._gamePlay.ShakyBranch(idBranchStand));
+
+        float TimeWait = (id != 2) ? 0.7f : 0.25f;
+        StartCoroutine(GameManager._instance._gamePlay.ShakyBranch(idBranchStand,TimeWait));
 
     }
 
@@ -140,11 +144,12 @@ public class Bird : MonoBehaviour
         {
             FlipX();
         }
-        yield return new WaitForSeconds(0.15f);
+       // yield return new WaitForSeconds(0.15f);
         StateGrounding();
-        yield return new WaitForSeconds(0.2f);
+        // yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.9f);
         StateIdle();
-      
+        yield return new WaitForSeconds(0.2f);
     }
     public void MixStateFlyAndTouching()
     {
@@ -168,10 +173,12 @@ public class Bird : MonoBehaviour
         if (_skeletonAnimation.skeleton.FlipX)
         {
             _skeletonAnimation.skeleton.FlipX = false;
+            SprakleEffect.transform.localRotation = Quaternion.Euler(143.8f, -90f, 0);
         }
         else
         {
             _skeletonAnimation.skeleton.FlipX = true;
+            SprakleEffect.transform.localRotation = Quaternion.Euler(61.3f, -90f, 0);
         }
     }
     public void MoveToOnScreen(Vector3 Target)
