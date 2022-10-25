@@ -20,7 +20,7 @@ public class Uicontroller : Singleton<Uicontroller>
     }
     IEnumerator WaitOutAndGame()
     {
-        _uiAndGame.GetComponent<UiAndGame>().Out();
+        _uiAndGame.GetComponent<UiAndGame>().StateOut();
        yield return new WaitForSeconds(0.4f);
         _UiPauseGame.SetActive(false);
         _uiAndGame.SetActive(false);
@@ -51,14 +51,12 @@ public class Uicontroller : Singleton<Uicontroller>
         _uiAndGame.SetActive(false);
         _uiGamePlay.SetActive(true);
         _UiPauseGame.SetActive(true);
-        _UiPauseGame.GetComponent<UiPause>().In();
     }
     public void OpenUiAndGame()
     {
         _uiGamePlay.SetActive(false);
         _UiPauseGame.SetActive(false);
         _uiAndGame.SetActive(true);
-        _uiAndGame.GetComponent<UiAndGame>().In();
         TutorialManager._instance.SetActiveHand(false);
     }
 

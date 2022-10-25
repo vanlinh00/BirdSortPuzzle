@@ -15,16 +15,18 @@ public class StateUndo :MonoBehaviour
 public class BirdUndo
 {
     public int idOldBranch;
+    public int idSlot;
     public int idNextBranch;
     public Vector3 posOldSlot;
     public Bird bird;
     public bool isChangeSeats;
-    public BirdUndo(int IdBranch, Bird Bird,Vector3 IdOldSlot,int IdNextBranch, bool IsChangeSeats)
+    public BirdUndo(int IdBranch, Bird Bird,Vector3 IdOldSlot,int IdNextBranch, bool IsChangeSeats, int IdSlot)
     {
         idOldBranch = IdBranch;
         bird = Bird;
         posOldSlot = IdOldSlot;
         idNextBranch = IdNextBranch;
         isChangeSeats = IsChangeSeats;
+        idSlot = IdSlot;
     }
 }

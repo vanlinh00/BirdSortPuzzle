@@ -41,14 +41,14 @@ public class Branch : MonoBehaviour
         {
             int CountBirds = listBirds.Count - 1;
             int IdFistBird = listBirds[listBirds.Count - 1].id;
-            listBirds[listBirds.Count - 1].GetComponent<Bird>().MixStateIdleAndTouching(10f);
+            listBirds[listBirds.Count - 1].GetComponent<Bird>().MixStateIdleAndTouching();
             listBirdMove.Add(listBirds[listBirds.Count - 1]);
             for (int i = CountBirds - 1; i >= 0; i--)
             {
                 if (IdFistBird == listBirds[i].id)
                 {
                     listBirdMove.Add(listBirds[i]);
-                    listBirds[i].GetComponent<Bird>().MixStateIdleAndTouching(10f);
+                    listBirds[i].GetComponent<Bird>().MixStateIdleAndTouching();
                 }
                 else
                 {
@@ -249,27 +249,39 @@ public class Branch : MonoBehaviour
         Vector3 NewPosOutScreen = new Vector3(Random.RandomRange(posOutScreen.x, posOutScreen.x + 1f), posOutScreen.y, 0f);
 
         ListFakeBirds[1].StateFly();
-        ListFakeBirds[1].transform.DOMove(posOutScreen, 1f);
+        ListFakeBirds[1].transform.DOMove(posOutScreen, 1.2f).OnComplete(() =>
+        {
+            ListFakeBirds[1].SprakleEffect.Stop();
+        });
         yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
 
         ListFakeBirds[2].StateFly();
-        ListFakeBirds[2].transform.DOMove(posOutScreen, 1f);
+        ListFakeBirds[2].transform.DOMove(posOutScreen, 1.2f).OnComplete(() =>
+        {
+            ListFakeBirds[2].SprakleEffect.Stop();
+        });
         yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
 
         ListFakeBirds[0].StateFly();
-        ListFakeBirds[0].transform.DOMove(posOutScreen, 1f);
+        ListFakeBirds[0].transform.DOMove(posOutScreen, 1.2f).OnComplete(() =>
+        {
+            ListFakeBirds[0].SprakleEffect.Stop();
+        });
         yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
 
         ListFakeBirds[3].StateFly();
-        ListFakeBirds[3].transform.DOMove(posOutScreen, 1f);
+        ListFakeBirds[3].transform.DOMove(posOutScreen, 1.2f).OnComplete(() =>
+        {
+            ListFakeBirds[3].SprakleEffect.Stop();
+        });
         yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
 
 
-        for (int i = 0; i < ListFakeBirds.Count; i++)
-        {
-            ListFakeBirds[i].transform.parent = null;
-            ListFakeBirds[i].SprakleEffect.Stop();
-        }
+        //for (int i = 0; i < ListFakeBirds.Count; i++)
+        //{
+        //    ListFakeBirds[i].transform.parent = null;
+        //    ListFakeBirds[i].SprakleEffect.Stop();
+        //}
    
     }
     private void OnMouseDown()
@@ -285,6 +297,11 @@ public class Branch : MonoBehaviour
     {
         List<Bird> ListFakeBirds = new List<Bird>();
         ListFakeBirds.AddRange(listBirds);
+
+        for(int i=0;i<listBirds.Count;i++)
+        {
+            listBirds[i].idSlot = i;
+        }
         listBirds.Clear();
 
         int[] NumberBirds = new int[20];
@@ -460,26 +477,34 @@ public class Branch : MonoBehaviour
                 listBirds.Add(ListFakeBirds[2]);
             }
         }
-
-
         SetOrderBirdsAndBrands(20);
 
         List<BirdUndo> ListBirdUndo = new List<BirdUndo>();
-
         for (int i = 0; i < listBirds.Count; i++)
         {
-           listBirds[i].ParentObj = _animator.gameObject;
+            Vector3 PosOldSlot = listBirds[i].transform.position;
+            int IdSlot = listBirds[i].idSlot;
+
+            BirdUndo BirdUndos = new BirdUndo(id, listBirds[i], PosOldSlot, id, true, IdSlot);
+            ListBirdUndo.Add(BirdUndos);
+
+            listBirds[i].ParentObj = _animator.gameObject;
             listBirds[i].idBranchStand = id - 1;
             listBirds[i].TimeMove = 0.3f;
-            listBirds[i].isMoveCurve = false;
-            listBirds[i].isMoveToSlot = false;
+            listBirds[i].isMoveNextBranch = false;
+            listBirds[i].idSlot = i;
             listBirds[i].ChangeSeats(allSlots[i].transform.position, false);
 
 
-            Vector3 PosOldSlot = listBirds[i].transform.position;
-            BirdUndo BirdUndos = new BirdUndo(id, listBirds[i], PosOldSlot, id, true);
-            ListBirdUndo.Add(BirdUndos);
+
+            //  0 1 2 3
+            //  9 8 7 6 
+            //  7 6 9 8 
+            // 7  6 9 8
+  // 0  3   // 1  2  // 2  1 // 3   0 
+
         }
+
 
         StateUndo NewStateUndo = new StateUndo(ListBirdUndo, ListFakeBirds);
         GameManager._instance.StackStateUndos.Push(NewStateUndo);

@@ -9,9 +9,7 @@ public class UiAndGame : Singleton<UiAndGame>
     [SerializeField] Button _homeBtn;
     [SerializeField] Text _totalcointTxt;
     [SerializeField] Button _continueGameBtn;
-
     [SerializeField] CanvasGroup _canvasGroup;
-
     [Header("UI references")]
     [SerializeField] TMP_Text coinUIText;
     private int _c;
@@ -20,8 +18,12 @@ public class UiAndGame : Singleton<UiAndGame>
     private int _coinMidlle;
 
     [SerializeField] GameObject _effectWinGame;
+
+    [SerializeField] Animator _animator;
     private void OnEnable()
     {
+        _continueGameBtn.gameObject.SetActive(false);
+        StateIn();
         CoinsMidlle = 12;
         StartCoroutine(WaitTimeBornCoins());
        
@@ -59,14 +61,14 @@ public class UiAndGame : Singleton<UiAndGame>
     {
         if(_canvasGroup.alpha==1)
         {
+            UiGamePlay._instance.ResetNumberUndo();
             _effectWinGame.SetActive(false);
             GameManager._instance.NextLevel();
             Uicontroller._instance.OpenUiGamePlay(true);
 
         }
-
     }
- 
+
     IEnumerator WaitTimeBornCoins()
     {
         yield return new WaitForSeconds(0.4f);
@@ -76,34 +78,13 @@ public class UiAndGame : Singleton<UiAndGame>
         _continueGameBtn.gameObject.SetActive(true);
     
     }
-    public void In()
+    public void StateOut()
     {
-        StartCoroutine(FadeIn());
+        _animator.SetBool("Out", true);
     }
-    IEnumerator FadeIn()
+    public void StateIn()
     {
-        float t = 0;
-        while (_canvasGroup.alpha < 1)
-        {
-            yield return new WaitForEndOfFrame();
-            _canvasGroup.alpha = t;
-            t += Time.deltaTime * 1.7f;
-        }
-    }
-    public void Out()
-    {
-        _continueGameBtn.gameObject.SetActive(false);
-        StartCoroutine(FadeOut());
-    }
-    IEnumerator FadeOut()
-    {
-        float t = 1;
-        while (_canvasGroup.alpha >= 0)
-        {
-            yield return new WaitForEndOfFrame();
-            _canvasGroup.alpha = t;
-            t -= Time.deltaTime * 2f;
-        }
+        _animator.SetBool("Out", false);
     }
 
 }

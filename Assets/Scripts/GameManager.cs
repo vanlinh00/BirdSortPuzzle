@@ -18,6 +18,7 @@ public class GameManager : Singleton<GameManager>
         SortBirds,
         ChangeSeatsBirds,
         FinishGame,
+        PauseGame,
     }
     public GameState gameState;
 
@@ -43,7 +44,7 @@ public class GameManager : Singleton<GameManager>
     {
         return level;
     }
-  public  IEnumerator WaitTimeRenew()
+    public  IEnumerator WaitTimeRenew()
     {
          ReNewGame();
         yield return new WaitForSeconds(0.1f);
@@ -93,18 +94,20 @@ public class GameManager : Singleton<GameManager>
             int IdOldBranch = StateBirdUndos.listStateBirdUndo[0].idOldBranch;
             int IdNexBranch= StateBirdUndos.listStateBirdUndo[0].idNextBranch;
             bool IsChangeSeats= StateBirdUndos.listStateBirdUndo[StateBirdUndos.listStateBirdUndo.Count - 1].isChangeSeats;
+            int  IdSlot = 0;
             Vector3 PosOldSlot;
 
             for (int i = StateBirdUndos.listStateBirdUndo.Count - 1; i >= 0; i--)
             {
-
                 PosOldSlot = StateBirdUndos.listStateBirdUndo[i].posOldSlot;
+                IdSlot = StateBirdUndos.listStateBirdUndo[i].idSlot;
+                StateBirdUndos.listStateBirdUndo[i].bird.idSlot = IdSlot;
+                Debug.Log("Day la comeback" + IdSlot);
                 if (IsChangeSeats)
                 {
-
                     StateBirdUndos.listStateBirdUndo[i].bird.idBranchStand = IdNexBranch - 1;
-                    StateBirdUndos.listStateBirdUndo[i].bird.isMoveToSlot = false;
                     StateBirdUndos.listStateBirdUndo[i].bird.ChangeSeats(PosOldSlot, false);
+
                 }
                 else
                 {
@@ -132,8 +135,7 @@ public class GameManager : Singleton<GameManager>
         bool IsMoveDown = (_gamePlay.ListAllBranchs[IndexCurrentBranch].id % 2 == _gamePlay.ListAllBranchs[IndexNextBranch].id % 2) ? true : false;
         int idNextBranch = _gamePlay.ListAllBranchs[IndexNextBranch].id-1;
         Bird.idBranchStand = idNextBranch;
-        Bird.isMoveToSlot = false;
-        Bird.isMoveCurve = true;
+        Bird.isMoveNextBranch = true;
         float DistanceBirdMove = Vector3.Distance(Bird.transform.position, PosOldSlot);
 
         if (IsMoveDown)
@@ -180,15 +182,14 @@ public class GameManager : Singleton<GameManager>
             }
             else
             {
-            if (IndexCurrentBranch == IndexNextBranch)
-            {
+              if (IndexCurrentBranch == IndexNextBranch)
+              {
                 Bird.TimeMove = 0.5f;
-            }
-            else
-            {
+              }
+              else
+              {
                 Bird.TimeMove = 0.55f * DistanceBirdMove / 2.5f;
-
-            }
+                }
             Bird.ChangeSeats(PosOldSlot, true);
             }
         yield return new WaitForSeconds(1f);

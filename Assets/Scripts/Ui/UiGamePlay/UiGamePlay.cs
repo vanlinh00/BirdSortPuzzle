@@ -110,6 +110,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
     {
         if(IsNextLevel)
         {
+            ResetNumberUndo();
             IsNextLevel = false;
             GameManager._instance.NextLevel();
             Uicontroller._instance.OpenUiGamePlay(false);
@@ -128,19 +129,34 @@ public class UiGamePlay : Singleton<UiGamePlay>
         {
             IsNextLevel = false;
             StartCoroutine(GameManager._instance.WaitTimeRenew());
+            StartCoroutine(SetAnimationInAndOut());
             StartCoroutine(WaitTimeNextLevel());
             StartCoroutine(FunctionGame(GameManager._instance.Getlevel()));
         }
+    }
+    IEnumerator SetAnimationInAndOut()
+    {
+        StateOutHeaderUiGP();
+        yield return new WaitForSeconds(0.2f);
+        StateInHeaderUiGP();
     }
     public void ChangeSeats()
     {
         TutorialManager._instance.SetActiveHand(false);
         if (_changeSteatsBtn.GetComponent<ButtonGP>().IsReady())
         {
-            StateOutHeaderUiGP();
-            _darkBgChangeSeats.SetActive(true);
-            GameManager._instance._gamePlay.EnableBirdsCanChangeSeats();
-            GameManager._instance.gameState = GameManager.GameState.ChangeSeatsBirds;
+            if(!_darkBgChangeSeats.activeSelf)
+            {
+                StateOutHeaderUiGP();
+                _darkBgChangeSeats.SetActive(true);
+                GameManager._instance._gamePlay.EnableBirdsCanChangeSeats();
+                GameManager._instance.gameState = GameManager.GameState.ChangeSeatsBirds;
+            }
+            else
+            {
+                DisableChangeSeats();
+            }
+
         }
 
     }
@@ -155,6 +171,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
         TutorialManager._instance.SetActiveHand(false);
         if (_undoBtn.GetComponent<ButtonGP>().IsReady())
         {
+            GameManager._instance._gamePlay.UnTouchingAndRemoveAllBirds();
             GameManager._instance.Undo();
             _undoBtn.GetComponent<ButtonGP>().Click();
         }
@@ -168,7 +185,12 @@ public class UiGamePlay : Singleton<UiGamePlay>
             addBranch = false;
             StartCoroutine(WaitTimeAddBranch());
             if (_addBranch.GetComponent<ButtonGP>().IsReady())
-            {
+            {  
+                if(GameManager._instance._gamePlay.IsClickBird)
+                {
+                    ResetNumberUndo();
+                    GameManager._instance._gamePlay.IsClickBird = false;
+                }
                 GameManager._instance.StackStateUndos.Clear();
                 BranchManager._instance.AddNewBranch();
                 CountAddBranch--;

@@ -15,6 +15,17 @@ public class UiPause : MonoBehaviour
     [SerializeField] Button _closeBtn;
 
     [SerializeField] CanvasGroup _canvasGroup;
+
+    [SerializeField] Animator _animator;
+    private void OnEnable()
+    {
+        GameManager._instance.gameState = GameManager.GameState.PauseGame;
+        StateIn();
+    }
+    private void OnDisable()
+    {
+        GameManager._instance.gameState = GameManager.GameState.SortBirds;
+    }
     private void Awake()
     {
         _closeBtn.onClick.AddListener(OpenGamePlay);
@@ -28,39 +39,16 @@ public class UiPause : MonoBehaviour
     }
     IEnumerator WaitDisableOut()
     {
-        Out();
-        yield return new WaitForSeconds(1f);
+        StateOut();
+        yield return new WaitForSeconds(0.25f);
         gameObject.SetActive(false);
-
     }
-
-    public void In()
+    public void StateOut()
     {
-        StartCoroutine(FadeIn());
+        _animator.SetBool("Out", true);
     }
-    IEnumerator FadeIn()
+    public void StateIn()
     {
-        float t = 0;
-        while (_canvasGroup.alpha < 1)
-        {
-            yield return new WaitForEndOfFrame();
-            _canvasGroup.alpha = t;
-            t += Time.deltaTime * 1.7f;
-        }
+        _animator.SetBool("Out", false);
     }
-    public void Out()
-    {
-        StartCoroutine(FadeOut());
-    }
-    IEnumerator FadeOut()
-    {
-        float t = 1;
-        while (_canvasGroup.alpha >= 0)
-        {
-            yield return new WaitForEndOfFrame();
-            _canvasGroup.alpha = t;
-            t -= Time.deltaTime * 2f;
-        }
-    }
-
 }

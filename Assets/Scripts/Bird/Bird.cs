@@ -19,13 +19,12 @@ public class Bird : MonoBehaviour
     public Vector3 _target;
     public bool _isMove = false;
     public float duration;
-    public bool isMoveToSlot;
 
     Parabola _parabola;
     Vector3 _startPos;
     private float _preTime;
 
-    public bool isMoveCurve;
+    public bool isMoveNextBranch;
 
     public ParticleSystem SprakleEffect;
 
@@ -47,22 +46,25 @@ public class Bird : MonoBehaviour
             }
             else
             {
-                if(!isMoveToSlot)
-                {
-                    transform.position = _target;
-                }
-                else
-                {
-                    transform.position = GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position;
-                }
-             
                 _isMove = false;
+                //if (!isMoveToSlot)
+                //{
+                //    transform.position = _target;
+                //}
+                //else
+                //{
+                transform.position = GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position;
+              
+                // }
+
+
             }
         }
     }
     public void UpdateMoveMent(Vector3 Target, float Duration,float H)
     {
-        _target = Target;
+      //  _target = Target;
+        _target = GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position;
         duration = Duration;
         _preTime = Time.time;
         _startPos = transform.position;
@@ -99,19 +101,19 @@ public class Bird : MonoBehaviour
     {
         if (isMoveToNextBranch)
         {
-            UpdateMoveMent(Target, TimeMove,0.4f); 
-            _isMove = true;
+            UpdateMoveMent(Target, TimeMove,0.4f);
+             _isMove = true;
+         //   transform.DOMove(GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position, TimeMove).SetEase(Ease.Linear);
         }
         else
         {
+           // transform.DOMove(Target, TimeMove);
             UpdateMoveMent(Target, TimeMove, 0.15f);
             _isMove = true;
-            //    transform.DOMove(Target, TimeMove).SetEase(Ease.Linear);
+         // transform.DOMove(GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position, TimeMove).SetEase(Ease.Linear);
         }
-
         yield return new WaitForSeconds(TimeMove-0.1f);
         StartCoroutine(WaitTimeChangeState(IsFlipX));
-
         float TimeWait = (id != 2) ? 0.7f : 0.25f;
         StartCoroutine(GameManager._instance._gamePlay.ShakyBranch(idBranchStand,TimeWait));
 
@@ -121,7 +123,7 @@ public class Bird : MonoBehaviour
     {
         StateFly();
 
-        if (isMoveCurve)
+        if (isMoveNextBranch)
         {
             StartCoroutine(Move(Target, IsFlipX, true));
         }
@@ -144,29 +146,20 @@ public class Bird : MonoBehaviour
         {
             FlipX();
         }
-       // yield return new WaitForSeconds(0.15f);
         StateGrounding();
-        // yield return new WaitForSeconds(0.2f);
         yield return new WaitForSeconds(0.9f);
         StateIdle();
         yield return new WaitForSeconds(0.2f);
     }
     public void MixStateFlyAndTouching()
     {
-        StateFly();
-
         _skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
-        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
-        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
-        _skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, 100f);
-
+        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", false, 0).MixDuration =0f;
     }
-    public void MixStateIdleAndTouching(float TimeTouching)
+    public void MixStateIdleAndTouching()
     {
         _skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
-        _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
-        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0.5f;
-        _skeletonAnimation.AnimationState.AddEmptyAnimation(1, 0.5f, TimeTouching);
+        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", false, 0).MixDuration = 0f;
     }
     public void FlipX()
     {

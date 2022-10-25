@@ -180,4 +180,11 @@ public class BranchManager : Singleton<BranchManager>
     {
         return _listBirds.Count/4;
     }
+    public void UntouchingListBirds()
+    {
+        for(int i=0;i<_listAllBranchs.Count;i++)
+        {
+            _listAllBranchs[i].UnTouching();
+        }
+    }
 }
