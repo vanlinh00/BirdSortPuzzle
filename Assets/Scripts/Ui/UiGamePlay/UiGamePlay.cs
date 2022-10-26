@@ -174,7 +174,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
             GameManager._instance._gamePlay.UnTouchingAndRemoveAllBirds();
             GameManager._instance.Undo();
             _undoBtn.GetComponent<ButtonGP>().Click();
-        }
+       }
     }
     public void AddBranch()
     {
@@ -185,13 +185,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
             addBranch = false;
             StartCoroutine(WaitTimeAddBranch());
             if (_addBranch.GetComponent<ButtonGP>().IsReady())
-            {  
-                if(GameManager._instance._gamePlay.IsClickBird)
-                {
-                    ResetNumberUndo();
-                    GameManager._instance._gamePlay.IsClickBird = false;
-                }
-                GameManager._instance.StackStateUndos.Clear();
+            { 
                 BranchManager._instance.AddNewBranch();
                 CountAddBranch--;
                 if (CountAddBranch <= 0)

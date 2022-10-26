@@ -9,15 +9,15 @@ public class ButtonGP : MonoBehaviour
     public  int numberClick;
     public void Update()
     {
-        //if(/*GameManager._instance._gamePlay.IsBirdMoving|| */numberClick<=0)
-        //{
-        //    _darkBg.SetActive(true);
-        //}
-        //else
-        //{
-        //    _darkBg.SetActive(false);
+        if (GameManager._instance._gamePlay.IsBirdMoving|| numberClick <= 0)
+        {
+            _darkBg.SetActive(true);
+        }
+        else
+        {
+            _darkBg.SetActive(false);
 
-        //}
+        }
     }
     public void Click()
     {

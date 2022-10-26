@@ -275,14 +275,6 @@ public class Branch : MonoBehaviour
             ListFakeBirds[3].SprakleEffect.Stop();
         });
         yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
-
-
-        //for (int i = 0; i < ListFakeBirds.Count; i++)
-        //{
-        //    ListFakeBirds[i].transform.parent = null;
-        //    ListFakeBirds[i].SprakleEffect.Stop();
-        //}
-   
     }
     private void OnMouseDown()
     {
@@ -298,15 +290,12 @@ public class Branch : MonoBehaviour
         List<Bird> ListFakeBirds = new List<Bird>();
         ListFakeBirds.AddRange(listBirds);
 
-        for(int i=0;i<listBirds.Count;i++)
-        {
-            listBirds[i].idSlot = i;
-        }
         listBirds.Clear();
 
         int[] NumberBirds = new int[20];
         for (int i = 0; i < ListFakeBirds.Count; i++)
         {
+            ListFakeBirds[i].idSlot = i;
             NumberBirds[ListFakeBirds[i].id]++;
         }
 
@@ -436,17 +425,14 @@ public class Branch : MonoBehaviour
                     {
                         listBirds.Add(ListBirds3ID[0]);
                         listBirds.Add(ListBirds3ID[1]);
-
                         listBirds.Add(ListBirds3ID[2]);
                         listBirds.Add(ListBirds3ID[3]);
                     }
                     else
                     {
                         listBirds.Add(ListBirds3ID[3]);
-
                         listBirds.Add(ListBirds3ID[0]);
                         listBirds.Add(ListBirds3ID[1]);
-
                         listBirds.Add(ListBirds3ID[2]);
                     }
                 }
@@ -482,10 +468,8 @@ public class Branch : MonoBehaviour
         List<BirdUndo> ListBirdUndo = new List<BirdUndo>();
         for (int i = 0; i < listBirds.Count; i++)
         {
-            Vector3 PosOldSlot = listBirds[i].transform.position;
             int IdSlot = listBirds[i].idSlot;
-
-            BirdUndo BirdUndos = new BirdUndo(id, listBirds[i], PosOldSlot, id, true, IdSlot);
+            BirdUndo BirdUndos = new BirdUndo(id, listBirds[i], id, true, IdSlot);
             ListBirdUndo.Add(BirdUndos);
 
             listBirds[i].ParentObj = _animator.gameObject;
@@ -493,16 +477,7 @@ public class Branch : MonoBehaviour
             listBirds[i].TimeMove = 0.3f;
             listBirds[i].isMoveNextBranch = false;
             listBirds[i].idSlot = i;
-            listBirds[i].ChangeSeats(allSlots[i].transform.position, false);
-
-
-
-            //  0 1 2 3
-            //  9 8 7 6 
-            //  7 6 9 8 
-            // 7  6 9 8
-  // 0  3   // 1  2  // 2  1 // 3   0 
-
+            listBirds[i].ChangeSeats(false);
         }
 
 

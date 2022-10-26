@@ -5,7 +5,6 @@ using UnityEngine;
 using DG.Tweening;
 using Spine;
 
-// 1325 /2 463.8
 public class Bird : MonoBehaviour
 {
     public int id;
@@ -23,9 +22,7 @@ public class Bird : MonoBehaviour
     Parabola _parabola;
     Vector3 _startPos;
     private float _preTime;
-
     public bool isMoveNextBranch;
-
     public ParticleSystem SprakleEffect;
 
     private void OnEnable()
@@ -47,23 +44,12 @@ public class Bird : MonoBehaviour
             else
             {
                 _isMove = false;
-                //if (!isMoveToSlot)
-                //{
-                //    transform.position = _target;
-                //}
-                //else
-                //{
                 transform.position = GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position;
-              
-                // }
-
-
             }
         }
     }
-    public void UpdateMoveMent(Vector3 Target, float Duration,float H)
+    public void UpdateMoveMent( float Duration,float H)
     {
-      //  _target = Target;
         _target = GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position;
         duration = Duration;
         _preTime = Time.time;
@@ -91,26 +77,24 @@ public class Bird : MonoBehaviour
 
     }
 
-    public void MoveToTarget(Vector3 Target, bool IsFlipX)
+    public void MoveToTarget(bool IsFlipX)
     {
         MixStateFlyAndTouching();
-        StartCoroutine(Move(Target,IsFlipX,true));
+        StartCoroutine(Move(IsFlipX,true));
     }
 
-    IEnumerator Move(Vector3 Target, bool IsFlipX,bool isMoveToNextBranch)
+    IEnumerator Move(bool IsFlipX,bool isMoveToNextBranch)
     {
         if (isMoveToNextBranch)
         {
-            UpdateMoveMent(Target, TimeMove,0.4f);
+            UpdateMoveMent( TimeMove,0.4f);
              _isMove = true;
-         //   transform.DOMove(GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position, TimeMove).SetEase(Ease.Linear);
+             //.transform.position, TimeMove).SetEase(Ease.Linear);
         }
         else
         {
-           // transform.DOMove(Target, TimeMove);
-            UpdateMoveMent(Target, TimeMove, 0.15f);
+            UpdateMoveMent( TimeMove, 0.15f);
             _isMove = true;
-         // transform.DOMove(GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position, TimeMove).SetEase(Ease.Linear);
         }
         yield return new WaitForSeconds(TimeMove-0.1f);
         StartCoroutine(WaitTimeChangeState(IsFlipX));
@@ -119,17 +103,17 @@ public class Bird : MonoBehaviour
 
     }
 
-    public void ChangeSeats(Vector3 Target, bool IsFlipX)
+    public void ChangeSeats( bool IsFlipX)
     {
         StateFly();
 
         if (isMoveNextBranch)
         {
-            StartCoroutine(Move(Target, IsFlipX, true));
+            StartCoroutine(Move(IsFlipX, true));
         }
         else
         {
-            StartCoroutine(Move(Target, IsFlipX, false));
+            StartCoroutine(Move( IsFlipX, false));
         }
     }
     IEnumerator WaitTimeChangeState(bool IsFlipX)
@@ -137,10 +121,6 @@ public class Bird : MonoBehaviour
         if (ParentObj != null)
         {
             transform.parent = ParentObj.transform;
-        }
-        else
-        {
-            Debug.Log(id);
         }
         if (IsFlipX)
         {
@@ -193,7 +173,6 @@ public class Bird : MonoBehaviour
     public void Renew()
     {
         TimeMove = 5f;
-
         StateIdle();
         _skeletonAnimation.skeleton.FlipX = false;
         ObjectPooler._instance.AddElement("Bird"+id, gameObject);

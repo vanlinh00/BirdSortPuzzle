@@ -21,10 +21,9 @@ public class GamePlay : MonoBehaviour
 
     // check finish game
     public int AmountListBirdsFinishGame = 0;
-    public bool IsClickBird;
     private void Awake()
     {
-        IsClickBird = false;
+
         IsBirdMoving = true;
     }
     private void Update()
@@ -41,7 +40,6 @@ public class GamePlay : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0) || _isChangeBird)
             {
-                IsClickBird = true;
                 _isChangeBird = false;
 
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -154,10 +152,8 @@ public class GamePlay : MonoBehaviour
         IsBirdMoving = true;
         for (int i = 0; i < CountBirdMove; i++)
         {
-            Vector3 PosOldSlot = ListAllBranchs[indexCurrentBranch].allSlots[ListAllBranchs[indexCurrentBranch].listBirds.Count - 1 - i].transform.position;
             int IdSlot = ListAllBranchs[indexCurrentBranch].listBirds.Count - 1 - i;
-            Debug.Log(IdSlot);
-            BirdUndo BirdUndos = new BirdUndo(indexCurrentBranch + 1, ListAllBranchs[indexCurrentBranch].listBirdMove[i], PosOldSlot, indexNextBranch + 1, false,IdSlot);
+            BirdUndo BirdUndos = new BirdUndo(indexCurrentBranch + 1, ListAllBranchs[indexCurrentBranch].listBirdMove[i], indexNextBranch + 1, false,IdSlot);
             ListBirdUndo.Add(BirdUndos);
         }
         StateUndo NewStateUndo = new StateUndo(ListBirdUndo, null);
@@ -199,34 +195,34 @@ public class GamePlay : MonoBehaviour
                     if(ListAllBranchs[indexCurrentBranch].id % 2==0)
                      {
                         birdMove.FlipX();
-                        birdMove.MoveToTarget(PosNewSlot, true);
+                        birdMove.MoveToTarget(true);
                     }
                     else
                     {
                        if(ListAllBranchs[indexCurrentBranch].listBirdMove[i].transform.position.x == PosNewSlot.x)
                         {
                             birdMove.FlipX();
-                            birdMove.MoveToTarget(PosNewSlot, true);
+                            birdMove.MoveToTarget(true);
                         }
-                        birdMove.MoveToTarget(PosNewSlot, false);
+                        birdMove.MoveToTarget(false);
                     }
                 }
                 else
                 {
                      if (ListAllBranchs[indexCurrentBranch].id % 2 == 0)
                       {
-                        birdMove.MoveToTarget(PosNewSlot, false);
+                        birdMove.MoveToTarget(false);
                     }
                     else
                     {
                         birdMove.FlipX();
-                        birdMove.MoveToTarget(PosNewSlot, true);
+                        birdMove.MoveToTarget( true);
                     }
                 }
             }
             else
             {
-                birdMove.MoveToTarget(PosNewSlot, true);
+                birdMove.MoveToTarget( true);
             }
             yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
         }
@@ -243,13 +239,11 @@ public class GamePlay : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
         ListAllBranchs[indexNextBranch].SetOrderBirdsAndBrands(20);
-        //_idOldNextBranch = -100;
         if (lastBridMoveToBranch)
         {
             if (ListAllBranchs[indexNextBranch].IsFullSameBirdsOnBranch())
             {
                 IsBirdMoving = true;
-                //yield return new WaitForSeconds(0.15f);
                 ListAllBranchs[indexNextBranch].MoveAllBirdToOutScreen();
                 yield return new WaitForSeconds(1.2f);
                 IsBirdMoving = false;
@@ -283,9 +277,8 @@ public class GamePlay : MonoBehaviour
         int IndexBirds = ListAllBranchs[indexNextBranch].listBirds.Count - CountBirdMoveToBranch;
         for (int i = IndexBirds - 1; i >= 0; i--)
         {
-            Vector3 PosOldSlot = ListAllBranchs[indexNextBranch].allSlots[i].transform.position; //ListAllBranchs[indexNextBranch].listBirds[i].transform.position;
             int IdSlot = i; 
-            BirdUndo BirdUndos = new BirdUndo(indexNextBranch + 1, ListAllBranchs[indexNextBranch].listBirds[i], PosOldSlot, indexNextBranch + 1, false, IdSlot);
+            BirdUndo BirdUndos = new BirdUndo(indexNextBranch + 1, ListAllBranchs[indexNextBranch].listBirds[i], indexNextBranch + 1, false, IdSlot);
             ListBirdUndo.Add(BirdUndos);
         }
         StateUndo NewStateUndo = new StateUndo(ListBirdUndo, null);
