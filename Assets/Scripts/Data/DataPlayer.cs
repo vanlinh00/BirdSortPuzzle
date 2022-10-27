@@ -47,7 +47,6 @@ public class DataPlayer
     {
         return inforPlayer;
     }
-
 }
 public class InforPlayer
 {

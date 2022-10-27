@@ -11,7 +11,13 @@ public class Branch : MonoBehaviour
     public Animator _animator;
     public Vector3 posOutScreen;
     [SerializeField] SpriteRenderer _spriteRenderer;
+    public bool IsBranchBirdsMoving;
 
+
+    private void Awake()
+    {
+        IsBranchBirdsMoving = false;
+    }
     public void AddToListBrids(Bird bird)
     {
         listBirds.Add(bird);

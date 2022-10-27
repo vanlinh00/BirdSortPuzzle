@@ -21,10 +21,11 @@ public class GamePlay : MonoBehaviour
 
     // check finish game
     public int AmountListBirdsFinishGame = 0;
+
     private void Awake()
     {
-
-        IsBirdMoving = true;
+        _idCurrentBranch = -100;
+           IsBirdMoving = true;
     }
     private void Update()
     {
@@ -56,7 +57,7 @@ public class GamePlay : MonoBehaviour
                     {
                         _idCurrentBranch = branch.id;
 
-                        if (ListAllBranchs[_idCurrentBranch - 1].listBirds.Count != 0 && !ListAllBranchs[_idCurrentBranch - 1].IsFullSameBirdsOnBranch() /*_idOldNextBranch!= _idCurrentBranch*/)
+                        if (/*!ListAllBranchs[_idCurrentBranch-1].IsBranchBirdsMoving &&*/ ListAllBranchs[_idCurrentBranch - 1].listBirds.Count != 0 && !ListAllBranchs[_idCurrentBranch - 1].IsFullSameBirdsOnBranch())
                         {
                             branch.Touching();
                         }
@@ -128,6 +129,7 @@ public class GamePlay : MonoBehaviour
     }
     IEnumerator MoveBirdToNextBranch(int indexCurrentBranch, int indexNextBranch)
     {
+       //  ListAllBranchs[indexNextBranch].IsBranchBirdsMoving = true;
         int AmountSlotNextBranch = ListAllBranchs[indexNextBranch].PositionSlotAvailable(0).Count;
         int AmountBirdMove = ListAllBranchs[indexCurrentBranch].listBirdMove.Count;
 
@@ -270,6 +272,7 @@ public class GamePlay : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         ListAllBranchs[indexNextBranch].StateIdle();
         yield return new WaitForSeconds(0.2f);
+      //  ListAllBranchs[indexNextBranch].IsBranchBirdsMoving = false;
     }
     public void SaveStateBirdsWhenFinishBranch(int CountBirdMoveToBranch, int indexNextBranch)
     {
@@ -322,17 +325,15 @@ public class GamePlay : MonoBehaviour
         _countClick = 0;
         _canClick = true;
         _isChangeBird = false;
+        _idCurrentBranch = -100;
     }
 
-    public void UnTouchingAndRemoveAllBirds()
+    public void UnTouchingAndRemoveAllBirdsMoveCurrentBranch()
     {
-        BranchManager._instance.UntouchingListBirds();
-        for (int i=0;i< ListAllBranchs.Count;i++)
+        if(_idCurrentBranch!=-100)
         {
-            if(ListAllBranchs[i].listBirdMove.Count!=0)
-            {
-                ListAllBranchs[i].listBirdMove.Clear();
-            }
+            ListAllBranchs[_idCurrentBranch - 1].listBirdMove.Clear();
+            ListAllBranchs[_idCurrentBranch - 1].UnTouching();
         }
     }
    

@@ -38,7 +38,7 @@ public class BranchManager : Singleton<BranchManager>
             }
         }
         yield return new WaitForSeconds(0.33f);
-        _listAllBranchs.Add(_branchLeftManger.BonrNewBranch());
+        _listAllBranchs.Add(_branchLeftManger.BonrNewBranch(-100000));
     }
 
     IEnumerator FadeBranchsRightMoveUp()
@@ -115,7 +115,7 @@ public class BranchManager : Singleton<BranchManager>
             }
             else
             {
-                _listAllBranchs.Add(_branchLeftManger.BonrNewBranch());
+                _listAllBranchs.Add(_branchLeftManger.BonrNewBranch(_dataBirdOnBranchs.AmountBranch));
             }
         }
     }
@@ -180,11 +180,11 @@ public class BranchManager : Singleton<BranchManager>
     {
         return _listBirds.Count/4;
     }
-    public void UntouchingListBirds()
-    {
-        for(int i=0;i<_listAllBranchs.Count;i++)
-        {
-            _listAllBranchs[i].UnTouching();
-        }
-    }
+    //public void UntouchingListBirds()
+    //{
+    //    for(int i=0;i<_listAllBranchs.Count;i++)
+    //    {
+    //        _listAllBranchs[i].UnTouching();
+    //    }
+    //}
 }

@@ -22,6 +22,7 @@ public class UiAndGame : Singleton<UiAndGame>
     [SerializeField] Animator _animator;
     private void OnEnable()
     {
+       CoinsManager._instance.SetSpread(0.2f);
         _continueGameBtn.gameObject.SetActive(false);
         StateIn();
         CoinsMidlle = 12;

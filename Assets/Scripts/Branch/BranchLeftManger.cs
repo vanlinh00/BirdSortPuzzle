@@ -5,7 +5,7 @@ using UnityEngine;
 public class BranchLeftManger : MonoBehaviour
 {
     int CountBrach = 2;
-    public Branch BonrNewBranch()
+    public Branch BonrNewBranch(int AmountBird)
     {
         GameObject BrachRight = ObjectPooler._instance.SpawnFromPool("Branch", new Vector3(-100, -100, 0), Quaternion.identity);
         Vector3 PoslastChild = new Vector3(0, 0, 0);
@@ -19,7 +19,14 @@ public class BranchLeftManger : MonoBehaviour
         }
         else
         {
-            PoslastChild = new Vector3(2.71f, 2.04f-0.9f*2f, 0);
+            if(AmountBird>=10)
+            {
+                PoslastChild = new Vector3(2.71f, 2.04f - 0.9f, 0);
+            }
+            else
+            {
+                PoslastChild = new Vector3(2.71f, 2.04f - 0.9f * 2f, 0);
+            }
             BrachRight.GetComponent<Branch>().id = CountBrach;
         }
 

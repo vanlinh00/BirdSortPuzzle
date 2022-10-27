@@ -25,14 +25,22 @@ public class Bird : MonoBehaviour
     public bool isMoveNextBranch;
     public ParticleSystem SprakleEffect;
 
+    public enum StateBrid
+    {
+        idle,
+        fly,
+        flyAndTouching,
+        idleAndTouching,
+        Grounding,
+    }
+    public StateBrid stateBrid;
     private void OnEnable()
     {
+        stateBrid = StateBrid.idle;
+        StateIdle();
         SprakleEffect.Stop();
     }
-    public void Start()
-    {
-        StateIdle();
-    }
+
     private void Update()
     {
         if (_isMove)
@@ -62,16 +70,19 @@ public class Bird : MonoBehaviour
     }
     public void StateFly()
     {
+        stateBrid = StateBrid.fly;
         _skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
         _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
     }
     public void StateIdle()
     {
+        stateBrid = StateBrid.idle;
         _skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
         _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
     }
     public void StateGrounding()
     {
+        stateBrid = StateBrid.Grounding;
         _skeletonAnimation.AnimationState.SetAnimation(0, "grounding", true);
         _skeletonAnimation.AnimationState.SetEmptyAnimation(1, 0);
 
@@ -128,18 +139,26 @@ public class Bird : MonoBehaviour
         }
         StateGrounding();
         yield return new WaitForSeconds(0.9f);
-        StateIdle();
+        if (stateBrid == StateBrid.idleAndTouching)
+        {
+
+       }else if(stateBrid == StateBrid.Grounding)
+        {
+            StateIdle();
+        }
         yield return new WaitForSeconds(0.2f);
     }
     public void MixStateFlyAndTouching()
     {
+        stateBrid = StateBrid.flyAndTouching;
         _skeletonAnimation.AnimationState.SetAnimation(0, "fly", true);
-        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", false, 0).MixDuration =0f;
+       _skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration =0f;
     }
     public void MixStateIdleAndTouching()
     {
+        stateBrid = StateBrid.idleAndTouching;
         _skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
-        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", false, 0).MixDuration = 0f;
+        _skeletonAnimation.AnimationState.AddAnimation(1, "touching", true, 0).MixDuration = 0f;
     }
     public void FlipX()
     {
@@ -166,8 +185,15 @@ public class Bird : MonoBehaviour
     {
         yield return new WaitForSeconds(0.7f);
         StateGrounding();
+        if (stateBrid == StateBrid.idleAndTouching)
+        {
+
+        }
+        else if (stateBrid == StateBrid.Grounding)
+        {
+            StateIdle();
+        }
         yield return new WaitForSeconds(0.3f);
-        StateIdle();
         GameManager._instance._gamePlay.IsBirdMoving = false;
     }
     public void Renew()

@@ -14,7 +14,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
     [SerializeField] GameObject _darkBgChangeSeats;
     [SerializeField] Button _darkBgBtn;
 
-    int CountAddBranch = 2;
+    int CountAddBranch = 1;
     [SerializeField] Button _pauseGameBtn;
     [SerializeField] Text _levelTxt;
 
@@ -77,7 +77,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
         }
         else if(level==5)
         {
-            CountAddBranch = 2;
+            CountAddBranch = 1;
             _nextLevelBtn.gameObject.SetActive(true);
             _undoBtn.gameObject.SetActive(true);
             _changeSteatsBtn.gameObject.SetActive(true);
@@ -92,7 +92,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
             _undoBtn.gameObject.SetActive(true);
             _changeSteatsBtn.gameObject.SetActive(true);
 
-            CountAddBranch=2;
+            CountAddBranch=1;
             _addBranch.gameObject.SetActive(true);
             _addBranch.gameObject.SetActive(true);
         }
@@ -147,6 +147,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
         {
             if(!_darkBgChangeSeats.activeSelf)
             {
+                GameManager._instance._gamePlay.UnTouchingAndRemoveAllBirdsMoveCurrentBranch();
                 StateOutHeaderUiGP();
                 _darkBgChangeSeats.SetActive(true);
                 GameManager._instance._gamePlay.EnableBirdsCanChangeSeats();
@@ -171,7 +172,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
         TutorialManager._instance.SetActiveHand(false);
         if (_undoBtn.GetComponent<ButtonGP>().IsReady())
         {
-            GameManager._instance._gamePlay.UnTouchingAndRemoveAllBirds();
+            GameManager._instance._gamePlay.UnTouchingAndRemoveAllBirdsMoveCurrentBranch();
             GameManager._instance.Undo();
             _undoBtn.GetComponent<ButtonGP>().Click();
        }
