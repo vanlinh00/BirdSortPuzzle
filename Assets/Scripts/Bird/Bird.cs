@@ -196,6 +196,12 @@ public class Bird : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         GameManager._instance._gamePlay.IsBirdMoving = false;
     }
+    public void ChangeSkin(int IdSkin)
+    {
+        _skeletonAnimation.Skeleton.SetSkin(IdSkin.ToString());
+        _skeletonAnimation.skeleton.SetSlotsToSetupPose();
+        _skeletonAnimation.AnimationState.Apply(_skeletonAnimation.Skeleton);
+    }
     public void Renew()
     {
         TimeMove = 5f;

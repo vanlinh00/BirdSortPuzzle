@@ -21,7 +21,7 @@ public class Uicontroller : Singleton<Uicontroller>
     IEnumerator WaitOutAndGame()
     {
         _uiAndGame.GetComponent<UiAndGame>().StateOut();
-       yield return new WaitForSeconds(0.4f);
+       yield return new WaitForSeconds(0.2f);
         _UiPauseGame.SetActive(false);
         _uiAndGame.SetActive(false);
         _uiGamePlay.SetActive(true);

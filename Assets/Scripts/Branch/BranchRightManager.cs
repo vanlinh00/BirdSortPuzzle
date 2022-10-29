@@ -24,9 +24,15 @@ public class BranchRightManager : MonoBehaviour
         }
         Vector3 PosOutScreen = new Vector3(1.8f, 6.27f, 0);
         BrachRight.GetComponent<Branch>().posOutScreen = PosOutScreen;
+        BrachRight.GetComponent<Branch>().ChangeSprite(LoadSpriteBranchById());
         BrachRight.transform.parent = transform;
         BrachRight.transform.localPosition = PoslastChild;
         return BrachRight.GetComponent<Branch>();
+    }
+    public Sprite LoadSpriteBranchById()
+    {
+        int IdBranch = DataPlayer.GetInforPlayer().idCurrentBranchLoading;
+       return Resources.Load<Sprite>("Shop/Branchs/Branch" + IdBranch);
     }
     public void Renew()
     {

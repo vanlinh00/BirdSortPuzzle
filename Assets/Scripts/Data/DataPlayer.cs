@@ -14,10 +14,14 @@ public class DataPlayer
             inforPlayer = new InforPlayer
             {
                 isOnMusicBg = true,
-                idLevelPlaying = 1,
                 countCoins = 0,
                 isOnSound = true,
-
+                listIdBg = new List<int>() { 1 },
+                listIdBirds = new List<int>() { 1 },
+                listIdBranchs = new List<int>() { 1 },
+                idCurrentBranchLoading=1,
+                idCurrentBgsLoading=1,
+                idCurrentBirdsLoading=1,
             };
             SaveData();
         }
@@ -26,6 +30,21 @@ public class DataPlayer
     {
         var data = JsonUtility.ToJson(inforPlayer);
         PlayerPrefs.SetString(ALL_DATA, data);
+    }
+    public static void ChangeBackGroundLoading(int idBg)
+    {
+        inforPlayer.idCurrentBgsLoading = idBg;
+        SaveData();
+    }
+    public static void ChangeBranchLoading(int idBranch)
+    {
+        inforPlayer.idCurrentBranchLoading = idBranch;
+        SaveData();
+    }
+    public static void ChangeBirdLoading(int idBird)
+    {
+        inforPlayer.idCurrentBirdsLoading = idBird;
+        SaveData();
     }
     public static void UpdateAmountCoins(int Amount)
     {
@@ -42,6 +61,23 @@ public class DataPlayer
         inforPlayer.isOnSound = IsOnAudio;
         SaveData();
     }
+    public static void AddNewIdBg(int IdBg)
+    {
+        inforPlayer.listIdBg.Add(IdBg);
+        SaveData();
+    }
+    public static void AddNewIdBirds(int IdBird)
+    {
+        inforPlayer.listIdBirds.Add(IdBird);
+        SaveData();
+
+    }
+    public static void AddNewlistIdBranchs(int IdBranch)
+    {
+        inforPlayer.listIdBranchs.Add(IdBranch);
+        SaveData();
+
+    }
 
     public static InforPlayer GetInforPlayer()
     {
@@ -52,7 +88,11 @@ public class InforPlayer
 {
     public bool isOnMusicBg;
     public bool isOnSound;
-    public int idLevelPlaying;
     public int countCoins;
-
+    public List<int> listIdBg;
+    public List<int> listIdBirds;
+    public List<int> listIdBranchs;
+    public int idCurrentBranchLoading;
+    public int idCurrentBgsLoading;
+    public int idCurrentBirdsLoading;
 }

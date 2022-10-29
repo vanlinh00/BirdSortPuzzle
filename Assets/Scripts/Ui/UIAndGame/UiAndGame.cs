@@ -13,22 +13,20 @@ public class UiAndGame : Singleton<UiAndGame>
     [Header("UI references")]
     [SerializeField] TMP_Text coinUIText;
     private int _c;
-
     [SerializeField] TMP_Text coinMidlleText;
     private int _coinMidlle;
-
     [SerializeField] GameObject _effectWinGame;
-
     [SerializeField] Animator _animator;
+    [SerializeField] Image _coinImg;
+    [SerializeField] Camera _camera;
     private void OnEnable()
     {
-       CoinsManager._instance.SetSpread(0.2f);
+       ///CoinsManager._instance.SetSpread(0.2f);
         _continueGameBtn.gameObject.SetActive(false);
-        StateIn();
         CoinsMidlle = 12;
         StartCoroutine(WaitTimeBornCoins());
-       
     }
+
     protected override void Awake()
     {
         base.Awake();
@@ -74,8 +72,8 @@ public class UiAndGame : Singleton<UiAndGame>
     {
         yield return new WaitForSeconds(0.4f);
         _effectWinGame.SetActive(true);
-        CoinsManager._instance.Animate(12);
-        yield return new WaitForSeconds(1f);
+        CoinsManager._instance.Animate(12, _coinImg.transform.position);
+        yield return new WaitForSeconds(1.5f);
         _continueGameBtn.gameObject.SetActive(true);
     
     }
@@ -83,9 +81,4 @@ public class UiAndGame : Singleton<UiAndGame>
     {
         _animator.SetBool("Out", true);
     }
-    public void StateIn()
-    {
-        _animator.SetBool("Out", false);
-    }
-
 }

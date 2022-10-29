@@ -13,7 +13,10 @@ public class Branch : MonoBehaviour
     [SerializeField] SpriteRenderer _spriteRenderer;
     public bool IsBranchBirdsMoving;
 
-
+    public void ChangeSprite(Sprite Sprite)
+    {
+        _spriteRenderer.sprite = Sprite;
+    }
     private void Awake()
     {
         IsBranchBirdsMoving = false;
@@ -33,7 +36,7 @@ public class Branch : MonoBehaviour
     {
         return allSlots[Number].transform.position;
     }
-    public void RemoveBirdPromListBird(int CountBirdMoved)
+    public void RemoveBirdFromListBird(int CountBirdMoved)
     { 
         int index = listBirds.Count - CountBirdMoved;
         for (int i = listBirds.Count - 1; i >= index; i--)

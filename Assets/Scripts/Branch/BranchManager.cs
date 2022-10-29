@@ -73,11 +73,6 @@ public class BranchManager : Singleton<BranchManager>
                 Vector3 StartPosBird = new Vector3(RealPosBird.x - 2.5f, RealPosBird.y + 1.25f, 0);
                 Bird = ObjectPooler._instance.SpawnFromPool("Bird" + data.idBird, StartPosBird, Quaternion.identity);
                 Bird.GetComponent<Bird>().FlipX();
-
-                //if (Random.RandomRange(1, 3) == 2)
-                //{
-                  
-                //}
             }
             else
             {
@@ -91,6 +86,7 @@ public class BranchManager : Singleton<BranchManager>
             }
             Bird.GetComponent<Bird>().SetOrderLayer(30);
             Bird.GetComponent<Bird>().RealPosBird = RealPosBird;
+            Bird.GetComponent<Bird>().ChangeSkin(DataPlayer.GetInforPlayer().idCurrentBirdsLoading);
             _listBirds.Add(Bird.GetComponent<Bird>());
             _listAllBranchs[data.idBranch - 1].AddToListBrids(Bird.GetComponent<Bird>());
 
@@ -180,11 +176,19 @@ public class BranchManager : Singleton<BranchManager>
     {
         return _listBirds.Count/4;
     }
-    //public void UntouchingListBirds()
-    //{
-    //    for(int i=0;i<_listAllBranchs.Count;i++)
-    //    {
-    //        _listAllBranchs[i].UnTouching();
-    //    }
-    //}
+   
+    public void ChangeSpriteAllBranchs(Sprite BranchSprite)
+    {
+        for(int i=0;i< _listAllBranchs.Count;i++)
+        {
+            _listAllBranchs[i].ChangeSprite(BranchSprite);
+        }
+    }
+    public void ChangeSkinAllBrids(int SkinType)
+    {
+        for(int i=0;i< _listBirds.Count;i++)
+        {
+            _listBirds[i].ChangeSkin(SkinType);
+        }
+    }
 }

@@ -57,7 +57,7 @@ public class GamePlay : MonoBehaviour
                     {
                         _idCurrentBranch = branch.id;
 
-                        if (/*!ListAllBranchs[_idCurrentBranch-1].IsBranchBirdsMoving &&*/ ListAllBranchs[_idCurrentBranch - 1].listBirds.Count != 0 && !ListAllBranchs[_idCurrentBranch - 1].IsFullSameBirdsOnBranch())
+                        if (ListAllBranchs[_idCurrentBranch - 1].listBirds.Count != 0 && !ListAllBranchs[_idCurrentBranch - 1].IsFullSameBirdsOnBranch())
                         {
                             branch.Touching();
                         }
@@ -229,7 +229,7 @@ public class GamePlay : MonoBehaviour
             yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
         }
         ListAllBranchs[indexCurrentBranch].ClearBirdMove();
-        ListAllBranchs[indexCurrentBranch].RemoveBirdPromListBird(CountBirdMove);
+        ListAllBranchs[indexCurrentBranch].RemoveBirdFromListBird(CountBirdMove);
         _countClick = 0;
 
         yield return new WaitForSeconds(0.7f);
@@ -291,6 +291,7 @@ public class GamePlay : MonoBehaviour
 
     public  IEnumerator WaitTimeLoadData(int level)
     {
+        yield return new WaitForSeconds(0.1f);
         _branchManager.LoadDataBirdOnBranchs(loadData.LoadDataLevel(level));
         yield return new WaitForSeconds(0.1f); 
         _branchManager.LoadAllBranchLevel();  

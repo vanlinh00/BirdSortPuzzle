@@ -32,7 +32,7 @@ public class BranchLeftManger : MonoBehaviour
 
         Vector3 PosOutScreen = new Vector3(-1.8f, 6.27f, 0);
         BrachRight.GetComponent<Branch>().posOutScreen = PosOutScreen;
-
+        BrachRight.GetComponent<Branch>().ChangeSprite(LoadSpriteBranchById());
         BrachRight.transform.parent = transform;
         BrachRight.transform.eulerAngles = new Vector3(180, 0, -180f);
         BrachRight.transform.localPosition = PoslastChild;
@@ -43,6 +43,13 @@ public class BranchLeftManger : MonoBehaviour
         transform.position = new Vector3(2.5f, 0, 0f);
         CountBrach = 2;
     }
+
+    public Sprite LoadSpriteBranchById()
+    {
+        int IdBranch = DataPlayer.GetInforPlayer().idCurrentBranchLoading;
+        return Resources.Load<Sprite>("Shop/Branchs/Branch" + IdBranch);
+    }
+
     //public void ResetBranchs()
     //{
     //    GameObject Branch;
