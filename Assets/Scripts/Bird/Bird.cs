@@ -51,6 +51,7 @@ public class Bird : MonoBehaviour
             }
             else
             {
+                 SprakleEffect.Stop();
                 _isMove = false;
                 transform.position = GameManager._instance._gamePlay.ListAllBranchs[idBranchStand].allSlots[idSlot].transform.position;
             }
@@ -178,13 +179,14 @@ public class Bird : MonoBehaviour
         GameManager._instance._gamePlay.IsBirdMoving = true;
         StateFly();
         transform.DOMove(Target, 0.7f);
-
         StartCoroutine(WaitTimeChangeStateWhenStartGame());
     }
     IEnumerator WaitTimeChangeStateWhenStartGame()
     {
         yield return new WaitForSeconds(0.7f);
+        transform.position = GameManager._instance._gamePlay.ListAllBranchs[idBranchStand - 1].allSlots[idSlot].transform.position;
         StateGrounding();
+        yield return new WaitForSeconds(0.9f);
         if (stateBrid == StateBrid.idleAndTouching)
         {
 

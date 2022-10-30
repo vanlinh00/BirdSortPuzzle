@@ -30,16 +30,8 @@ public class ItemBtn: MonoBehaviour
     }
 
     private void ClickBuyBtn()
-    {   
-        if(DataPlayer.GetInforPlayer().countCoins>=price)
-        {
-            AddIdItemToDataPlayer();
-            DisPlaySelectBtn();
-        }
-        else
-        {
-         
-        }
+    {
+        CheckConditionBuy();
     }
   
     private void ClickBackGroundBtn()
@@ -50,10 +42,24 @@ public class ItemBtn: MonoBehaviour
         }
         else
         {
-            //load notice
+            CheckConditionBuy();
         }
     }
-
+    void CheckConditionBuy()
+    {
+        int AmountCoins = DataPlayer.GetInforPlayer().countCoins;
+        if (AmountCoins >= price)
+        {
+            DataPlayer.UpdateAmountCoins(AmountCoins - price);
+            AddIdItemToDataPlayer();
+            DisPlaySelectBtn();
+            UiShop._instance.LoadAmountCoin();
+        }
+        else
+        {
+            UiShop._instance.EnablePopupNotice();
+        }
+    }
     private void ClickSelectBtn()
     {
         LoadData._instance.Loadata(idType, id);

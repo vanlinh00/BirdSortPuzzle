@@ -14,6 +14,7 @@ public class DataPlayer
             inforPlayer = new InforPlayer
             {
                 isOnMusicBg = true,
+                isOnBravible = true,
                 countCoins = 0,
                 isOnSound = true,
                 listIdBg = new List<int>() { 1 },
@@ -61,6 +62,11 @@ public class DataPlayer
         inforPlayer.isOnSound = IsOnAudio;
         SaveData();
     }
+    public static void ChangeStateBravible(bool IsOnBravible)
+    {
+        inforPlayer.isOnBravible = IsOnBravible;
+        SaveData();
+    }
     public static void AddNewIdBg(int IdBg)
     {
         inforPlayer.listIdBg.Add(IdBg);
@@ -88,6 +94,7 @@ public class InforPlayer
 {
     public bool isOnMusicBg;
     public bool isOnSound;
+    public bool isOnBravible;
     public int countCoins;
     public List<int> listIdBg;
     public List<int> listIdBirds;

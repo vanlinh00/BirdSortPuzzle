@@ -11,15 +11,10 @@ public class Branch : MonoBehaviour
     public Animator _animator;
     public Vector3 posOutScreen;
     [SerializeField] SpriteRenderer _spriteRenderer;
-    public bool IsBranchBirdsMoving;
 
     public void ChangeSprite(Sprite Sprite)
     {
         _spriteRenderer.sprite = Sprite;
-    }
-    private void Awake()
-    {
-        IsBranchBirdsMoving = false;
     }
     public void AddToListBrids(Bird bird)
     {
@@ -143,14 +138,16 @@ public class Branch : MonoBehaviour
         float TimeWaitBridMove = 0f;
         for (int j = 0; j < listBirds.Count; j++)
         {    
-            listBirds[j].transform.parent= _animator.gameObject.transform; 
+            listBirds[j].transform.parent= _animator.gameObject.transform;
+            listBirds[j].idSlot = j;
+            listBirds[j].idBranchStand = id;
             Vector3 RealPosBird = listBirds[j].RealPosBird;
             listBirds[j].MoveToOnScreen(RealPosBird);
             yield return new WaitForSeconds(Random.RandomRange(0.07f, 0.15f));
            
             if (j== listBirds.Count-1)
             {
-                TimeWaitBridMove = CalculerTimeWait(listBirds[j].id);
+                TimeWaitBridMove = CalculerTimeWait(listBirds[j].id)+0.5f;
                 AllBirdsTouchBranch(TimeWaitBridMove-0.1f);
             }
         }

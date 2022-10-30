@@ -14,6 +14,8 @@ public class UiShop : Singleton<UiShop>
 
     [SerializeField] ShopManager shopManager;
     [SerializeField] Animator _animator;
+    [SerializeField] PopupNotice _popupNotice;
+    [SerializeField] Text _amountCoinTxt;
     protected override void Awake()
     {
         base.Awake();
@@ -29,6 +31,11 @@ public class UiShop : Singleton<UiShop>
         OfButtonOpenShopBranch();
         OnButtonOpenShopBgs();
         shopManager.LoadDataShopBg();
+        LoadAmountCoin();
+    }
+    public void LoadAmountCoin()
+    {
+        _amountCoinTxt.text = DataPlayer.GetInforPlayer().countCoins.ToString();
     }
     private void OnDisable()
     {
@@ -54,7 +61,6 @@ public class UiShop : Singleton<UiShop>
     }
     private void OpenShopBranch()
     {
-     
         if (!branhBtn.transform.GetChild(0).gameObject.activeSelf)
         {
             OfButtonOpenShopBirds();
@@ -136,5 +142,9 @@ public class UiShop : Singleton<UiShop>
         var sprite = Resources.Load<Sprite>("Ui/UiShop/Buttons/shop_tag_branch_on");
         branhBtn.GetComponent<RectTransform>().localScale = new Vector3(1.2f, 1.1f, 1f);
         branhBtn.GetComponent<Image>().sprite = sprite;
+    }
+    public void EnablePopupNotice()
+    {
+        _popupNotice.gameObject.SetActive(true);
     }
 }

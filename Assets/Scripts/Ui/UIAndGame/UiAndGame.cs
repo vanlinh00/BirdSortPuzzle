@@ -16,6 +16,7 @@ public class UiAndGame : Singleton<UiAndGame>
     [SerializeField] TMP_Text coinMidlleText;
     private int _coinMidlle;
     [SerializeField] GameObject _effectWinGame;
+    [SerializeField] GameObject _fireWorkPs;
     [SerializeField] Animator _animator;
     [SerializeField] Image _coinImg;
     [SerializeField] Camera _camera;
@@ -62,6 +63,7 @@ public class UiAndGame : Singleton<UiAndGame>
         {
             UiGamePlay._instance.ResetNumberUndo();
             _effectWinGame.SetActive(false);
+            _fireWorkPs.SetActive(false);
             GameManager._instance.NextLevel();
             Uicontroller._instance.OpenUiGamePlay(true);
 
@@ -72,6 +74,8 @@ public class UiAndGame : Singleton<UiAndGame>
     {
         yield return new WaitForSeconds(0.4f);
         _effectWinGame.SetActive(true);
+        _fireWorkPs.SetActive(true);
+        SoundController._instance.OnPlayAudio(SoundType.Game_Win);
         CoinsManager._instance.Animate(12, _coinImg.transform.position);
         yield return new WaitForSeconds(1.5f);
         _continueGameBtn.gameObject.SetActive(true);

@@ -9,6 +9,7 @@ public class GameManager : Singleton<GameManager>
     public GamePlay _gamePlay;
     [SerializeField] int level;
     public int CountNumberShuffle = 0;
+    int OrderLayer = 40;
     protected override void Awake()
     {
         base.Awake();
@@ -52,7 +53,6 @@ public class GameManager : Singleton<GameManager>
     }
 
     int numberUndo = 1;
-
     public void Undo()
     {
         numberUndo = 1;
@@ -112,7 +112,12 @@ public class GameManager : Singleton<GameManager>
                     if (IdOldBranch != IdNexBranch && numberUndo == 1)
                     {
                         _gamePlay.ListAllBranchs[IdNexBranch - 1].DeleteLastBird();
+                        StateBirdUndos.listStateBirdUndo[i].bird.SprakleEffect.Stop();
                     }
+                    else{
+                        StateBirdUndos.listStateBirdUndo[i].bird.SprakleEffect.Play();
+                    }
+
                     StartCoroutine(MoveBirdsToOldBranch(IdNexBranch - 1, IdOldBranch - 1, StateBirdUndos.listStateBirdUndo[i].bird, IdSlot));
                     yield return new WaitForSeconds(Random.RandomRange(0.05f, 0.1f));
                 }
@@ -122,8 +127,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-int OrderLayer = 40;
- public   IEnumerator MoveBirdsToOldBranch(int IndexCurrentBranch, int IndexNextBranch, Bird Bird, int IdSlot)
+  public IEnumerator MoveBirdsToOldBranch(int IndexCurrentBranch, int IndexNextBranch, Bird Bird, int IdSlot)
     {
         GameManager._instance._gamePlay.IsBirdMoving = true;
         Bird.transform.parent = null;
@@ -196,9 +200,6 @@ int OrderLayer = 40;
             GameManager._instance._gamePlay.IsBirdMoving = false;
             _gamePlay.ListAllBranchs[IndexNextBranch].SetOrderBirdsAndBrands(20);
         }
-
-
-      
     }
     public void ReNewGame()
     {

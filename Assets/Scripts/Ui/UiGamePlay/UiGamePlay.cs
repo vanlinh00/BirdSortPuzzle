@@ -104,6 +104,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
     }
     public void OpenPauseGame()
     {
+        TutorialManager._instance.SetActiveHand(false);
         Uicontroller._instance.OpenUiPauseGame();
     }
     public void NextLevel()
@@ -169,12 +170,13 @@ public class UiGamePlay : Singleton<UiGamePlay>
     }
     public void Undo()
     {
+ 
         TutorialManager._instance.SetActiveHand(false);
         if (_undoBtn.GetComponent<ButtonGP>().IsReady())
         {
             GameManager._instance._gamePlay.UnTouchingAndRemoveAllBirdsMoveCurrentBranch();
             GameManager._instance.Undo();
-            _undoBtn.GetComponent<ButtonGP>().Click();
+          //  _undoBtn.GetComponent<ButtonGP>().Click();
        }
     }
     public void AddBranch()

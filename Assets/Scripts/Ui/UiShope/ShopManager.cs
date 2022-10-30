@@ -21,6 +21,16 @@ public class ShopManager : Singleton<ShopManager>
             ItemBtn newItem = ItemBtn.GetComponent<ItemBtn>();
             int Price = Random.RandomRange(1, 10);
             newItem.Init(i, sprite, Price, _idTypeBird);
+
+            if (DataPlayer.GetInforPlayer().listIdBirds.Contains(newItem.id))
+            {
+                newItem.DisPlaySelectBtn();
+            }
+            else
+            {
+                newItem.DisPlayBuyBtn();
+            }
+
             ItemBtn.transform.parent = transform;
             ItemBtn.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
         }
@@ -60,7 +70,7 @@ public class ShopManager : Singleton<ShopManager>
             int Price = Random.RandomRange(1, 10);
             newItem.Init(i, sprite, Price, _idTypeBranch);
 
-            if (DataPlayer.GetInforPlayer().listIdBg.Contains(newItem.id))
+            if (DataPlayer.GetInforPlayer().listIdBranchs.Contains(newItem.id))
             {
                 newItem.DisPlaySelectBtn();
             }

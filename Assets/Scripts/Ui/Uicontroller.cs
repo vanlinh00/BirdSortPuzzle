@@ -16,7 +16,19 @@ public class Uicontroller : Singleton<Uicontroller>
     }
     public void Start()
     {
+        ChangeStateSoundBackGround();
         OpenUiGamePlay(false);
+    }
+   public void ChangeStateSoundBackGround()
+    {
+        if(DataPlayer.GetInforPlayer().isOnMusicBg)
+        {
+            SoundBackGround._instance.OnPlayAudio(SoundType.Summer);
+            SoundBackGround._instance.audioFx.loop = true;
+        }else
+        {
+            SoundBackGround._instance.audioFx.Stop();
+        }
     }
     IEnumerator WaitOutAndGame()
     {

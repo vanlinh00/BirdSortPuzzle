@@ -59,6 +59,7 @@ public class GamePlay : MonoBehaviour
 
                         if (ListAllBranchs[_idCurrentBranch - 1].listBirds.Count != 0 && !ListAllBranchs[_idCurrentBranch - 1].IsFullSameBirdsOnBranch())
                         {
+                            EffectsManager._instance.VibrationWithDelay(10, 0f);
                             branch.Touching();
                         }
                         else
@@ -129,7 +130,6 @@ public class GamePlay : MonoBehaviour
     }
     IEnumerator MoveBirdToNextBranch(int indexCurrentBranch, int indexNextBranch)
     {
-       //  ListAllBranchs[indexNextBranch].IsBranchBirdsMoving = true;
         int AmountSlotNextBranch = ListAllBranchs[indexNextBranch].PositionSlotAvailable(0).Count;
         int AmountBirdMove = ListAllBranchs[indexCurrentBranch].listBirdMove.Count;
 
@@ -149,9 +149,9 @@ public class GamePlay : MonoBehaviour
                 ListAllBranchs[indexCurrentBranch].UnTouching();
             }
         }
+        IsBirdMoving = true;
 
         List<BirdUndo> ListBirdUndo = new List<BirdUndo>();
-        IsBirdMoving = true;
         for (int i = 0; i < CountBirdMove; i++)
         {
             int IdSlot = ListAllBranchs[indexCurrentBranch].listBirds.Count - 1 - i;
@@ -231,14 +231,12 @@ public class GamePlay : MonoBehaviour
         ListAllBranchs[indexCurrentBranch].ClearBirdMove();
         ListAllBranchs[indexCurrentBranch].RemoveBirdFromListBird(CountBirdMove);
         _countClick = 0;
-
         yield return new WaitForSeconds(0.7f);
         if (GameManager._instance.Getlevel() == 3 && !isDisplayTut)
         {
             isDisplayTut = true;
             TutorialManager._instance.MoveHandToTarget(new Vector3(0.89f, -3.046f, 0));
         }
-
         yield return new WaitForSeconds(0.5f);
         ListAllBranchs[indexNextBranch].SetOrderBirdsAndBrands(20);
         if (lastBridMoveToBranch)
