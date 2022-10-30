@@ -59,7 +59,7 @@ public class GamePlay : MonoBehaviour
 
                         if (ListAllBranchs[_idCurrentBranch - 1].listBirds.Count != 0 && !ListAllBranchs[_idCurrentBranch - 1].IsFullSameBirdsOnBranch())
                         {
-                            EffectsManager._instance.VibrationWithDelay(10, 0f);
+                            EffectsManager._instance.VibrationWithDelay(15, 0f);
                             branch.Touching();
                         }
                         else

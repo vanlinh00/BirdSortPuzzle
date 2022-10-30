@@ -43,6 +43,7 @@ public class Branch : MonoBehaviour
     {
         if (listBirds.Count != 0)
         {
+            BirdSong.BirdSing(listBirds[listBirds.Count - 1]);
             int CountBirds = listBirds.Count - 1;
             int IdFistBird = listBirds[listBirds.Count - 1].id;
             listBirds[listBirds.Count - 1].GetComponent<Bird>().MixStateIdleAndTouching();
@@ -254,6 +255,7 @@ public class Branch : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         Vector3 NewPosOutScreen = new Vector3(Random.RandomRange(posOutScreen.x, posOutScreen.x + 1f), posOutScreen.y, 0f);
 
+        SoundController._instance.OnPlayAudioFx2("Birdflappingwings2");
         ListFakeBirds[1].StateFly();
         ListFakeBirds[1].transform.DOMove(posOutScreen, 1.2f).OnComplete(() =>
         {

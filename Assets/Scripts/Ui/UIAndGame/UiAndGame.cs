@@ -61,6 +61,7 @@ public class UiAndGame : Singleton<UiAndGame>
     {
         if(_canvasGroup.alpha==1)
         {
+            SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
             UiGamePlay._instance.ResetNumberUndo();
             _effectWinGame.SetActive(false);
             _fireWorkPs.SetActive(false);

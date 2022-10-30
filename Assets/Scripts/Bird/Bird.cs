@@ -24,7 +24,7 @@ public class Bird : MonoBehaviour
     private float _preTime;
     public bool isMoveNextBranch;
     public ParticleSystem SprakleEffect;
-
+    
     public enum StateBrid
     {
         idle,
@@ -99,6 +99,7 @@ public class Bird : MonoBehaviour
     {
         if (isMoveToNextBranch)
         {
+            SoundController._instance.OnPlayAudioFx2("Birdflappingwings2");
             UpdateMoveMent( TimeMove,0.4f);
              _isMove = true;
              //.transform.position, TimeMove).SetEase(Ease.Linear);
@@ -213,4 +214,10 @@ public class Bird : MonoBehaviour
         gameObject.transform.parent = ObjectPooler._instance.transform;
         gameObject.SetActive(false);
     }
+
+    public void Sing(SoundType soundType)
+    {
+        SoundController._instance.OnPlayAudio(soundType);
+    }
+
 }

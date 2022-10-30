@@ -104,13 +104,15 @@ public class UiGamePlay : Singleton<UiGamePlay>
     }
     public void OpenPauseGame()
     {
+        SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
         TutorialManager._instance.SetActiveHand(false);
         Uicontroller._instance.OpenUiPauseGame();
     }
     public void NextLevel()
     {
-        if(IsNextLevel)
+        if (IsNextLevel)
         {
+            SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
             ResetNumberUndo();
             IsNextLevel = false;
             GameManager._instance.NextLevel();
@@ -128,6 +130,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
      {
         if (IsNextLevel)
         {
+            SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
             IsNextLevel = false;
             StartCoroutine(GameManager._instance.WaitTimeRenew());
             StartCoroutine(SetAnimationInAndOut());
@@ -146,7 +149,8 @@ public class UiGamePlay : Singleton<UiGamePlay>
         TutorialManager._instance.SetActiveHand(false);
         if (_changeSteatsBtn.GetComponent<ButtonGP>().IsReady())
         {
-            if(!_darkBgChangeSeats.activeSelf)
+            SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
+            if (!_darkBgChangeSeats.activeSelf)
             {
                 GameManager._instance._gamePlay.UnTouchingAndRemoveAllBirdsMoveCurrentBranch();
                 StateOutHeaderUiGP();
@@ -174,6 +178,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
         TutorialManager._instance.SetActiveHand(false);
         if (_undoBtn.GetComponent<ButtonGP>().IsReady())
         {
+            SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
             GameManager._instance._gamePlay.UnTouchingAndRemoveAllBirdsMoveCurrentBranch();
             GameManager._instance.Undo();
           //  _undoBtn.GetComponent<ButtonGP>().Click();
@@ -185,6 +190,7 @@ public class UiGamePlay : Singleton<UiGamePlay>
 
         if(addBranch)
         {
+            SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
             addBranch = false;
             StartCoroutine(WaitTimeAddBranch());
             if (_addBranch.GetComponent<ButtonGP>().IsReady())

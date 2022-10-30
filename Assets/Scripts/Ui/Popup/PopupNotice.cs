@@ -21,6 +21,7 @@ public class PopupNotice : Singleton<PopupNotice>
     }
     public void Exit()
     {
+        SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
         StartCoroutine(WaitTimeDisable());
     }
     IEnumerator WaitTimeDisable()

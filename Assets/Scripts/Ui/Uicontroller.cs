@@ -17,17 +17,30 @@ public class Uicontroller : Singleton<Uicontroller>
     public void Start()
     {
         ChangeStateSoundBackGround();
+        ChangeStateSound();
         OpenUiGamePlay(false);
     }
    public void ChangeStateSoundBackGround()
     {
         if(DataPlayer.GetInforPlayer().isOnMusicBg)
         {
+            SoundBackGround._instance.OnMusic();    
             SoundBackGround._instance.OnPlayAudio(SoundType.Summer);
             SoundBackGround._instance.audioFx.loop = true;
         }else
         {
-            SoundBackGround._instance.audioFx.Stop();
+            SoundBackGround._instance.OfMusic();
+        }
+    }
+    public void ChangeStateSound()
+    {
+        if(DataPlayer.GetInforPlayer().isOnSound)
+        {
+            SoundController._instance.OnSound();
+        }
+        else
+        {
+            SoundController._instance.OfSound();
         }
     }
     IEnumerator WaitOutAndGame()

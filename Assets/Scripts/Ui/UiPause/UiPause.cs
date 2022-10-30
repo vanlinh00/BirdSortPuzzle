@@ -18,12 +18,8 @@ public class UiPause : MonoBehaviour
     [SerializeField] UiShop _uiShop;
     [SerializeField] Text _amountCoinTxt;
 
-    //private bool _isBravibleOn;
-
     private void OnEnable()
     {
-        //    _isBravibleOn = DataPlayer.GetInforPlayer().isOnBravible;
-
         GameManager._instance.gameState = GameManager.GameState.PauseGame;
         GameManager._instance._gamePlay.UnTouchingAndRemoveAllBirdsMoveCurrentBranch();
         StateIn();
@@ -32,6 +28,9 @@ public class UiPause : MonoBehaviour
     private void Awake()
     {
         ChangeStateMusic();
+        ChangeStateSound();
+        ChangeStateVibration();
+
         _closeBtn.onClick.AddListener(OpenGamePlay);
         _shopeBtn.onClick.AddListener(OpenShop);
         _musicBtn.onClick.AddListener(ClickMusicBtn);
@@ -40,6 +39,7 @@ public class UiPause : MonoBehaviour
     }
     void ClickMusicBtn()
     {
+        SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
         DataPlayer.ChangeStateAudio(!DataPlayer.GetInforPlayer().isOnMusicBg);
         ChangeStateMusic();
     }
@@ -60,6 +60,7 @@ public class UiPause : MonoBehaviour
     }
     void ClickSoundBtn()
     {
+        SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
         DataPlayer.ChangeStateSound(!DataPlayer.GetInforPlayer().isOnSound);
         ChangeStateSound();
     }
@@ -76,13 +77,31 @@ public class UiPause : MonoBehaviour
             sprite = Resources.Load<Sprite>("Ui/UiPause/Settings/Settings_btn_sound_off");
         }
         _soundBtn.GetComponent<Image>().sprite = sprite;
+        Uicontroller._instance.ChangeStateSound();
     }
     void ClickBravibleBtn()
     {
-
+        SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
+        DataPlayer.ChangeStateBravible(!DataPlayer.GetInforPlayer().isOnBravible);
+        ChangeStateVibration();
+    }
+    public void ChangeStateVibration()
+    {
+        bool _isBravibleOn = DataPlayer.GetInforPlayer().isOnBravible;
+        Sprite sprite;
+        if (_isBravibleOn)
+        {
+            sprite = Resources.Load<Sprite>("Ui/UiPause/Settings/Settings_btn_vibration_on");
+        }
+        else
+        {
+            sprite = Resources.Load<Sprite>("Ui/UiPause/Settings/Settings_btn_vibration_off");
+        }
+        _bravible.GetComponent<Image>().sprite = sprite;
     }
     private void OpenShop()
     {
+        SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
         GameManager._instance.gameState = GameManager.GameState.PauseGame;
         _uiShop.gameObject.SetActive(true);
         gameObject.SetActive(false);
@@ -92,6 +111,7 @@ public class UiPause : MonoBehaviour
     {
         if(_canvasGroup.alpha ==1)
         {
+            SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
             StartCoroutine(WaitDisableOut());
         }
     }

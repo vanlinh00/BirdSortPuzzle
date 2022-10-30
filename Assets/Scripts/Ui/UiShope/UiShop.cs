@@ -43,6 +43,7 @@ public class UiShop : Singleton<UiShop>
     }
     private void CloseShop()
     {
+        SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
         StartCoroutine(WaitTimeDisable());
     }
     IEnumerator WaitTimeDisable()
@@ -63,6 +64,7 @@ public class UiShop : Singleton<UiShop>
     {
         if (!branhBtn.transform.GetChild(0).gameObject.activeSelf)
         {
+            SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
             OfButtonOpenShopBirds();
             OfButtonOpenShopBgs();
             OnButtonOpenShopBranch();
@@ -74,6 +76,7 @@ public class UiShop : Singleton<UiShop>
     {
         if (!shopBirdBtn.transform.GetChild(0).gameObject.activeSelf)
         {
+            SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
             OfButtonOpenShopBranch();
             OfButtonOpenShopBgs();
             OnButtonOpenShopBirds();
@@ -85,6 +88,7 @@ public class UiShop : Singleton<UiShop>
     {
         if (!shopBackGroundBtn.transform.GetChild(0).gameObject.activeSelf)
         {
+            SoundController._instance.OnPlayAudio(SoundType.ButtonClick);
             OfButtonOpenShopBirds();
             OfButtonOpenShopBranch();
             OnButtonOpenShopBgs();

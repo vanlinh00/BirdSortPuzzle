@@ -33,6 +33,7 @@ public class SoundBackGround : MonoBehaviour
         audioFx.Play();
         // audioFx.PlayOneShot(audio);
     }
+    
     public void OfMusic()
     {
         audioFx.volume = 0f;

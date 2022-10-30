@@ -11,7 +11,11 @@ public class EffectsManager : Singleton<EffectsManager>
   
     public void VibrationWithDelay(long milliseconds, float timer) // #param1 Duration, #param2 Delay
     {
-        StartCoroutine(VibrateDelay(milliseconds, timer));
+        if(DataPlayer.GetInforPlayer().isOnBravible)
+        {
+            StartCoroutine(VibrateDelay(milliseconds, timer));
+        }
+      
     }
 
     IEnumerator VibrateDelay(long milliseconds, float timer)

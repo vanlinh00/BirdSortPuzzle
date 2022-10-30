@@ -54,6 +54,7 @@ public class ItemBtn: MonoBehaviour
             AddIdItemToDataPlayer();
             DisPlaySelectBtn();
             UiShop._instance.LoadAmountCoin();
+            LoadData._instance.Loadata(idType, id);
         }
         else
         {

@@ -18,12 +18,13 @@ public enum SoundType
     Birdtweet7 = 12,
     ButtonClick = 13,
     Game_Win = 14,
-    Summer = 0,
+    Summer = 15,
 }
 public class SoundController : MonoBehaviour
 {
     public static SoundController _instance;
     public AudioSource audioFx;
+    public AudioSource audioFx2;
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -37,27 +38,39 @@ public class SoundController : MonoBehaviour
         }
        // DontDestroyOnLoad(this);
     }
-    private void OnValidate()
-    {
-        if (audioFx == null)
-        {
-            audioFx = gameObject.AddComponent<AudioSource>();
-        }
-    }
+    //private void OnValidate()
+    //{
+    //    if (audioFx == null)
+    //    {
+    //        audioFx = gameObject.AddComponent<AudioSource>();
+    //    }
+    //}
     public void OnPlayAudio(SoundType soundType)
     {
         var audio = Resources.Load<AudioClip>($"AudioClip/{soundType.ToString()}");
         audioFx.clip = audio;
-        audioFx.Play();
-        // audioFx.PlayOneShot(audio);
+       // audioFx.Play();
+        audioFx.PlayOneShot(audio);
 
     }
+
+    public void OnPlayAudioFx2(string Link)
+    {
+        var audio = Resources.Load<AudioClip>($"AudioClip/"+ Link);
+        audioFx2.clip = audio;
+        // audioFx.Play();
+        audioFx2.PlayOneShot(audio);
+
+    }
+
     public void OfSound()
     {
         audioFx.volume = 0f;
+        audioFx2.volume = 0f;
     }
     public void OnSound()
     {
         audioFx.volume = 1f;
+        audioFx2.volume = 0.14f;
     }
 }
