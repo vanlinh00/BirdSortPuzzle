@@ -44931,7 +44931,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gamePlay: {fileID: 1001684952}
-  level: 1
   CountNumberShuffle: 0
   gameState: 0
 --- !u!1 &1624632768
