@@ -23,6 +23,7 @@ public class DataPlayer
                 idCurrentBranchLoading=1,
                 idCurrentBgsLoading=1,
                 idCurrentBirdsLoading=1,
+                level=1,
             };
             SaveData();
         }
@@ -67,6 +68,11 @@ public class DataPlayer
         inforPlayer.isOnBravible = IsOnBravible;
         SaveData();
     }
+    public static void UpdateLevel(int Level)
+    {
+        inforPlayer.level = Level;
+        SaveData();
+    }
     public static void AddNewIdBg(int IdBg)
     {
         inforPlayer.listIdBg.Add(IdBg);
@@ -102,4 +108,5 @@ public class InforPlayer
     public int idCurrentBranchLoading;
     public int idCurrentBgsLoading;
     public int idCurrentBirdsLoading;
+    public int level;
 }

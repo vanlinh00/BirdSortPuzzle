@@ -7,7 +7,7 @@ using DG.Tweening;
 public class GameManager : Singleton<GameManager>
 {
     public GamePlay _gamePlay;
-    [SerializeField] int level;
+  //  [SerializeField] int level;
     public int CountNumberShuffle = 0;
     int OrderLayer = 40;
     protected override void Awake()
@@ -33,17 +33,18 @@ public class GameManager : Singleton<GameManager>
     {
         StackStateUndos.Clear();
         gameState = GameState.SortBirds; 
-        StartCoroutine(_gamePlay.WaitTimeLoadData(level));
+        StartCoroutine(_gamePlay.WaitTimeLoadData(DataPlayer.GetInforPlayer().level));
 
     }
     public void NextLevel()
     {
-        level++;
+        int Level = DataPlayer.GetInforPlayer().level+1;
+        DataPlayer.UpdateLevel(Level);
         StartCoroutine(WaitTimeRenew());
     }
     public int  Getlevel()
     {
-        return level;
+        return DataPlayer.GetInforPlayer().level;
     }
     public  IEnumerator WaitTimeRenew()
     {
